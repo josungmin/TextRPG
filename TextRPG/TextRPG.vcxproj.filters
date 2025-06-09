@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일\Scene">
+      <UniqueIdentifier>{a27d991c-30ac-48e1-b99e-a139cf70b7ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{0a4cbe5a-42e1-4f5f-b1b4-7819ced6ffd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Stat">
+      <UniqueIdentifier>{bef84922-f06c-46c4-833e-c4cc9ff00aa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stat">
+      <UniqueIdentifier>{6df56ce1-da69-4cfa-8862-27ec487fcec4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Item">
+      <UniqueIdentifier>{1db65ff9-9afc-44e4-99d3-f96358dcc4d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Item">
+      <UniqueIdentifier>{a2d1c8d9-0b9f-4a2e-a801-3c41b2f6e590}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Character">
+      <UniqueIdentifier>{dee3cefd-0b87-44be-9b22-853b70784ebc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Character">
+      <UniqueIdentifier>{ad59b7aa-f610-467d-bf63-6bba5eaaa5f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Component">
+      <UniqueIdentifier>{a7dcc3da-4f32-4d5c-9a5a-6753581c6ea9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\MainScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Stat\StatDataType.cpp">
+      <Filter>소스 파일\Stat</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\EquipableItem.cpp">
+      <Filter>소스 파일\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\PlayerCharacter.cpp">
+      <Filter>소스 파일\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\EnemyCharacter.cpp">
+      <Filter>소스 파일\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\CombatCharacter.cpp">
+      <Filter>소스 파일\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="TextPrompt.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Item\ItemTable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Equipment.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInstance.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\MainScene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Stat\StatDataType.h">
+      <Filter>헤더 파일\Stat</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\Item.h">
+      <Filter>헤더 파일\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\EquipableItem.h">
+      <Filter>헤더 파일\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\Character.h">
+      <Filter>헤더 파일\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\NPCCharacter.h">
+      <Filter>헤더 파일\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\CombatCharacter.h">
+      <Filter>헤더 파일\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\PlayerCharacter.h">
+      <Filter>헤더 파일\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\EnemyCharacter.h">
+      <Filter>헤더 파일\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="TextPrompt.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\ItemTable.h">
+      <Filter>헤더 파일\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Equipment.h">
+      <Filter>헤더 파일\Component</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
