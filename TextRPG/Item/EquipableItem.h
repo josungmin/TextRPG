@@ -20,7 +20,7 @@ public:
 		return std::make_shared<EquipableItem>(*this);
 	}
 
-	inline EquipType GetEquipType() const { return equipType; }
+	inline const EquipType GetEquipType() const { return equipType; }
 	inline void SetEquipType(EquipType type) { equipType = type; }
 	inline const ModifierContainer& GetModifierContainer() const { return modifierContainer; }
 	inline void SetModifierContainer(const ModifierContainer& container) { modifierContainer = container; }

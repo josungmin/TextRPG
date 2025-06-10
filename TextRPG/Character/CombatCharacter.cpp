@@ -17,10 +17,10 @@ void CombatCharacter::TakeDamage(uint16_t damage)
 
 void CombatCharacter::HealHp(uint16_t amount)
 {
-	currentHP += amount;
+	const uint32_t total = static_cast<uint32_t>(currentHP + amount);
+	const uint32_t maxHP = static_cast<uint32_t>(statContainer.GetStatValue(EStatType::HP));
 
-	const uint16_t maxHP = statContainer.GetStatValue(EStatType::HP);
-	if (currentHP >= maxHP)
+	if (total > maxHP)
 	{
 		currentHP = maxHP;
 	}

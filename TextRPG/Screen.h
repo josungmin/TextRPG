@@ -12,11 +12,11 @@ public:
 private:
 	const SHORT width = 128;
 	const SHORT height = 32;
-	const int bufferSize = width * height;
+	const uint32_t bufferSize = width * height;
 
 private:
 	HANDLE consoleBuffers[2];
-	int bufferIndex = 0; // TODO: 타입 변경예정
+	uint8_t bufferIndex = 0;
 	std::unique_ptr<wchar_t[]> buffer = nullptr;
 
 public:

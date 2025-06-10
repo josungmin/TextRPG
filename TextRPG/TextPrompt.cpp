@@ -6,11 +6,6 @@ TextPrompt::TextPrompt(Screen& screen, uint8_t posX, uint8_t posY)
 
 }
 
-TextPrompt::~TextPrompt()
-{
-
-}
-
 void TextPrompt::Enqueue(const std::wstring& msg)
 {
 	inputMessageQueue.push_back(msg);

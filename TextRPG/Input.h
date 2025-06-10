@@ -6,8 +6,10 @@ using namespace std;
 class Input
 {
 public:
-	Input();
-	~Input();
+	Input() = default;
+	~Input() = default;
+	Input(const Input&) = delete;
+
 
 public:
 	void InputProcess();

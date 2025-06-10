@@ -1,95 +1,71 @@
-#include "MainScene.h"
-#include "../GameInstance.h"
-#include "../Character/PlayerCharacter.h"
 #include "DungeonScene.h"
+#include "../GameInstance.h"
+//#include "../Stat/StatDataType.h"
+#include "../Character/EnemyCharacter.h"
+#include "MainScene.h"
 
-MainScene::MainScene(Screen& screen, Input& input)
-	:Scene(screen, input), textPrompt(screen, 34, 3)
+DungeonScene::DungeonScene(Screen& screen, Input& input)
+	:Scene(screen, input), textPrompt(screen, 34, 3), enemy(nullptr)
 {
-	CurrentSceneState = EMainSceneState::Default;
+	CurrentSceneState = EDungeonSceneState::Default;
 }
 
-MainScene::~MainScene()
+DungeonScene::~DungeonScene()
 {
+
 }
 
-void MainScene::OnEnter()
+void DungeonScene::OnEnter()
+{
+	screen.Clear();
+	textPrompt.Clear();
+
+	StatContainer enemyStats;
+	enemyStats.stats[EStatType::HP].baseValue = 50;
+	enemyStats.stats[EStatType::AttackPower].baseValue = 10;
+	enemyStats.stats[EStatType::Defence].baseValue = 5;
+	enemyStats.stats[EStatType::Agility].baseValue = 5;
+
+	enemy = std::make_unique<EnemyCharacter>(L"Goblin", L"Goblin Soldier", enemyStats);
+
+	textPrompt.Enqueue(L"System : You are entering a dungeon.");
+	textPrompt.Enqueue(L"System : In the dungeon you meet a monster.");
+}
+
+void DungeonScene::OnExit()
 {
 	screen.Clear();
 	textPrompt.Clear();
 }
 
-void MainScene::OnExit()
-{
-	screen.Clear();
-	textPrompt.Clear();
-}
-
-void MainScene::Update()
+void DungeonScene::Update()
 {
 	textPrompt.Update();
 
-	if (input.HasCommand()) 
+	if (input.HasCommand())
 	{
 		std::wstring cmd = input.GetCommand();
 
-		if (CurrentSceneState == EMainSceneState::Default && cmd == L"Healer")
+		if (CurrentSceneState == EDungeonSceneState::Default)
 		{
-			textPrompt.Enqueue(L"System : I approach Healer and talk to him.");
-			textPrompt.Enqueue(L"Healer : Give me 500 gold and I'll restore your HP!");
-			CurrentSceneState = EMainSceneState::Healer;
-		}
-		else if (CurrentSceneState == EMainSceneState::Default && cmd == L"Inventory")
-		{
-			PlayerCharacter& player = GameInstance::Instance().GetPlayer();
-
-			auto sword = dynamic_pointer_cast<EquipableItem>(GameInstance::Instance().GetItemTable().CreateItem(L"Sword"));
-			if (sword != nullptr)
+			if (cmd == L"Combat")
 			{
-				player.GetEquipment().Equip(sword, player.GetStats());
+				textPrompt.Enqueue(L"System : The battle begins.");
 			}
-
-			auto armor = dynamic_pointer_cast<EquipableItem>(GameInstance::Instance().GetItemTable().CreateItem(L"Armor"));
-			if (sword != nullptr)
+			else if (cmd == L"Runaway")
 			{
-				player.GetEquipment().Equip(armor, player.GetStats());
+				textPrompt.Enqueue(L"System : You run away from the enemy, but are attacked and your HP decreases.");
+				GameInstance::Instance().GetSceneManager().ChangeScene(make_unique<MainScene>(screen, input));
 			}
 		}
-		else if (CurrentSceneState == EMainSceneState::Default && cmd == L"Dungeon")
+		else if (CurrentSceneState == EDungeonSceneState::Combat)
 		{
-			GameInstance::Instance().GetSceneManager().ChangeScene(make_unique<DungeonScene>(screen, input));
-		}
-		else if (CurrentSceneState == EMainSceneState::Healer)
-		{
-			if (cmd == L"Yes") 
-			{
-				if (GameInstance::Instance().GetPlayer().GetGold().RemoveGold(500))
-				{
-					GameInstance::Instance().GetPlayer().HealHp(UINT16_MAX);
-					textPrompt.Enqueue({ L"Healer : I've restored all your HP!" });
-				}
-				else 
-				{
-					textPrompt.Enqueue({ L"Healer : I don't have enough money..." });
-				}
-
-				CurrentSceneState = EMainSceneState::Default;
-			}
-			else if (cmd == L"No")
-			{
-				textPrompt.Enqueue({ L"Healer : I don't have enough money..." });
-				CurrentSceneState = EMainSceneState::Default;
-			}
-		}
-		//TODO :디버그용
-		else if (CurrentSceneState == EMainSceneState::Default && cmd == L"Damage")
-		{
-			GameInstance::Instance().GetPlayer().TakeDamage(20);
+			
 		}
 	}
 }
 
-void MainScene::Render()
+void DungeonScene::Render()
 {
 	// Frame
 	screen.Write(0, 0, L"┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐");
@@ -102,7 +78,7 @@ void MainScene::Render()
 	}
 
 	screen.Write(13, 1, L"[ Stat ]");
-	screen.Write(73, 1, L"<< Village >>");
+	screen.Write(73, 1, L"<< Dungeon >>");
 
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 	screen.Write(1, 2, L"────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
@@ -115,16 +91,12 @@ void MainScene::Render()
 	screen.Write(2, 9, L"Agility: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
 	screen.Write(2, 11, L"Equipment");
 	screen.Write(2, 12, L"Weapon: " + (player.GetEquipment().GetWeapon() == nullptr ? L"None" : player.GetEquipment().GetWeapon()->GetItemName()));
-	screen.Write(2, 13, L"Amor: " +(player.GetEquipment().GetArmor() == nullptr ? L"None" : player.GetEquipment().GetArmor()->GetItemName()));
+	screen.Write(2, 13, L"Amor: " + (player.GetEquipment().GetArmor() == nullptr ? L"None" : player.GetEquipment().GetArmor()->GetItemName()));
 	screen.Write(0, 27, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");
 
-	if (CurrentSceneState == EMainSceneState::Healer)
+	if (CurrentSceneState == EDungeonSceneState::Default)
 	{
-		screen.Write(2, 28, L"Command List : Yes, No");
-	}
-	else if (CurrentSceneState == EMainSceneState::Default)
-	{
-		screen.Write(2, 28, L"Command List : Healer, Shop, Dungeon, Inventory");
+		screen.Write(2, 28, L"Command List : Combat, Runaway");
 	}
 
 	screen.Write(0, 28, L"│");                                                                                                  screen.Write(126, 28, L"│");

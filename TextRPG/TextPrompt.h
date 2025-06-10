@@ -10,9 +10,9 @@ class TextPrompt
 {
 public:
     TextPrompt(Screen& screen, uint8_t posX, uint8_t posY);
-    ~TextPrompt();
+    ~TextPrompt() = default;
 
-    void Enqueue(const std::wstring& msg);
+    void Enqueue(const wstring& msg);
     void Update();                     
     void Render();
     void Clear();

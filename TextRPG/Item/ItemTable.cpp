@@ -14,7 +14,7 @@ void ItemTable::Load()
 
 	sword->SetModifierContainer(swordMod);
 	itemMap[L"Sword"] = sword;
-
+	
 	auto armor = std::make_shared<EquipableItem>(L"Armor", L"light armor", 8, 4);
 	armor->SetType(EItemType::Equip);
 	armor->SetEquipType(EquipType::ARMOR);
@@ -27,7 +27,7 @@ void ItemTable::Load()
 	itemMap[L"Armor"] = armor;
 }
 
-std::shared_ptr<Item> ItemTable::CreateItem(const std::wstring& id) const
+std::shared_ptr<Item> ItemTable::CreateItem(const wstring& id) const
 {
     auto it = itemMap.find(id);
     if (it == itemMap.end())

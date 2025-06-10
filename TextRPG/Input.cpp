@@ -2,14 +2,6 @@
 #include "Screen.h"
 #include <conio.h>
 
-Input::Input()
-{
-
-}
-
-Input::~Input()
-{
-}
 
 void Input::InputProcess()
 {

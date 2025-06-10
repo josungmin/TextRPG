@@ -39,8 +39,11 @@ Screen::~Screen()
 
 void Screen::Write(const SHORT x, const SHORT y, const std::wstring& text)
 {
-	int pos = y * width + x;
-	wmemcpy(buffer.get() + pos, text.c_str(), text.size());
+	if (x < width && y < height)
+	{
+		int pos = y * width + x;
+		wmemcpy(buffer.get() + pos, text.c_str(), text.size());
+	}
 }
 
 void Screen::Render()
