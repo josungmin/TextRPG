@@ -18,16 +18,16 @@ public:
     void Clear();
 
 private:
-    Screen& screen;
-    uint8_t posX;
-    uint8_t posY;
+    const uint16_t DELAY_MS = 1000; //2√ 
+    const uint8_t MAX_LINE = 24;
 
-    deque<wstring> inputMessageQueue;
-    deque<wstring> outputMessageQueue;
+    Screen& m_screen;
+    uint8_t m_pivotX;
+    uint8_t m_pivotY;
 
-    DWORD lastPrintTime = 0;
-    bool readyToPrint = true;
+    deque<wstring> m_inputMessageQueue;
+    deque<wstring> m_outputMessageQueue;
 
-    const uint16_t delayMS = 1000; //2√ 
-    const uint8_t maxLines = 24;
+    DWORD m_lastPrintTime = 0;
+    bool m_readyToPrint = true;
 };

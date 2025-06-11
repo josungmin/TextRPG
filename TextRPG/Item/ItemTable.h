@@ -2,8 +2,9 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include <map>
 
-#include "Item.h"
+class Item;
 
 using namespace std;
 
@@ -14,6 +15,8 @@ public:
 	~ItemTable() { }
 
 public:
+	//public Item FindItem(wstring itemName);
+
 	shared_ptr<Item> CreateItem(const wstring& id) const;
 	inline const unordered_map<wstring, shared_ptr<Item>>& GetItemMap() const { return itemMap; }
 
@@ -22,4 +25,6 @@ private:
 
 private:
 	std::unordered_map<wstring, shared_ptr<Item>> itemMap;
+
+	std::map<const wstring, Item*> itemDatas;
 };

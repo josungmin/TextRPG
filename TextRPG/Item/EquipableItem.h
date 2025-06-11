@@ -2,7 +2,7 @@
 #include "Item.h"
 #include "../Stat/StatDataType.h"
 
-enum class EquipType : uint8_t
+enum class EEquipType : uint8_t
 {
 	NONE,
 	WEAPON,
@@ -12,20 +12,21 @@ enum class EquipType : uint8_t
 class EquipableItem : public Item
 {
 public:
-	EquipableItem(const std::wstring& itemName, const std::wstring& description, uint8_t buyPrice, uint8_t sellPrice);
-	virtual ~EquipableItem() override;
+	EquipableItem(const EEquipType equipType, const EItemType itemType, const std::wstring& itemName, const std::wstring& description, const uint8_t buyPrice, const uint8_t sellPrice);
 
 	std::shared_ptr<Item> Clone() const override
 	{
 		return std::make_shared<EquipableItem>(*this);
 	}
 
-	inline const EquipType GetEquipType() const { return equipType; }
-	inline void SetEquipType(EquipType type) { equipType = type; }
-	inline const ModifierContainer& GetModifierContainer() const { return modifierContainer; }
-	inline void SetModifierContainer(const ModifierContainer& container) { modifierContainer = container; }
+	inline const EEquipType GetEquipType() const { return m_equipType; }
+	inline void SetEquipType(EEquipType type) { m_equipType = type; }
+	inline const ModifierContainer& GetModifierContainer() const { return m_modifierContainer; }
+	inline void SetModifierContainer(const ModifierContainer& container) { m_modifierContainer = container; }
+
+protected:
+	EEquipType m_equipType = EEquipType::NONE;
 
 private:
-	EquipType equipType = EquipType::NONE;
-	ModifierContainer modifierContainer;
+	ModifierContainer m_modifierContainer;
 };

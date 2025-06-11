@@ -5,7 +5,7 @@
 class Scene
 {
 public:
-	Scene(Screen& screen, Input& input) : screen(screen), input(input) { }
+	Scene(Screen& screen, Input& input) : m_screen(screen), m_input(input) { }
 	virtual ~Scene() { }
 
 	virtual void OnEnter() = 0;
@@ -14,6 +14,6 @@ public:
 	virtual void Render() = 0;
 
 protected:
-	Screen& screen;
-	Input& input;
+	Screen& m_screen;
+	Input& m_input;
 };

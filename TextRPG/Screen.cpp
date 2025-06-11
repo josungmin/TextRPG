@@ -1,29 +1,37 @@
 #include "Screen.h"
+#include <locale>
+#include <iostream>
+#include <cwchar>
 #include <cassert>
 
 Screen::Screen()
-	: buffer(nullptr)
+	: m_buffer(nullptr)
 {
+	SetConsoleOutputCP(CP_UTF8);
+	std::locale::global(std::locale("kor"));
+	std::wcin.imbue(std::locale());
+	std::wcout.imbue(std::locale());
+
 	for (int i = 0; i < 2; ++i)
 	{
-		consoleBuffers[i] = CreateConsoleScreenBuffer(
+		m_consoleBuffers[i] = CreateConsoleScreenBuffer(
 			GENERIC_READ | GENERIC_WRITE,
 			0, nullptr,
 			CONSOLE_TEXTMODE_BUFFER,
 			nullptr
 		);
-		SetConsoleScreenBufferSize(consoleBuffers[i], { width, height });
+		SetConsoleScreenBufferSize(m_consoleBuffers[i], { WIDTH, HEIGHT });
 
-		SMALL_RECT rect = { 
-			0, 
-			0, 
-			width - 1, 
-			height - 1 
+		SMALL_RECT rect = {
+			0,
+			0,
+			WIDTH - 1,
+			HEIGHT - 1
 		};
-		SetConsoleWindowInfo(consoleBuffers[i], TRUE, &rect);
+		SetConsoleWindowInfo(m_consoleBuffers[i], TRUE, &rect);
 	}
 
-	buffer = std::make_unique<wchar_t[]>(bufferSize);
+	m_buffer = new wchar_t[HEIGHT * WIDTH];
 	Clear();
 
 	ShowConsoleCursor(false);
@@ -33,37 +41,59 @@ Screen::~Screen()
 {
 	for (int i = 0; i < 2; ++i)
 	{
-		CloseHandle(consoleBuffers[i]);
+		CloseHandle(m_consoleBuffers[i]);
 	}
+
+	delete[] m_buffer;
 }
 
 void Screen::Write(const SHORT x, const SHORT y, const std::wstring& text)
 {
-	if (x < width && y < height)
+	if (x < WIDTH && y < HEIGHT)
 	{
-		int pos = y * width + x;
-		wmemcpy(buffer.get() + pos, text.c_str(), text.size());
+		int pos = y * WIDTH + x;
+		for (int i = 0; i < text.size(); i++)
+		{
+			m_buffer[pos] = text[i];
+
+			if (GetCharWidth(text[i]) == 2)
+			{
+				m_buffer[++pos] = NULL;
+			}
+
+			++pos;
+		}	
 	}
+
+	//if (x < WIDTH && y < HEIGHT)
+	//{
+	//	int pos = y * WIDTH + x;
+	//	wmemcpy(m_buffer + pos, text.c_str(), text.size());
+	//}
 }
 
 void Screen::Render()
 {
 	DWORD written;
-	WriteConsoleOutputCharacterW(
-		consoleBuffers[bufferIndex], 
-		buffer.get(), 
-		bufferSize, 
-		{ 0, 0 }, 
-		&written
-	);
 
-	SetConsoleActiveScreenBuffer(consoleBuffers[bufferIndex]);
-	bufferIndex = 1 - bufferIndex;
+	for (SHORT i = 0; i < BUFFER_SIZE; i++)
+	{
+		WriteConsoleOutputCharacterW(
+			m_consoleBuffers[m_bufferIndex],
+			&m_buffer[i],
+			1,
+			{ i % WIDTH, i / WIDTH },
+			&written
+		);
+	}
+
+	SetConsoleActiveScreenBuffer(m_consoleBuffers[m_bufferIndex]);
+	m_bufferIndex = 1 - m_bufferIndex;
 }
 
 void Screen::Clear()
 {
-	std::fill(buffer.get(), buffer.get() + bufferSize, L' ');
+	std::fill(m_buffer, m_buffer + BUFFER_SIZE, L' ');
 }
 
 void Screen::ShowConsoleCursor(bool bIsShow)
@@ -71,9 +101,19 @@ void Screen::ShowConsoleCursor(bool bIsShow)
 	for (int i = 0; i < 2; ++i)
 	{
 		CONSOLE_CURSOR_INFO cursorInfo;
-		GetConsoleCursorInfo(consoleBuffers[i], &cursorInfo);
+		GetConsoleCursorInfo(m_consoleBuffers[i], &cursorInfo);
 
 		cursorInfo.bVisible = bIsShow;
-		SetConsoleCursorInfo(consoleBuffers[i], &cursorInfo);
+		SetConsoleCursorInfo(m_consoleBuffers[i], &cursorInfo);
 	}
+}
+
+uint8 Screen::GetCharWidth(wchar_t c)
+{
+	if (c >= 0xAC00 && c <= 0xD7A3)
+	{
+		return 2;
+	}
+
+	return 1;
 }

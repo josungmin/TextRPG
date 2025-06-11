@@ -1,44 +1,44 @@
 #include "TextPrompt.h"
 
 TextPrompt::TextPrompt(Screen& screen, uint8_t posX, uint8_t posY)
-	:screen(screen), posX(posX), posY(posY)
+	:m_screen(screen), m_pivotX(posX), m_pivotY(posY)
 {
-
+    
 }
 
 void TextPrompt::Enqueue(const std::wstring& msg)
 {
-	inputMessageQueue.push_back(msg);
+	m_inputMessageQueue.push_back(msg);
 }
 
 void TextPrompt::Update()
 {
     DWORD now = GetTickCount();
 
-    if (!inputMessageQueue.empty() && (now - lastPrintTime >= delayMS))
+    if (!m_inputMessageQueue.empty() && (now - m_lastPrintTime >= DELAY_MS))
     {
-        outputMessageQueue.push_back(inputMessageQueue.front());
-        inputMessageQueue.pop_front();
-        lastPrintTime = now;
+        m_outputMessageQueue.push_back(m_inputMessageQueue.front());
+        m_inputMessageQueue.pop_front();
+        m_lastPrintTime = now;
 
-        if (outputMessageQueue.size() > maxLines)
+        if (m_outputMessageQueue.size() > MAX_LINE)
         {
-            outputMessageQueue.pop_front();
+            m_outputMessageQueue.pop_front();
         }
     }
 }
 
 void TextPrompt::Render()
 {
-    uint8_t y = posY;
-    for (const auto& msg : outputMessageQueue)
+    uint8_t y = m_pivotY;
+    for (const auto& msg : m_outputMessageQueue)
     {
-        screen.Write(posX, y++, msg);
+        m_screen.Write(m_pivotX, y++, msg);
     }
 }
 
 void TextPrompt::Clear()
 {
-    inputMessageQueue.clear();
-    outputMessageQueue.clear();
+    m_inputMessageQueue.clear();
+    m_outputMessageQueue.clear();
 }

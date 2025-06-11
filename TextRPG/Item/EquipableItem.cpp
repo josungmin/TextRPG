@@ -1,16 +1,7 @@
 #include "EquipableItem.h"
 
-EquipableItem::EquipableItem(const std::wstring& itemName, const std::wstring& description, uint8_t buyPrice, uint8_t sellPrice)
+EquipableItem::EquipableItem(const EEquipType equipType, const EItemType itemType, const std::wstring& itemName, const std::wstring& description, const uint8_t buyPrice, const uint8_t sellPrice)
+	:Item(itemType, itemName, description, buyPrice, sellPrice), m_equipType(equipType)
 {
-	this->itemName = itemName;
-	this->description = description;
-	this->buyPrice = buyPrice;
-	this->sellPrice = sellPrice;
-
-	SetMaxCount(1);
-}
-
-EquipableItem::~EquipableItem()
-{
-
+	
 }

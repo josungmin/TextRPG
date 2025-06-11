@@ -130,7 +130,9 @@
     <ClCompile Include="Character\CombatCharacter.cpp" />
     <ClCompile Include="Character\EnemyCharacter.cpp" />
     <ClCompile Include="Character\PlayerCharacter.cpp" />
+    <ClCompile Include="CombatGameMode.cpp" />
     <ClCompile Include="Component\Equipment.cpp" />
+    <ClCompile Include="Component\Inventory.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Item\EquipableItem.cpp" />
@@ -149,13 +151,17 @@
     <ClInclude Include="Character\EnemyCharacter.h" />
     <ClInclude Include="Character\NPCCharacter.h" />
     <ClInclude Include="Character\PlayerCharacter.h" />
+    <ClInclude Include="CombatGameMode.h" />
+    <ClInclude Include="Component\Dungeon.h" />
     <ClInclude Include="Component\Equipment.h" />
+    <ClInclude Include="Component\Inventory.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameInstance.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Item\EquipableItem.h" />
     <ClInclude Include="Item\Item.h" />
     <ClInclude Include="Item\ItemTable.h" />
+    <ClInclude Include="MyType.h" />
     <ClInclude Include="Scene\DungeonScene.h" />
     <ClInclude Include="Scene\MainScene.h" />
     <ClInclude Include="Scene\Scene.h" />

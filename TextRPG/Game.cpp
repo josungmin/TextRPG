@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Scene/TitleScene.h"
+#include "Scene/DungeonScene.h"
 
 Game::Game()
 {
@@ -20,33 +21,37 @@ void Game::Run()
 	{
 		DWORD frameStart = GetTickCount();
 
-		input.InputProcess();
+		m_input.InputProcess();
 		Update();
 		Render();
 
 		DWORD frameEnd = GetTickCount();
 		DWORD elapsed = frameEnd - frameStart;
 
-		if (elapsed < (DWORD)frameTimeMS)
-			Sleep(frameTimeMS - elapsed);
+		if (elapsed < (DWORD)FRAME_TIME_MS)
+			Sleep(FRAME_TIME_MS - elapsed);
 	}
 }
 
 void Game::Init()
 {
-	GameInstance::Instance().GetSceneManager().ChangeScene(std::make_unique<TitleScene>(screen, input));
+	Scene* titleScene = new TitleScene(m_screen, m_input);
+	GameInstance::Instance().GetSceneManager().ChangeScene(*titleScene);
+
+	//Scene* dungeonScene = new DungeonScene(m_screen, m_input);
+	//GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
 }
 
 void Game::Update()
 {
-	GameInstance::Instance().GetSceneManager().GetCurrentScene()->Update();
+	GameInstance::Instance().GetSceneManager().GetCurrentScene().Update();
 }
 
 void Game::Render()
 {
-	screen.Clear();
+	m_screen.Clear();
 
-	GameInstance::Instance().GetSceneManager().GetCurrentScene()->Render();
+	GameInstance::Instance().GetSceneManager().GetCurrentScene().Render();
 
-	screen.Render();
+	m_screen.Render();
 }

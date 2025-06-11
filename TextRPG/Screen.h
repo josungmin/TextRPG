@@ -3,6 +3,8 @@
 #include <string>
 #include <windows.h>
 
+#include "MyType.h"
+
 class Screen
 {
 public:
@@ -10,14 +12,9 @@ public:
 	~Screen();
 
 private:
-	const SHORT width = 128;
-	const SHORT height = 32;
-	const uint32_t bufferSize = width * height;
-
-private:
-	HANDLE consoleBuffers[2];
-	uint8_t bufferIndex = 0;
-	std::unique_ptr<wchar_t[]> buffer = nullptr;
+	const SHORT WIDTH = 128;
+	const SHORT HEIGHT = 32;
+	const uint32 BUFFER_SIZE = WIDTH * HEIGHT;
 
 public:
 	void Write(const SHORT x, const SHORT y, const std::wstring& text);
@@ -25,4 +22,12 @@ public:
 	void Clear();
 
 	void ShowConsoleCursor(bool bIsShow);
+
+private:
+	uint8 GetCharWidth(wchar_t c);
+
+private:
+	HANDLE m_consoleBuffers[2];
+	uint8 m_bufferIndex = 0;
+	wchar_t* m_buffer = nullptr;
 };

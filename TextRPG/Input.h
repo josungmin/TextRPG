@@ -8,17 +8,15 @@ class Input
 public:
 	Input() = default;
 	~Input() = default;
-	Input(const Input&) = delete;
-
 
 public:
 	void InputProcess();
-	bool HasCommand();
+	const bool HasCommand() const;
 
-	wstring GetCommand();
-	inline const wstring& GetInputBuffer() const { return inputBuffer; };
+	const wstring GetCommand();
+	inline const wstring& GetInputBuffer() const { return m_inputBuffer; };
 
 private:
-	wstring inputBuffer;
-	wstring command;
+	wstring m_inputBuffer;
+	wstring m_command;
 };

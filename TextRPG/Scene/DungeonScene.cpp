@@ -3,11 +3,19 @@
 //#include "../Stat/StatDataType.h"
 #include "../Character/EnemyCharacter.h"
 #include "MainScene.h"
+#include "../CombatGameMode.h"
 
 DungeonScene::DungeonScene(Screen& screen, Input& input)
-	:Scene(screen, input), textPrompt(screen, 34, 3), enemy(nullptr)
+	:Scene(screen, input), m_textPrompt(screen, 34, 3)
 {
-	CurrentSceneState = EDungeonSceneState::Default;
+	m_currentSceneState = EDungeonSceneState::Default;
+
+	StatContainer enemyStats;
+	enemyStats.stats[EStatType::HP].baseValue = 50;
+	enemyStats.stats[EStatType::AttackPower].baseValue = 10;
+	enemyStats.stats[EStatType::Defence].baseValue = 5;
+	enemyStats.stats[EStatType::Agility].baseValue = 5;
+	m_enemy = new EnemyCharacter(L"Goblin", L"Goblin Soldier", enemyStats);
 }
 
 DungeonScene::~DungeonScene()
@@ -17,92 +25,104 @@ DungeonScene::~DungeonScene()
 
 void DungeonScene::OnEnter()
 {
-	screen.Clear();
-	textPrompt.Clear();
+	m_screen.Clear();
+	m_textPrompt.Clear();
 
-	StatContainer enemyStats;
-	enemyStats.stats[EStatType::HP].baseValue = 50;
-	enemyStats.stats[EStatType::AttackPower].baseValue = 10;
-	enemyStats.stats[EStatType::Defence].baseValue = 5;
-	enemyStats.stats[EStatType::Agility].baseValue = 5;
-
-	enemy = std::make_unique<EnemyCharacter>(L"Goblin", L"Goblin Soldier", enemyStats);
-
-	textPrompt.Enqueue(L"System : You are entering a dungeon.");
-	textPrompt.Enqueue(L"System : In the dungeon you meet a monster.");
+	m_textPrompt.Enqueue(L"衛蝶蠱 : 湍瞪縑 殮濰м棲棻.");
+	m_textPrompt.Enqueue(L"衛蝶蠱 : 湍瞪縑 殮濰м棲棻.");
+	//m_textPrompt.Enqueue(L"衛蝶蠱 : 橫替 寞щ戲煎 檜翕 ж衛啊蝗棲梱?");
+	//m_textPrompt.Enqueue(L"衛蝶蠱 : 1.豭薹 2.醞懈 3, 螃艇薹");
 }
 
 void DungeonScene::OnExit()
 {
-	screen.Clear();
-	textPrompt.Clear();
+	m_screen.Clear();
+	m_textPrompt.Clear();
 }
 
 void DungeonScene::Update()
 {
-	textPrompt.Update();
+	m_textPrompt.Update();
 
-	if (input.HasCommand())
+	if (m_input.HasCommand())
 	{
-		std::wstring cmd = input.GetCommand();
+		std::wstring cmd = m_input.GetCommand();
 
-		if (CurrentSceneState == EDungeonSceneState::Default)
+		if (m_currentSceneState == EDungeonSceneState::Default)
 		{
-			if (cmd == L"Combat")
+			if (cmd == L"1" || cmd == L"豭" || cmd == L"豭薹" || cmd == L"1.豭薹" || cmd == L"1豭薹" || cmd == L"1 豭薹")
 			{
-				textPrompt.Enqueue(L"System : The battle begins.");
+				
+			}
+
+			if (cmd == L"2" || cmd == L"醞" || cmd == L"醞懈" || cmd == L"2.醞懈" || cmd == L"2醞懈" || cmd == L"2 醞懈")
+			{
+
+			}
+
+			if (cmd == L"3" || cmd == L"螃" || cmd == L"螃艇" || cmd == L"螃艇薹" || cmd == L"3.螃艇薹" || cmd == L"3.螃艇" || cmd == L"3.螃" || cmd == L"3 螃" || cmd == L"3 螃艇" || cmd == L"3 螃艇薹" || cmd == L"3螃" || cmd == L"3螃艇" || cmd == L"3螃艇薹")
+			{
+
+			}
+
+
+			/*if (cmd == L"Combat")
+			{
+				m_textPrompt.Enqueue(L"System : The battle begins.");
 			}
 			else if (cmd == L"Runaway")
 			{
-				textPrompt.Enqueue(L"System : You run away from the enemy, but are attacked and your HP decreases.");
-				GameInstance::Instance().GetSceneManager().ChangeScene(make_unique<MainScene>(screen, input));
-			}
+				m_textPrompt.Enqueue(L"System : You run away from the enemy, but are attacked and your HP decreases.");
+
+				Scene* mainScene = new MainScene(m_screen, m_input);
+				GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
+			}*/
 		}
-		else if (CurrentSceneState == EDungeonSceneState::Combat)
+		else if (m_currentSceneState == EDungeonSceneState::Combat)
 		{
-			
+			//GameMode.ProcessCombat(enemy);
 		}
 	}
 }
 
 void DungeonScene::Render()
 {
+	m_textPrompt.Render();
+
 	// Frame
-	screen.Write(0, 0, L"忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖");
+	m_screen.Write(0, 0, L"忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖");
 
 	for (int y = 1; y <= 26; ++y)
 	{
-		screen.Write(0, y, L"弛");
-		screen.Write(32, y, L"弛");
-		screen.Write(126, y, L"弛");
+		m_screen.Write(0, y, L"弛");
+		m_screen.Write(32, y, L"弛");
+		m_screen.Write(126, y, L"弛");
 	}
 
-	screen.Write(13, 1, L"[ Stat ]");
-	screen.Write(73, 1, L"<< Dungeon >>");
+	m_screen.Write(13, 1, L"[ Stat ]");
+	m_screen.Write(73, 1, L"<< Dungeon >>");
 
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
-	screen.Write(1, 2, L"式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式");
-	screen.Write(2, 3, L"Name: " + player.GetName());
-	screen.Write(2, 4, L"Info: " + player.GetDescription());
-	screen.Write(2, 5, L"Gold: " + to_wstring(player.GetGold().amount));
-	screen.Write(2, 6, L"HP: " + to_wstring(player.GetStats().GetStatValue(EStatType::HP)) + L"/" + to_wstring(player.GetCurrentHP()));
-	screen.Write(2, 7, L"AttackPower: " + to_wstring(player.GetStats().GetStatValue(EStatType::AttackPower)));
-	screen.Write(2, 8, L"Defence: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));
-	screen.Write(2, 9, L"Agility: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
-	screen.Write(2, 11, L"Equipment");
-	screen.Write(2, 12, L"Weapon: " + (player.GetEquipment().GetWeapon() == nullptr ? L"None" : player.GetEquipment().GetWeapon()->GetItemName()));
-	screen.Write(2, 13, L"Amor: " + (player.GetEquipment().GetArmor() == nullptr ? L"None" : player.GetEquipment().GetArmor()->GetItemName()));
-	screen.Write(0, 27, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
+	m_screen.Write(1, 2, L"式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式");
+	m_screen.Write(2, 3, L"檜葷: " + player.GetName());
+	m_screen.Write(2, 4, L"薑爾: " + player.GetDescription());
+	m_screen.Write(2, 5, L"埤萄: " + to_wstring(player.GetGold().m_amount));
+	m_screen.Write(2, 6, L"HP: " + to_wstring(player.GetStats().GetStatValue(EStatType::HP)) + L"/" + to_wstring(player.GetCurrentHP()));
+	m_screen.Write(2, 7, L"奢問溘: " + to_wstring(player.GetStats().GetStatValue(EStatType::AttackPower)));
+	m_screen.Write(2, 8, L"寞橫溘: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));
+	m_screen.Write(2, 9, L"團繪: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
+	m_screen.Write(2, 11, L"濰雜 嬴檜蠱");
+	m_screen.Write(2, 12, L"鼠晦: " + (player.GetEquipment().GetWeapon() == nullptr ? L"嘐濰雜" : player.GetEquipment().GetWeapon()->GetItemName()));
+	m_screen.Write(2, 13, L"寞橫掘: " + (player.GetEquipment().GetArmor() == nullptr ? L"嘐濰雜" : player.GetEquipment().GetArmor()->GetItemName()));
+	m_screen.Write(0, 27, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
 
-	if (CurrentSceneState == EDungeonSceneState::Default)
+	if (m_currentSceneState == EDungeonSceneState::Default)
 	{
-		screen.Write(2, 28, L"Command List : Combat, Runaway");
+		m_screen.Write(2, 28, L"Command List : Combat, Runaway");
 	}
 
-	screen.Write(0, 28, L"弛");                                                                                                  screen.Write(126, 28, L"弛");
-	screen.Write(0, 29, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
-	screen.Write(0, 30, L"弛"); screen.Write(2, 30, L"Command > " + input.GetInputBuffer());                                     screen.Write(126, 30, L"弛");
-	screen.Write(0, 31, L"戌式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式戎");
-
-	textPrompt.Render();
+	m_screen.Write(0, 28, L"弛");                                                                                                  m_screen.Write(126, 28, L"弛");
+	m_screen.Write(0, 29, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
+	m_screen.Write(0, 30, L"弛"); m_screen.Write(2, 30, L"Command > " + m_input.GetInputBuffer());                                     m_screen.Write(126, 30, L"弛");
+	m_screen.Write(0, 31, L"戌式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式戎");
 }

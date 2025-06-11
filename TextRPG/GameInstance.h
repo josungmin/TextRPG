@@ -13,9 +13,11 @@ public:
 		return instance;
 	};
 
+public:
+	~GameInstance() = default;
+
 private:
 	GameInstance() = default;
-	~GameInstance() = default;
 
 public:
 	ItemTable& GetItemTable() { return itemTable; }

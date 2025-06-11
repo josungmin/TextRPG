@@ -7,7 +7,7 @@ class Equipment
 {
 public:
     bool Equip(std::shared_ptr<EquipableItem> item, StatContainer& ownerStatContainer);
-    bool Unequip(EquipType type, StatContainer& ownerStatContainer);
+    bool Unequip(EEquipType type, StatContainer& ownerStatContainer);
 
     inline std::shared_ptr<EquipableItem> GetWeapon() const { return weapon; }
     inline std::shared_ptr<EquipableItem> GetArmor() const { return armor; }

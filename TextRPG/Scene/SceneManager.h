@@ -3,29 +3,47 @@
 #include "Scene.h"
 #include "../Screen.h"
 
+//enum class ESceneType : uint8_t
+//{
+//	Title,
+//	Main,
+//	Dungeon,
+//	Shop,
+//	Inventory,
+//};
+
 class SceneManager
 {
 public:
-	SceneManager() :currentScene(nullptr) { }
-	~SceneManager() {}
-
-public:
-	inline std::unique_ptr<Scene>& GetCurrentScene()
+	SceneManager() 
+		:m_currentScene(nullptr)
 	{
-		return currentScene;
+		
 	}
 
-	void ChangeScene(std::unique_ptr<Scene> newScene)
+	~SceneManager() 
 	{
-		if (currentScene)
+		delete m_currentScene;
+	}
+
+public:
+	inline Scene& GetCurrentScene() const { return *m_currentScene; }
+	
+	void ChangeScene(Scene& newScene)
+	{
+		if (m_currentScene != nullptr)
 		{
-			currentScene->OnExit();
+			m_currentScene->OnExit();
+
+			delete m_currentScene;
+			m_currentScene = nullptr;
 		}
-		currentScene = std::move(newScene);
-		currentScene->OnEnter();
+
+		m_currentScene = &newScene;
+		m_currentScene->OnEnter();
 	}
 
 private:
-	std::unique_ptr<Scene> currentScene = nullptr;
+	Scene* m_currentScene = nullptr;
 };
 

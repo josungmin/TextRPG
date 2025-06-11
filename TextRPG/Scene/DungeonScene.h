@@ -3,8 +3,7 @@
 #include <memory>
 
 #include "../TextPrompt.h"
-
-class EnemyCharacter;
+#include "../Character/EnemyCharacter.h"
 
 enum class EDungeonSceneState : uint8_t
 {
@@ -26,8 +25,9 @@ public:
 	virtual void Render() override;
 
 private:
-	TextPrompt textPrompt;
-	EDungeonSceneState CurrentSceneState = EDungeonSceneState::Default;
+	TextPrompt m_textPrompt;
+	EDungeonSceneState m_currentSceneState = EDungeonSceneState::Default;
+	//CombatGameMode GameMode;
 
-	std::unique_ptr<EnemyCharacter> enemy = nullptr;
+	EnemyCharacter* m_enemy;
 };

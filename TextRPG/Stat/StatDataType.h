@@ -135,23 +135,23 @@ private:
 
 struct Experience
 {
-	int8_t currentExp = 0;
-	int8_t level = 1;
+	int8_t m_currentExp = 0;
+	int8_t m_level = 1;
 
 	int8_t GetRequiredExpForNextLevel() const
 	{
-		return 3 + (level - 1) * 5;
+		return 3 + (m_level - 1) * 5;
 	}
 
 	bool AddExperience(const int8_t amount)
 	{
-		currentExp += amount;
+		m_currentExp += amount;
 		bool leveledUp = false;
 
-		while (currentExp >= GetRequiredExpForNextLevel())
+		while (m_currentExp >= GetRequiredExpForNextLevel())
 		{
-			currentExp -= GetRequiredExpForNextLevel();
-			level++;
+			m_currentExp -= GetRequiredExpForNextLevel();
+			m_level++;
 			leveledUp = true;
 		}
 
@@ -177,28 +177,28 @@ struct ExperienceTable
 
 struct Gold
 {
-	uint16_t amount = 10000;
+	uint16_t m_amount = 10000;
 	
 	void AddGold(const uint16_t amount)
 	{
-		uint32_t total = (this->amount + amount);
+		uint32_t total = (m_amount + amount);
 
 		if (total > UINT8_MAX)
 		{
-			this->amount = UINT8_MAX;
+			m_amount = UINT8_MAX;
 		}
 
-		this->amount = (uint16_t)total;
+		m_amount = (uint16_t)total;
 	}
 
 	bool RemoveGold(const uint16_t amount)
 	{
-		if (this->amount < amount)
+		if (m_amount < amount)
 		{
 			return false;
 		}
 
-		this->amount -= amount;
+		m_amount -= amount;
 		return true;
 	}
 };

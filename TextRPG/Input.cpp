@@ -11,35 +11,35 @@ void Input::InputProcess()
 
 		if (ch == L'\r') // Enter
 		{
-			if (!inputBuffer.empty())
+			if (m_inputBuffer.empty() == false)
 			{
-				command = inputBuffer;
-				inputBuffer.clear();
+				m_command = m_inputBuffer;
+				m_inputBuffer.clear();
 			}
 		}
 		else if (ch == L'\b') // Backspace
 		{
-			if (!inputBuffer.empty())
+			if (m_inputBuffer.empty() == false)
 			{
-				inputBuffer.pop_back();
+				m_inputBuffer.pop_back();
 			}				
 		}
 		else
 		{
-			inputBuffer += ch;
+			m_inputBuffer += ch;
 		}
 	}
 }
 
-bool Input::HasCommand()
+const bool Input::HasCommand() const
 {
-	return !command.empty();
+	return (m_command.empty() == false);
 }
 
-wstring Input::GetCommand()
+const wstring Input::GetCommand()
 {
-	wstring cmd = command;
-	command.clear();
+	wstring cmd = m_command;
+	m_command.clear();
 
 	return cmd;
 }

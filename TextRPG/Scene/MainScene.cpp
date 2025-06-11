@@ -15,13 +15,13 @@ MainScene::~MainScene()
 
 void MainScene::OnEnter()
 {
-	screen.Clear();
+	m_screen.Clear();
 	textPrompt.Clear();
 }
 
 void MainScene::OnExit()
 {
-	screen.Clear();
+	m_screen.Clear();
 	textPrompt.Clear();
 }
 
@@ -29,9 +29,9 @@ void MainScene::Update()
 {
 	textPrompt.Update();
 
-	if (input.HasCommand()) 
+	if (m_input.HasCommand()) 
 	{
-		std::wstring cmd = input.GetCommand();
+		std::wstring cmd = m_input.GetCommand();
 
 		if (CurrentSceneState == EMainSceneState::Default && cmd == L"Healer")
 		{
@@ -50,14 +50,15 @@ void MainScene::Update()
 			}
 
 			auto armor = dynamic_pointer_cast<EquipableItem>(GameInstance::Instance().GetItemTable().CreateItem(L"Armor"));
-			if (sword != nullptr)
+			if (armor != nullptr)
 			{
 				player.GetEquipment().Equip(armor, player.GetStats());
 			}
 		}
 		else if (CurrentSceneState == EMainSceneState::Default && cmd == L"Dungeon")
 		{
-			GameInstance::Instance().GetSceneManager().ChangeScene(make_unique<DungeonScene>(screen, input));
+			Scene* dungeonScene = new DungeonScene(m_screen, m_input);
+			GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
 		}
 		else if (CurrentSceneState == EMainSceneState::Healer)
 		{
@@ -92,45 +93,45 @@ void MainScene::Update()
 void MainScene::Render()
 {
 	// Frame
-	screen.Write(0, 0, L"忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖");
+	m_screen.Write(0, 0, L"忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖");
 
 	for (int y = 1; y <= 26; ++y)
 	{
-		screen.Write(0, y, L"弛");
-		screen.Write(32, y, L"弛");
-		screen.Write(126, y, L"弛");
+		m_screen.Write(0, y, L"弛");
+		m_screen.Write(32, y, L"弛");
+		m_screen.Write(126, y, L"弛");
 	}
 
-	screen.Write(13, 1, L"[ Stat ]");
-	screen.Write(73, 1, L"<< Village >>");
+	m_screen.Write(13, 1, L"[ Stat ]");
+	m_screen.Write(73, 1, L"<< Village >>");
 
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
-	screen.Write(1, 2, L"式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式");
-	screen.Write(2, 3, L"Name: " + player.GetName());
-	screen.Write(2, 4, L"Info: " + player.GetDescription());
-	screen.Write(2, 5, L"Gold: " + to_wstring(player.GetGold().amount));
-	screen.Write(2, 6, L"HP: " + to_wstring(player.GetStats().GetStatValue(EStatType::HP)) + L"/" + to_wstring(player.GetCurrentHP()));
-	screen.Write(2, 7, L"AttackPower: " + to_wstring(player.GetStats().GetStatValue(EStatType::AttackPower)));
-	screen.Write(2, 8, L"Defence: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));
-	screen.Write(2, 9, L"Agility: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
-	screen.Write(2, 11, L"Equipment");
-	screen.Write(2, 12, L"Weapon: " + (player.GetEquipment().GetWeapon() == nullptr ? L"None" : player.GetEquipment().GetWeapon()->GetItemName()));
-	screen.Write(2, 13, L"Amor: " +(player.GetEquipment().GetArmor() == nullptr ? L"None" : player.GetEquipment().GetArmor()->GetItemName()));
-	screen.Write(0, 27, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
+	m_screen.Write(1, 2, L"式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式");
+	m_screen.Write(2, 3, L"檜葷: " + player.GetName());
+	m_screen.Write(2, 4, L"薑爾: " + player.GetDescription());
+	m_screen.Write(2, 5, L"埤萄: " + to_wstring(player.GetGold().m_amount));
+	m_screen.Write(2, 6, L"HP: " + to_wstring(player.GetStats().GetStatValue(EStatType::HP)) + L"/" + to_wstring(player.GetCurrentHP()));
+	m_screen.Write(2, 7, L"奢問溘: " + to_wstring(player.GetStats().GetStatValue(EStatType::AttackPower)));
+	m_screen.Write(2, 8, L"寞橫溘: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));
+	m_screen.Write(2, 9, L"團繪: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
+	m_screen.Write(2, 11, L"濰雜 嬴檜蠱");
+	m_screen.Write(2, 12, L"鼠晦: " + (player.GetEquipment().GetWeapon() == nullptr ? L"嘐濰雜" : player.GetEquipment().GetWeapon()->GetItemName()));
+	m_screen.Write(2, 13, L"寞橫掘: " +(player.GetEquipment().GetArmor() == nullptr ? L"嘐濰雜" : player.GetEquipment().GetArmor()->GetItemName()));
+	m_screen.Write(0, 27, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
 
 	if (CurrentSceneState == EMainSceneState::Healer)
 	{
-		screen.Write(2, 28, L"Command List : Yes, No");
+		m_screen.Write(2, 28, L"Command List : Yes, No");
 	}
 	else if (CurrentSceneState == EMainSceneState::Default)
 	{
-		screen.Write(2, 28, L"Command List : Healer, Shop, Dungeon, Inventory");
+		m_screen.Write(2, 28, L"Command List : Healer, Shop, Dungeon, Inventory");
 	}
 
-	screen.Write(0, 28, L"弛");                                                                                                  screen.Write(126, 28, L"弛");
-	screen.Write(0, 29, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
-	screen.Write(0, 30, L"弛"); screen.Write(2, 30, L"Command > " + input.GetInputBuffer());                                     screen.Write(126, 30, L"弛");
-	screen.Write(0, 31, L"戌式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式戎");
+	m_screen.Write(0, 28, L"弛");                                                                                                  m_screen.Write(126, 28, L"弛");
+	m_screen.Write(0, 29, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
+	m_screen.Write(0, 30, L"弛"); m_screen.Write(2, 30, L"Command > " + m_input.GetInputBuffer());                                     m_screen.Write(126, 30, L"弛");
+	m_screen.Write(0, 31, L"戌式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式戎");
 
 	textPrompt.Render();
 }

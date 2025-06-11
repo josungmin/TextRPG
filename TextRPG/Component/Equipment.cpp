@@ -11,7 +11,7 @@ bool Equipment::Equip(std::shared_ptr<EquipableItem> item, StatContainer& statCo
 
     switch (item->GetEquipType())
     {
-    case EquipType::WEAPON:
+    case EEquipType::WEAPON:
     {
         if (weapon)
         {
@@ -23,7 +23,7 @@ bool Equipment::Equip(std::shared_ptr<EquipableItem> item, StatContainer& statCo
 
         return true;
     }         
-    case EquipType::ARMOR:
+    case EEquipType::ARMOR:
     {
         if (armor)
         {
@@ -42,11 +42,11 @@ bool Equipment::Equip(std::shared_ptr<EquipableItem> item, StatContainer& statCo
     }
 }
 
-bool Equipment::Unequip(EquipType type, StatContainer& statContainer)
+bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
 {
     switch (type)
     {
-    case EquipType::WEAPON:
+    case EEquipType::WEAPON:
     {
         if (weapon)
         {
@@ -57,7 +57,7 @@ bool Equipment::Unequip(EquipType type, StatContainer& statContainer)
 
         break;
     }   
-    case EquipType::ARMOR:
+    case EEquipType::ARMOR:
     {
         if (armor)
         {

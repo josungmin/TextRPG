@@ -17,11 +17,10 @@ private:
 	void Render();
 
 private:
-	const int targetFPS = 30;
-	const int frameTimeMS = 1000 / targetFPS;
+	const int TARGET_FPS = 30;
+	const int FRAME_TIME_MS = 1000 / TARGET_FPS;
 
 private:
-	Screen screen;
-	Input input;
+	Screen m_screen;
+	Input m_input;
 };
-

@@ -2,67 +2,79 @@
 #include <string>
 #include <memory>
 
+using namespace std;
+
 enum class EItemType : uint8_t
 {
+	None,
 	Equip,
+	Other,
 };
 
 class Item
 {
 public:
+	Item(const EItemType itemType, const std::wstring& itemName, const std::wstring& description, const uint8_t buyPrice, const uint8_t sellPrice)
+		:m_itemType(itemType), m_itemName(itemName), m_description(description), m_buyPrice(buyPrice), m_sellPrice(sellPrice)
+	{
 
-	virtual ~Item() {}
-	virtual std::shared_ptr<Item> Clone() const = 0;
+	}
+	~Item() = default;
+
+	virtual std::shared_ptr<Item> Clone() const
+	{
+		return std::make_shared<Item>(*this);
+	}
 
 public:
-	inline void SetType(EItemType itemType) { this->itemType = itemType; }
-	inline void SetMaxCount(uint8_t maxCount) { this->maxCount = maxCount; }
+	inline void SetMaxCount(uint8_t maxCount) { m_maxCount = maxCount; }
 
 	inline bool AddItem(int num = 1)
 	{
-		if (count + num > maxCount)
+		if (m_count + num > m_maxCount)
 		{
 			return false;
 		}
 
-		count += num;
+		m_count += num;
 		return true;
 	}
 
 	inline bool RemoveItem(int num = 1)
 	{
-		if (count <= 0 || count - num < 0)
+		if (m_count <= 0 || m_count - num < 0)
 		{
 			return false;
 		}
 
-		count -= num;
+		m_count -= num;
 
-		if (count < 0)
+		if (m_count < 0)
 		{
-			count = 0;
+			m_count = 0;
 		}
 
 		return true;
 	}
 
 public:
-	inline const EItemType GetType() const { return itemType; }
-	inline const int GetCount() const { return count; }
-	inline const int GetMaxCount() const { return maxCount; }
-	inline const std::wstring& GetItemName() const { return itemName; }
-	inline const std::wstring& GetDescription() const { return description; }
-	inline const int GetBuyPrice() const { return buyPrice; }
-	inline const int GetSellPrice() const { return sellPrice; }
+	inline const EItemType GetType() const { return m_itemType; }
+	inline const int GetCount() const { return m_count; }
+	inline const int GetMaxCount() const { return m_maxCount; }
+	inline const std::wstring& GetItemName() const { return m_itemName; }
+	inline const std::wstring& GetDescription() const { return m_description; }
+	inline const int GetBuyPrice() const { return m_buyPrice; }
+	inline const int GetSellPrice() const { return m_sellPrice; }
 
 private:
-	EItemType itemType;
-	uint8_t maxCount = 99;
+	uint8_t m_maxCount = 99;
 
 protected:
-	uint8_t count = 1;
-	std::wstring itemName{ L"Item Name" };
-	std::wstring description{ L"Item description" };
-	uint8_t buyPrice = 0;
-	uint8_t sellPrice = 0;
+	uint8_t m_count = 1;
+
+	const EItemType m_itemType = EItemType::None;
+	const std::wstring m_itemName{ L"Item Name" };
+	const std::wstring m_description{ L"Item description" };
+	const uint8_t m_buyPrice = 0;
+	const uint8_t m_sellPrice = 0;
 };
