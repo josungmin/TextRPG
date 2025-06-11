@@ -1,6 +1,12 @@
 #include "Equipment.h"
 
-bool Equipment::Equip(std::shared_ptr<EquipableItem> item, StatContainer& statContainer)
+Equipment::~Equipment()
+{
+    delete m_weapon;
+    delete m_armor;
+}
+
+bool Equipment::Equip(EquipableItem* item, StatContainer& statContainer)
 {
     if (!item)
     {
@@ -13,24 +19,24 @@ bool Equipment::Equip(std::shared_ptr<EquipableItem> item, StatContainer& statCo
     {
     case EEquipType::WEAPON:
     {
-        if (weapon)
+        if (m_weapon)
         {
-            statContainer.RemoveModifierContainer(weapon->GetModifierContainer().id);
+            statContainer.RemoveModifierContainer(m_weapon->GetModifierContainer().id);
         }
 
-        weapon = item;
+        m_weapon = item;
         statContainer.AddModifierContainer(modifierContainer);
 
         return true;
     }         
     case EEquipType::ARMOR:
     {
-        if (armor)
+        if (m_armor)
         {
-            statContainer.RemoveModifierContainer(armor->GetModifierContainer().id);
+            statContainer.RemoveModifierContainer(m_armor->GetModifierContainer().id);
         }
             
-        armor = item;
+        m_armor = item;
         statContainer.AddModifierContainer(modifierContainer);
 
         return true;
@@ -48,10 +54,10 @@ bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
     {
     case EEquipType::WEAPON:
     {
-        if (weapon)
+        if (m_weapon)
         {
-            statContainer.RemoveModifierContainer(weapon->GetModifierContainer().id);
-            weapon = nullptr;
+            statContainer.RemoveModifierContainer(m_weapon->GetModifierContainer().id);
+            m_weapon = nullptr;
             return true;
         }
 
@@ -59,10 +65,10 @@ bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
     }   
     case EEquipType::ARMOR:
     {
-        if (armor)
+        if (m_armor)
         {
-            statContainer.RemoveModifierContainer(armor->GetModifierContainer().id);
-            armor = nullptr;
+            statContainer.RemoveModifierContainer(m_armor->GetModifierContainer().id);
+            m_armor = nullptr;
             return true;
         }
 

@@ -9,8 +9,8 @@ class GameInstance
 public:
 	static GameInstance& Instance()
 	{
-		static GameInstance instance;
-		return instance;
+		static GameInstance m_instance;
+		return m_instance;
 	};
 
 public:
@@ -20,13 +20,13 @@ private:
 	GameInstance() = default;
 
 public:
-	ItemTable& GetItemTable() { return itemTable; }
-	PlayerCharacter& GetPlayer() { return player; }
-	SceneManager& GetSceneManager() { return sceneManager; }
+	ItemTable& GetItemTable() { return m_itemTable; }
+	PlayerCharacter& GetPlayer() { return m_player; }
+	SceneManager& GetSceneManager() { return m_sceneManager; }
 
 private:
-	ItemTable itemTable;
-	PlayerCharacter player{ L"SungMin", L"Hero this game" };
-	SceneManager sceneManager;
+	ItemTable m_itemTable;
+	PlayerCharacter m_player{ L"SungMin", L"Hero this game" };
+	SceneManager m_sceneManager;
 };
 

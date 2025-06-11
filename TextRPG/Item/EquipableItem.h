@@ -14,9 +14,9 @@ class EquipableItem : public Item
 public:
 	EquipableItem(const EEquipType equipType, const EItemType itemType, const std::wstring& itemName, const std::wstring& description, const uint8_t buyPrice, const uint8_t sellPrice);
 
-	std::shared_ptr<Item> Clone() const override
+	Item* Clone() const override
 	{
-		return std::make_shared<EquipableItem>(*this);
+		return new EquipableItem(*this);
 	}
 
 	inline const EEquipType GetEquipType() const { return m_equipType; }

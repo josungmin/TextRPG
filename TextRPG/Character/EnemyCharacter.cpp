@@ -3,6 +3,6 @@
 EnemyCharacter::EnemyCharacter(const wstring& characterName, const wstring& description, const StatContainer& statContainer)
 	: CombatCharacter(characterName, description)
 {
-	this->statContainer = statContainer;
-	currentHP = this->statContainer.GetStatValue(EStatType::HP);
+	this->m_statContainer = statContainer;
+	m_currentHP = this->m_statContainer.GetStatValue(EStatType::HP);
 }

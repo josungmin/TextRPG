@@ -2,6 +2,7 @@
 #include "CombatCharacter.h"
 #include "../Stat/StatDataType.h"
 #include "../Component/Equipment.h"
+#include "../Component/Inventory.h"
 
 class PlayerCharacter : public CombatCharacter
 {
@@ -9,12 +10,14 @@ public:
 	PlayerCharacter(const wstring& characterName, const wstring& description);
 	
 public:
-	inline Experience& GetExperience() { return experience; }
-	inline Gold& GetGold() { return gold; }
-	inline Equipment& GetEquipment() { return equipment; }
+	inline Experience& GetExperience() { return m_experience; }
+	inline Gold& GetGold() { return m_gold; }
+	inline Equipment& GetEquipment() { return m_equipment; }
+	inline Inventory& GetInventory() { return m_inventory; }
 
 protected:
-	Experience experience;
-	Gold gold;
-	Equipment equipment;
+	Experience m_experience;
+	Gold m_gold;
+	Equipment m_equipment;
+	Inventory m_inventory;
 };

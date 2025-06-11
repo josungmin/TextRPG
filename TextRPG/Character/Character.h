@@ -8,14 +8,14 @@ class Character
 {
 public:
 	Character(const wstring& characterName, const wstring& description)
-		:characterName(characterName), description(description) { }
+		:m_characterName(characterName), m_description(description) { }
 	virtual ~Character() = default;
 
 public:
-	inline const wstring& GetName() const { return characterName; }
-	inline const wstring& GetDescription() const { return description; }
+	inline const wstring& GetName() const { return m_characterName; }
+	inline const wstring& GetDescription() const { return m_description; }
 
 protected:
-	wstring characterName{ L"Character Name" };;
-	wstring description{ L"character description" };;
+	wstring m_characterName{ L"Character Name" };;
+	wstring m_description{ L"character description" };;
 };

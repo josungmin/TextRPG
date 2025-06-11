@@ -21,9 +21,9 @@ public:
 	}
 	~Item() = default;
 
-	virtual std::shared_ptr<Item> Clone() const
+	virtual Item* Clone() const
 	{
-		return std::make_shared<Item>(*this);
+		return new Item(*this);
 	}
 
 public:

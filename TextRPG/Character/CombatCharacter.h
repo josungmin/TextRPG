@@ -14,16 +14,16 @@ public:
 	virtual void HealHp(uint16_t amount);
 
 public:
-	inline StatContainer& GetStats() { return statContainer; }
-	inline const uint16_t GetCurrentHP() const { return currentHP; }
-	inline const bool GetIsDead() const { return bIsDead; }
+	inline const uint16_t GetCurrentHP() const { return m_currentHP; }
+	inline const bool GetIsDead() const { return m_IsDead; }
+	inline StatContainer& GetStats() { return m_statContainer; }
 
 protected:
 	virtual uint16_t CalculateDamage(uint16_t damage);
 
 protected:
-	StatContainer statContainer;
+	uint16_t m_currentHP = 0;
+	bool m_IsDead = false;
 
-	uint16_t currentHP = 0;
-	bool bIsDead = false;
+	StatContainer m_statContainer;
 };

@@ -11,20 +11,16 @@ using namespace std;
 class ItemTable
 {
 public:
-	ItemTable() { Load(); }
-	~ItemTable() { }
+	ItemTable();
+	~ItemTable();
 
 public:
-	//public Item FindItem(wstring itemName);
-
-	shared_ptr<Item> CreateItem(const wstring& id) const;
-	inline const unordered_map<wstring, shared_ptr<Item>>& GetItemMap() const { return itemMap; }
+	Item* CreateItem(const wstring& id) const;
+	inline const std::unordered_map<std::wstring, Item*>& GetItemMap() const { return m_itemMap; }
 
 private:
 	void Load(); //TODO: 테스트 코드
 
 private:
-	std::unordered_map<wstring, shared_ptr<Item>> itemMap;
-
-	std::map<const wstring, Item*> itemDatas;
+	std::unordered_map<wstring, Item*> m_itemMap;
 };

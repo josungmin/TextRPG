@@ -1,17 +1,23 @@
 #pragma once
+#include <string>
+#include <vector>
 #include "../MyType.h"
+
+using namespace std;
+
+class Item;
 
 class Inventory
 {
 public:
-	Inventory();
+	Inventory() = default;
 	~Inventory();
 
 public:
-	void AddItem();
-	void RemoveItem();
+	bool AddItem(Item* item);
+	bool RemoveItem(const wstring& itemName);
 
 private:
-	 uint8 m_size;
-
+	// TODO: 자료형 변경 고민중
+	vector<Item*> m_items;
 };

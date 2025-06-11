@@ -2,6 +2,19 @@
 #include "Item.h"
 #include "EquipableItem.h"
 
+ItemTable::ItemTable()
+{
+	Load();
+}
+
+ItemTable::~ItemTable()
+{
+	for (auto& pair : m_itemMap)
+	{
+		delete pair.second;
+	}
+}
+
 void ItemTable::Load()
 {
 	// Sword item 1
@@ -19,7 +32,7 @@ void ItemTable::Load()
 	swordMod.modifiers.push_back({ EStatType::AttackPower, EModifierType::Add, 1 });
 	sword->SetModifierContainer(swordMod);
 
-	itemDatas[sword->GetItemName()] = sword; //insert()?
+	m_itemMap[sword->GetItemName()] = sword; //insert()?
 	
 	// Sword Item 2
 	EquipableItem* lightSword = new EquipableItem(
@@ -37,7 +50,7 @@ void ItemTable::Load()
 	lightSwordMod.modifiers.push_back({ EStatType::Agility, EModifierType::Add, 1 });
 	lightSword->SetModifierContainer(lightSwordMod);
 
-	itemDatas[lightSword->GetItemName()] = lightSword; //insert()?
+	m_itemMap[lightSword->GetItemName()] = lightSword; //insert()?
 
 	// Sword item 3
 	EquipableItem* bronzeSword = new EquipableItem(
@@ -55,7 +68,7 @@ void ItemTable::Load()
 	bronzeSwordMod.modifiers.push_back({ EStatType::Agility, EModifierType::Add, 1 });
 	bronzeSword->SetModifierContainer(bronzeSwordMod);
 
-	itemDatas[lightSword->GetItemName()] = lightSword;
+	m_itemMap[lightSword->GetItemName()] = lightSword;
 
 
 
@@ -74,21 +87,21 @@ void ItemTable::Load()
 	amordMod.modifiers.push_back({ EStatType::Defence, EModifierType::Add, 1 });
 	amor->SetModifierContainer(amordMod);
 
-	itemDatas[amor->GetItemName()] = amor;
+	m_itemMap[amor->GetItemName()] = amor;
 
 
 	// Other items
 	Item* goblenBone = new Item(EItemType::Other, L"고블린의 뼈", L"고블린 처치 시 일정 확률로 획득할 수 있다.", 0, 2);
-	itemDatas[goblenBone->GetItemName()] = goblenBone;
+	m_itemMap[goblenBone->GetItemName()] = goblenBone;
 }
 
-std::shared_ptr<Item> ItemTable::CreateItem(const wstring& id) const
+Item* ItemTable::CreateItem(const wstring& id) const
 {
-    auto it = itemMap.find(id);
-    if (it == itemMap.end())
-    {
-        return nullptr;
-    }
+	auto it = m_itemMap.find(id);
+	if (it == m_itemMap.end())
+	{
+		return nullptr;
+	}
 
-    return it->second->Clone();
+	return it->second->Clone();
 }

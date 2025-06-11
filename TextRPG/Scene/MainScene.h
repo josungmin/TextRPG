@@ -22,7 +22,7 @@ public:
 	virtual void Render() override;
 
 private:
-	TextPrompt textPrompt;
-	EMainSceneState CurrentSceneState;
+	TextPrompt m_textPrompt;
+	EMainSceneState m_currentSceneState;
 };
 

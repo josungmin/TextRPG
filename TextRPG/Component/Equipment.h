@@ -6,13 +6,16 @@
 class Equipment
 {
 public:
-    bool Equip(std::shared_ptr<EquipableItem> item, StatContainer& ownerStatContainer);
+    ~Equipment();
+
+public:
+    bool Equip(EquipableItem* item, StatContainer& ownerStatContainer);
     bool Unequip(EEquipType type, StatContainer& ownerStatContainer);
 
-    inline std::shared_ptr<EquipableItem> GetWeapon() const { return weapon; }
-    inline std::shared_ptr<EquipableItem> GetArmor() const { return armor; }
+    inline EquipableItem* GetWeapon() const { return m_weapon; }
+    inline EquipableItem* GetArmor() const { return m_armor; }
 
 private:
-    std::shared_ptr<EquipableItem> weapon = nullptr;
-    std::shared_ptr<EquipableItem> armor = nullptr;
+    EquipableItem* m_weapon = nullptr;
+    EquipableItem* m_armor = nullptr;
 };
