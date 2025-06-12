@@ -5,9 +5,9 @@ void Input::InputProcess()
 {
 	while (_kbhit())
 	{
-		wchar_t ch = _getwch();
+		wchar_t wch = _getwch();
 
-		if (ch == L'\r') // Enter
+		if (wch == L'\r') // Enter
 		{
 			if (m_inputBuffer.empty() == false)
 			{
@@ -15,7 +15,7 @@ void Input::InputProcess()
 				m_inputBuffer.clear();
 			}
 		}
-		else if (ch == L'\b') // Backspace
+		else if (wch == L'\b') // Backspace
 		{
 			if (m_inputBuffer.empty() == false)
 			{
@@ -24,7 +24,7 @@ void Input::InputProcess()
 		}
 		else
 		{
-			m_inputBuffer += ch;
+			m_inputBuffer += wch;
 		}
 	}
 }

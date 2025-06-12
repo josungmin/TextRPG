@@ -11,7 +11,7 @@ enum class ECombatState : uint8
 	CombatEnd,
 	PlayerAction,
 	EnemyAction,
-	// 	PlayerInput,
+	PlayerInput,
 };
 
 class CombatGameMode

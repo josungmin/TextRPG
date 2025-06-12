@@ -94,32 +94,6 @@ void MainScene::Update()
 				m_currentSceneState = EMainSceneState::Default;
 			}
 		}
-
-		
-		/*if (m_currentSceneState == EMainSceneState::Default && cmd == L"Inventory")
-		{
-			PlayerCharacter& player = GameInstance::Instance().GetPlayer();
-
-			Item* sword = GameInstance::Instance().GetItemTable().CreateItem(L"최하급 검");
-			if (sword != nullptr)
-			{
-				EquipableItem* equipableItem = dynamic_cast<EquipableItem*>(sword);
-				if (equipableItem != nullptr)
-				{
-					player.GetEquipment().Equip(equipableItem, player.GetStats());
-				}				
-			}
-
-			Item* armor = GameInstance::Instance().GetItemTable().CreateItem(L"최하급 갑옷");
-			if (sword != nullptr)
-			{
-				EquipableItem* equipableItem = dynamic_cast<EquipableItem*>(armor);
-				if (equipableItem != nullptr)
-				{
-					player.GetEquipment().Equip(equipableItem, player.GetStats());
-				}
-			}
-		}*/		
 	}
 }
 
@@ -151,7 +125,7 @@ void MainScene::Render()
 	m_screen.Write(2, 12, L"무기: " + (player.GetEquipment().GetWeapon() == nullptr ? L"미장착" : player.GetEquipment().GetWeapon()->GetItemName()));
 	m_screen.Write(2, 13, L"방어구: " +(player.GetEquipment().GetArmor() == nullptr ? L"미장착" : player.GetEquipment().GetArmor()->GetItemName()));
 	m_screen.Write(2, 15, L"인벤토리: ");
-	m_screen.Write(2, 16, L"최하급 검"); // TODO: 아이템 목록 출력
+	m_screen.Write(2, 16, L"최하급 검"); //TODO: 보유 아이템 목록 출력
 
 	m_screen.Write(0, 29, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");
 	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"명령 > " + m_input.GetInputBuffer());                                    

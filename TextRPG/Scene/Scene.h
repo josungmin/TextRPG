@@ -1,11 +1,12 @@
 #pragma once
 #include "../Screen.h"
 #include "../Input.h"
+#include "../TextPrompt.h"
 
 class Scene
 {
 public:
-	Scene(Screen& screen, Input& input) 
+	Scene(Screen& screen, Input& input)
 		: m_screen(screen), m_input(input)
 	{
 

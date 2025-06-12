@@ -17,67 +17,66 @@ bool Equipment::Equip(EquipableItem* item, StatContainer& statContainer)
 
     switch (item->GetEquipType())
     {
-    case EEquipType::Weapon:
-    {
-        if (m_weapon)
+        case EEquipType::Weapon:
         {
-            statContainer.RemoveModifierContainer(m_weapon->GetModifierContainer().id);
-        }
+            if (m_weapon)
+            {
+                statContainer.RemoveModifierContainer(m_weapon->GetModifierContainer().id);
+            }
 
-        m_weapon = item;
-        statContainer.AddModifierContainer(modifierContainer);
+            m_weapon = item;
+            statContainer.AddModifierContainer(modifierContainer);
 
-        return true;
-    }         
-    case EEquipType::Armor:
-    {
-        if (m_armor)
+            return true;
+        }         
+        case EEquipType::Armor:
         {
-            statContainer.RemoveModifierContainer(m_armor->GetModifierContainer().id);
-        }
+            if (m_armor)
+            {
+                statContainer.RemoveModifierContainer(m_armor->GetModifierContainer().id);
+            }
             
-        m_armor = item;
-        statContainer.AddModifierContainer(modifierContainer);
+            m_armor = item;
+            statContainer.AddModifierContainer(modifierContainer);
 
-        return true;
-    }
-    default:
-    {
-        return false;
-    }      
+            return true;
+        }
+        default:
+        {
+            return false;
+        }      
     }
 }
 
 bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
 {
+
     switch (type)
     {
-    case EEquipType::Weapon:
-    {
-        if (m_weapon)
+        case EEquipType::Weapon:
         {
-            statContainer.RemoveModifierContainer(m_weapon->GetModifierContainer().id);
-            m_weapon = nullptr;
-            return true;
-        }
-
-        break;
-    }   
-    case EEquipType::Armor:
-    {
-        if (m_armor)
+            if (m_weapon)
+            {
+                statContainer.RemoveModifierContainer(m_weapon->GetModifierContainer().id);
+                m_weapon = nullptr;
+                return true;
+            }
+            break;
+        }   
+        case EEquipType::Armor:
         {
-            statContainer.RemoveModifierContainer(m_armor->GetModifierContainer().id);
-            m_armor = nullptr;
-            return true;
-        }
-
-        break;
-    }     
-    default:
-    {
-        break;
-    }   
+            if (m_armor)
+            {
+                statContainer.RemoveModifierContainer(m_armor->GetModifierContainer().id);
+                m_armor = nullptr;
+                return true;
+            }
+            break;
+        }     
+        default:
+        {
+            break;
+        }   
     }
 
     return false;

@@ -1,6 +1,6 @@
 #include "TextPrompt.h"
 
-TextPrompt::TextPrompt(Screen& screen, uint8_t posX, uint8_t posY)
+TextPrompt::TextPrompt(Screen& screen, uint8 posX, uint8 posY)
 	:m_screen(screen), m_posX(posX), m_posY(posY)
 {
 }
@@ -12,32 +12,33 @@ void TextPrompt::Enqueue(const wstring& msg)
 
 void TextPrompt::Update()
 {
-    DWORD now = GetTickCount();
+	unsigned long currentTime = GetTickCount();
 
-    if (m_waitMessageQueue.empty() == false && (now - m_lastPrintTime >= DELAY_MS))
-    {
-        m_printMessageQueue.push_back(m_waitMessageQueue.front());
-        m_waitMessageQueue.pop_front();
-        m_lastPrintTime = now;
+	if (m_waitMessageQueue.empty() == false && (currentTime - m_lastPrintTime >= DELAY_MS))
+	{
+		m_printMessageQueue.push_back(m_waitMessageQueue.front());
+		m_waitMessageQueue.pop_front();
+		m_lastPrintTime = currentTime;
 
-        if (m_printMessageQueue.size() > MAX_LINE)
-        {
-            m_printMessageQueue.pop_front();
-        }
-    }
+		if (m_printMessageQueue.size() * 2 - 1 > MAX_LINE)
+		{
+			m_printMessageQueue.pop_front();
+		}
+	}
 }
 
 void TextPrompt::Render()
 {
-    uint8 y = m_posY;
-    for (const wstring& msg : m_printMessageQueue)
-    {
-        m_screen.Write(m_posX, y++, msg);
-    }
+	uint8 y = m_posY;
+	for (const wstring& msg : m_printMessageQueue)
+	{
+		m_screen.Write(m_posX, y, msg);
+		y += 2;
+	}
 }
 
 void TextPrompt::Clear()
 {
-    m_waitMessageQueue.clear();
-    m_printMessageQueue.clear();
+	m_waitMessageQueue.clear();
+	m_printMessageQueue.clear();
 }

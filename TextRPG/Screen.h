@@ -21,7 +21,7 @@ public:
 	void Render();
 	void Clear();
 
-	void ShowConsoleCursor(bool bIsShow);
+	void ShowConsoleCursor(bool isShow);
 
 private:
 	uint8 GetCharWidth(wchar_t c);

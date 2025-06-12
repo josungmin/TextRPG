@@ -1,6 +1,4 @@
 #include "CombatCharacter.h"
-//TODO: 임시코드
-#include <windows.h>
 
 CombatCharacter::CombatCharacter(const wstring& characterName, const wstring& description)
 	:Character(characterName, description)
@@ -14,7 +12,6 @@ void CombatCharacter::TakeDamage(uint16 damage)
 	if (m_currentHP <= 0)
 	{
 		m_IsDead = true;
-		MessageBox(NULL, TEXT("Combat Character is Dead"), TEXT("Text"), MB_OK);
 	}
 }
 

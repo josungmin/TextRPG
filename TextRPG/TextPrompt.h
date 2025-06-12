@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 #include <deque>
-#include <windows.h>
+//#include <windows.h>
+#include "MyType.h"
 #include "Screen.h"
 
 using namespace std;
@@ -9,7 +10,7 @@ using namespace std;
 class TextPrompt
 {
 public:
-    TextPrompt(Screen& screen, uint8_t posX, uint8_t posY);
+    TextPrompt(Screen& screen, uint8 posX, uint8 posY);
     ~TextPrompt() = default;
 
 private:
@@ -31,5 +32,5 @@ private:
     deque<wstring> m_waitMessageQueue;
     deque<wstring> m_printMessageQueue;
 
-    DWORD m_lastPrintTime = 0;
+    unsigned long m_lastPrintTime = 0;
 };

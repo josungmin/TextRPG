@@ -28,14 +28,11 @@ void CombatGameMode::ProcessCombat()
 
 	switch (currentCombatState)
 	{
-		if (m_isCombat == true)
+		case ECombatState::PlayerInput:
 		{
-			return;
+			
+			break;
 		}
-		//case ECombatState::PlayerInput:
-		//{
-		//	break;
-		//}
 		case ECombatState::CombatStart:
 		{
 			CombatStart();
@@ -92,7 +89,6 @@ void CombatGameMode::CombatStart()
 	uint16_t enemyAgility = m_enemy->GetStats().GetStatValue(EStatType::Agility);
 
 	currentCombatState = playerAgility < enemyAgility ? ECombatState::EnemyAction : ECombatState::PlayerAction;
-	ProcessCombat();
 }
 
 void CombatGameMode::PlayerAction()
@@ -111,7 +107,6 @@ void CombatGameMode::PlayerAction()
 	}
 
 	currentCombatState = ECombatState::EnemyAction;
-	ProcessCombat();
 }
 
 void CombatGameMode::EnemyAction()
@@ -130,7 +125,6 @@ void CombatGameMode::EnemyAction()
 	}
 
 	currentCombatState = ECombatState::PlayerAction;
-	ProcessCombat();
 }
 
 void CombatGameMode::CombatEnd()

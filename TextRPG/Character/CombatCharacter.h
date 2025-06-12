@@ -3,8 +3,6 @@
 #include "../MyType.h"
 #include "../Stat/StatDataType.h"
 
-//class StatContainer;
-
 class CombatCharacter : public Character
 {
 public:
@@ -20,7 +18,7 @@ public:
 	inline StatContainer& GetStats() { return m_statContainer; }
 
 protected:
-	virtual uint16 CalculateDamage(uint16_t damage);
+	virtual uint16 CalculateDamage(uint16 damage);
 
 protected:
 	uint16 m_currentHP = 0;

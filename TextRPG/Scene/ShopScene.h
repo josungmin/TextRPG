@@ -28,6 +28,6 @@ public:
 
 private:
 	TextPrompt m_textPrompt;
-	vector<wstring> m_sellingItems; //TODO: 변수명 변경
+	vector<wstring> m_sellingItems; //TODO: 변수명 변경?
 	EShopSceneState m_currentSceneState;
 };

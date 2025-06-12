@@ -64,7 +64,7 @@ void Screen::Write(const int16 x, const int16 y, const std::wstring& text)
 
 void Screen::Render()
 {
-	DWORD written;
+	unsigned long written;
 
 	for (SHORT i = 0; i < BUFFER_SIZE; i++)
 	{

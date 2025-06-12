@@ -52,6 +52,8 @@ void DungeonScene::Update()
 			{
 				m_combatGameMode.SetEnemy(*m_enemy);				
 				m_currentSceneState = EDungeonSceneState::Combat;
+
+				m_combatGameMode.ProcessCombat();
 			}
 			else if (cmd == L"2" || cmd == L"µµ¸Á" || cmd == L"µµ¸Á°£´Ù" || cmd == L"1.µµ¸Á°£´Ù")
 			{
@@ -62,7 +64,7 @@ void DungeonScene::Update()
 
 		if (m_currentSceneState == EDungeonSceneState::Combat)
 		{
-			m_combatGameMode.ProcessCombat();
+			
 		}
 	}
 }

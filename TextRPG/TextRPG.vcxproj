@@ -153,7 +153,6 @@
     <ClInclude Include="Character\NPCCharacter.h" />
     <ClInclude Include="Character\PlayerCharacter.h" />
     <ClInclude Include="CombatGameMode.h" />
-    <ClInclude Include="Component\Dungeon.h" />
     <ClInclude Include="Component\Equipment.h" />
     <ClInclude Include="Component\Inventory.h" />
     <ClInclude Include="Game.h" />

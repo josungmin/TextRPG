@@ -3,15 +3,6 @@
 #include "Scene.h"
 #include "../Screen.h"
 
-//enum class ESceneType : uint8_t
-//{
-//	Title,
-//	Main,
-//	Dungeon,
-//	Shop,
-//	Inventory,
-//};
-
 class SceneManager
 {
 public:
