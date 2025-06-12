@@ -1,9 +1,9 @@
 #pragma once
 #include "Scene.h"
 #include <memory>
-
 #include "../TextPrompt.h"
 #include "../Character/EnemyCharacter.h"
+#include "../CombatGameMode.h"
 
 enum class EDungeonSceneState : uint8_t
 {
@@ -11,12 +11,11 @@ enum class EDungeonSceneState : uint8_t
 	Combat,
 };
 
-
 class DungeonScene : public Scene
 {
 public:
 	DungeonScene(Screen& screen, Input& input);
-	virtual ~DungeonScene() override;
+	~DungeonScene();
 
 public:
 	virtual void OnEnter() override;
@@ -26,8 +25,8 @@ public:
 
 private:
 	TextPrompt m_textPrompt;
-	EDungeonSceneState m_currentSceneState = EDungeonSceneState::Default;
-	//CombatGameMode GameMode;
+	CombatGameMode m_combatGameMode;
 
 	EnemyCharacter* m_enemy;
+	EDungeonSceneState m_currentSceneState = EDungeonSceneState::Default;
 };

@@ -5,8 +5,11 @@
 class Scene
 {
 public:
-	Scene(Screen& screen, Input& input) : m_screen(screen), m_input(input) { }
-	virtual ~Scene() { }
+	Scene(Screen& screen, Input& input) 
+		: m_screen(screen), m_input(input)
+	{
+
+	}
 
 	virtual void OnEnter() = 0;
 	virtual void OnExit() = 0;

@@ -1,6 +1,7 @@
 #include "MainScene.h"
 #include "../GameInstance.h"
 #include "../Character/PlayerCharacter.h"
+#include "ShopScene.h"
 #include "DungeonScene.h"
 
 MainScene::MainScene(Screen& screen, Input& input)
@@ -17,6 +18,10 @@ void MainScene::OnEnter()
 {
 	m_screen.Clear();
 	m_textPrompt.Clear();
+
+	m_textPrompt.Enqueue(L"시스템 : 마을에 입장합니다.");
+	m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+	m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
 }
 
 void MainScene::OnExit()
@@ -33,13 +38,65 @@ void MainScene::Update()
 	{
 		std::wstring cmd = m_input.GetCommand();
 
-		if (m_currentSceneState == EMainSceneState::Default && cmd == L"Healer")
+		if (m_currentSceneState == EMainSceneState::Default)
 		{
-			m_textPrompt.Enqueue(L"System : I approach Healer and talk to him.");
-			m_textPrompt.Enqueue(L"Healer : Give me 500 gold and I'll restore your HP!");
-			m_currentSceneState = EMainSceneState::Healer;
+			if (cmd == L"1" || cmd == L"힐러" || cmd == L"1.힐러" || cmd == L"1힐러" || cmd == L"힐")
+			{
+				m_textPrompt.Enqueue(L"시스템 : 힐러에게 다가가 말을 겁니다.");
+				m_textPrompt.Enqueue(L"힐러 : 500골드를 주면 너의 체력을 모두 회복시켜 줄게!");
+				m_textPrompt.Enqueue(L"시스템 : 1.수락한다 2.거절한다");
+				m_currentSceneState = EMainSceneState::Healer;
+			}
+			if (cmd == L"2" || cmd == L"상점" || cmd == L"2.상점" || cmd == L"2상점")
+			{
+				Scene* shopScene = new ShopScene(m_screen, m_input);
+				GameInstance::Instance().GetSceneManager().ChangeScene(*shopScene);
+			}
+			if (cmd == L"3" || cmd == L"인벤" || cmd == L"인벤토리" || cmd == L"3.인벤" || cmd == L"3인벤" || cmd == L"3인벤토리" || cmd == L"3.인벤토리")
+			{
+				
+			}
+			if (cmd == L"4" || cmd == L"던전" || cmd == L"4던전" || cmd == L"4.던전")
+			{
+				Scene* dungeonScene = new DungeonScene(m_screen, m_input);
+				GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
+			}
 		}
-		else if (m_currentSceneState == EMainSceneState::Default && cmd == L"Inventory")
+		else if (m_currentSceneState == EMainSceneState::Healer)
+		{
+			if (cmd == L"1" || cmd == L"수락" || cmd == L"수락한다" || cmd == L"1.수락" || cmd == L"1수락" || cmd == L"1수락한다" || cmd == L"1.수락한다")
+			{
+				PlayerCharacter player = GameInstance::Instance().GetPlayer();
+
+				if (player.GetCurrentHP() == player.GetStats().GetStatValue(EStatType::HP))
+				{
+					m_textPrompt.Enqueue({ L"힐러 : 너 이미 체력이 다 회복된것 같아..." });
+				}
+				else if (GameInstance::Instance().GetPlayer().GetGold().RemoveGold(500))
+				{
+					GameInstance::Instance().GetPlayer().HealHp(UINT16_MAX);
+					m_textPrompt.Enqueue({ L"힐러 : 너의 체력을 모두 회복시켰어!" });
+				}
+				else
+				{
+					m_textPrompt.Enqueue({ L"힐러 : 너 돈이 부족하구나..." });
+				}
+
+				m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+				m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
+				m_currentSceneState = EMainSceneState::Default;
+			}
+			else if (cmd == L"2" || cmd == L"거절" || cmd == L"거절한다" || cmd == L"1.거절" || cmd == L"1거절" || cmd == L"1거절한다" || cmd == L"1.거절한다")
+			{
+				m_textPrompt.Enqueue({ L"힐러 : 너 돈이 부족하구나..." });
+				m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+				m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
+				m_currentSceneState = EMainSceneState::Default;
+			}
+		}
+
+		
+		/*if (m_currentSceneState == EMainSceneState::Default && cmd == L"Inventory")
 		{
 			PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 
@@ -62,39 +119,7 @@ void MainScene::Update()
 					player.GetEquipment().Equip(equipableItem, player.GetStats());
 				}
 			}
-		}
-		else if (m_currentSceneState == EMainSceneState::Default && cmd == L"Dungeon")
-		{
-			Scene* dungeonScene = new DungeonScene(m_screen, m_input);
-			GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
-		}
-		else if (m_currentSceneState == EMainSceneState::Healer)
-		{
-			if (cmd == L"Yes") 
-			{
-				if (GameInstance::Instance().GetPlayer().GetGold().RemoveGold(500))
-				{
-					GameInstance::Instance().GetPlayer().HealHp(UINT16_MAX);
-					m_textPrompt.Enqueue({ L"Healer : I've restored all your HP!" });
-				}
-				else 
-				{
-					m_textPrompt.Enqueue({ L"Healer : I don't have enough money..." });
-				}
-
-				m_currentSceneState = EMainSceneState::Default;
-			}
-			else if (cmd == L"No")
-			{
-				m_textPrompt.Enqueue({ L"Healer : I don't have enough money..." });
-				m_currentSceneState = EMainSceneState::Default;
-			}
-		}
-		//TODO :디버그용
-		else if (m_currentSceneState == EMainSceneState::Default && cmd == L"Damage")
-		{
-			GameInstance::Instance().GetPlayer().TakeDamage(20);
-		}
+		}*/		
 	}
 }
 
@@ -103,15 +128,15 @@ void MainScene::Render()
 	// Frame
 	m_screen.Write(0, 0, L"┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐");
 
-	for (int y = 1; y <= 26; ++y)
+	for (int y = 1; y <= 28; ++y)
 	{
 		m_screen.Write(0, y, L"│");
 		m_screen.Write(32, y, L"│");
 		m_screen.Write(126, y, L"│");
 	}
 
-	m_screen.Write(13, 1, L"[ Stat ]");
-	m_screen.Write(73, 1, L"<< Village >>");
+	m_screen.Write(13, 1, L"[ 능력치 ]");
+	m_screen.Write(73, 1, L"<< 마을 >>");
 
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 	m_screen.Write(1, 2, L"────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
@@ -127,20 +152,10 @@ void MainScene::Render()
 	m_screen.Write(2, 13, L"방어구: " +(player.GetEquipment().GetArmor() == nullptr ? L"미장착" : player.GetEquipment().GetArmor()->GetItemName()));
 	m_screen.Write(2, 15, L"인벤토리: ");
 	m_screen.Write(2, 16, L"최하급 검"); // TODO: 아이템 목록 출력
-	m_screen.Write(0, 27, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");
 
-	if (m_currentSceneState == EMainSceneState::Healer)
-	{
-		m_screen.Write(2, 28, L"Command List : Yes, No");
-	}
-	else if (m_currentSceneState == EMainSceneState::Default)
-	{
-		m_screen.Write(2, 28, L"Command List : Healer, Shop, Dungeon, Inventory");
-	}
-
-	m_screen.Write(0, 28, L"│");                                                                                                  m_screen.Write(126, 28, L"│");
 	m_screen.Write(0, 29, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");
-	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"Command > " + m_input.GetInputBuffer());                                     m_screen.Write(126, 30, L"│");
+	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"명령 > " + m_input.GetInputBuffer());                                    
+	m_screen.Write(126, 30, L"│");
 	m_screen.Write(0, 31, L"└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
 
 	m_textPrompt.Render();

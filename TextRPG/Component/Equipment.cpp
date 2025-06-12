@@ -17,7 +17,7 @@ bool Equipment::Equip(EquipableItem* item, StatContainer& statContainer)
 
     switch (item->GetEquipType())
     {
-    case EEquipType::WEAPON:
+    case EEquipType::Weapon:
     {
         if (m_weapon)
         {
@@ -29,7 +29,7 @@ bool Equipment::Equip(EquipableItem* item, StatContainer& statContainer)
 
         return true;
     }         
-    case EEquipType::ARMOR:
+    case EEquipType::Armor:
     {
         if (m_armor)
         {
@@ -52,7 +52,7 @@ bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
 {
     switch (type)
     {
-    case EEquipType::WEAPON:
+    case EEquipType::Weapon:
     {
         if (m_weapon)
         {
@@ -63,7 +63,7 @@ bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
 
         break;
     }   
-    case EEquipType::ARMOR:
+    case EEquipType::Armor:
     {
         if (m_armor)
         {

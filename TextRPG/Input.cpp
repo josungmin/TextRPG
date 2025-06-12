@@ -1,7 +1,5 @@
 #include "Input.h"
-#include "Screen.h"
 #include <conio.h>
-
 
 void Input::InputProcess()
 {
@@ -33,7 +31,7 @@ void Input::InputProcess()
 
 const bool Input::HasCommand() const
 {
-	return (m_command.empty() == false);
+	return m_command.empty() == false;
 }
 
 const wstring Input::GetCommand()

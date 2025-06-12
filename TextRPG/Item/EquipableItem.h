@@ -5,8 +5,8 @@
 enum class EEquipType : uint8_t
 {
 	NONE,
-	WEAPON,
-	ARMOR,
+	Weapon,
+	Armor,
 };
 
 class EquipableItem : public Item
@@ -21,6 +21,7 @@ public:
 
 	inline const EEquipType GetEquipType() const { return m_equipType; }
 	inline void SetEquipType(EEquipType type) { m_equipType = type; }
+
 	inline const ModifierContainer& GetModifierContainer() const { return m_modifierContainer; }
 	inline void SetModifierContainer(const ModifierContainer& container) { m_modifierContainer = container; }
 

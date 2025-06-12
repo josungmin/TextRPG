@@ -14,7 +14,7 @@ public:
 private:
 	const SHORT WIDTH = 128;
 	const SHORT HEIGHT = 32;
-	const uint32 BUFFER_SIZE = WIDTH * HEIGHT;
+	const int32 BUFFER_SIZE = WIDTH * HEIGHT;
 
 public:
 	void Write(const SHORT x, const SHORT y, const std::wstring& text);

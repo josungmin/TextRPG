@@ -13,7 +13,7 @@ class MainScene : public Scene
 {
 public:
 	MainScene(Screen& screen, Input& input);
-	virtual ~MainScene() override;
+	~MainScene();
 
 public:
 	virtual void OnEnter() override;

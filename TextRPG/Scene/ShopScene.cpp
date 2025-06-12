@@ -1,44 +1,41 @@
-#include "DungeonScene.h"
+#include "ShopScene.h"
 #include "../GameInstance.h"
-#include "../Character/EnemyCharacter.h"
 #include "MainScene.h"
 
-
-DungeonScene::DungeonScene(Screen& screen, Input& input)
-	:Scene(screen, input), m_textPrompt(screen, 34, 3), m_combatGameMode(m_textPrompt)
+ShopScene::ShopScene(Screen& screen, Input& input)
+	:Scene(screen, input), m_textPrompt(screen, 34, 3)
 {
-	m_currentSceneState = EDungeonSceneState::Default;
+	m_sellingItems.reserve(4);
+	m_sellingItems.push_back(L"최하급 검");
+	m_sellingItems.push_back(L"하급 검");
+	m_sellingItems.push_back(L"일반 검");
+	m_sellingItems.push_back(L"최하급 갑옷");
 
-	StatContainer enemyStats;
-	enemyStats.stats[EStatType::HP].baseValue = 50;
-	enemyStats.stats[EStatType::AttackPower].baseValue = 10;
-	enemyStats.stats[EStatType::Defence].baseValue = 5;
-	enemyStats.stats[EStatType::Agility].baseValue = 5;
-	m_enemy = new EnemyCharacter(L"Goblin", L"Goblin Soldier", enemyStats);
+	m_currentSceneState = EShopSceneState::Default;
 }
 
-DungeonScene::~DungeonScene()
+ShopScene::~ShopScene()
 {
-
+	
 }
 
-void DungeonScene::OnEnter()
+void ShopScene::OnEnter()
 {
 	m_screen.Clear();
 	m_textPrompt.Clear();
 
-	m_textPrompt.Enqueue(L"시스템 : 던전에 입장합니다.");
-	m_textPrompt.Enqueue(L"시스템 : 던전에 들어서자 적을 마주합니다.");
-	m_textPrompt.Enqueue(L"시스템 : 1.싸운다 2.도망간다");
+	m_textPrompt.Enqueue(L"시스템 : 상점에 입장합니다.");
+	m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+	m_textPrompt.Enqueue(L"시스템 : 1.구매 2.판매 3.나가기");
 }
 
-void DungeonScene::OnExit()
+void ShopScene::OnExit()
 {
 	m_screen.Clear();
 	m_textPrompt.Clear();
 }
 
-void DungeonScene::Update()
+void ShopScene::Update()
 {
 	m_textPrompt.Update();
 
@@ -46,31 +43,37 @@ void DungeonScene::Update()
 	{
 		std::wstring cmd = m_input.GetCommand();
 
-		if (m_currentSceneState == EDungeonSceneState::Default)
+		if (m_currentSceneState == EShopSceneState::Default)
 		{
-			if (cmd == L"1" || cmd == L"싸운다" || cmd == L"1.싸운다")
+			if (cmd == L"1" || cmd == L"구매" || cmd == L"1.구매" || cmd == L"1구매")
 			{
-				m_combatGameMode.SetEnemy(*m_enemy);				
-				m_currentSceneState = EDungeonSceneState::Combat;
+				m_currentSceneState = EShopSceneState::Buy;
 			}
-			else if (cmd == L"2" || cmd == L"도망" || cmd == L"도망간다" || cmd == L"1.도망간다")
+			else if (cmd == L"2" || cmd == L"판매" || cmd == L"2.판매" || cmd == L"2판매")
+			{
+				m_currentSceneState = EShopSceneState::Sell;
+			}
+			else if (cmd == L"3" || cmd == L"나가기" || cmd == L"3.나가기" || cmd == L"3나가기")
 			{
 				Scene* mainScene = new MainScene(m_screen, m_input);
 				GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
 			}
 		}
 
-		if (m_currentSceneState == EDungeonSceneState::Combat)
+		if (m_currentSceneState == EShopSceneState::Buy)
 		{
-			m_combatGameMode.ProcessCombat();
+			
+		}
+
+		if (m_currentSceneState == EShopSceneState::Sell)
+		{
+			
 		}
 	}
 }
 
-void DungeonScene::Render()
+void ShopScene::Render()
 {
-	m_textPrompt.Render();
-
 	// Frame
 	m_screen.Write(0, 0, L"┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐");
 
@@ -82,7 +85,7 @@ void DungeonScene::Render()
 	}
 
 	m_screen.Write(13, 1, L"[ 능력치 ]");
-	m_screen.Write(73, 1, L"<< 던전 >>");
+	m_screen.Write(73, 1, L"<< 상점 >>");
 
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 	m_screen.Write(1, 2, L"────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
@@ -93,10 +96,16 @@ void DungeonScene::Render()
 	m_screen.Write(2, 7, L"공격력: " + to_wstring(player.GetStats().GetStatValue(EStatType::AttackPower)));
 	m_screen.Write(2, 8, L"방어력: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));
 	m_screen.Write(2, 9, L"민첩: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
-	m_screen.Write(2, 11, L"장착 아이템");
+	m_screen.Write(2, 11, L"장착 아이템:");
 	m_screen.Write(2, 12, L"무기: " + (player.GetEquipment().GetWeapon() == nullptr ? L"미장착" : player.GetEquipment().GetWeapon()->GetItemName()));
 	m_screen.Write(2, 13, L"방어구: " + (player.GetEquipment().GetArmor() == nullptr ? L"미장착" : player.GetEquipment().GetArmor()->GetItemName()));
+	m_screen.Write(2, 15, L"인벤토리: ");
+	m_screen.Write(2, 16, L"최하급 검"); // TODO: 아이템 목록 출력
+
 	m_screen.Write(0, 29, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");
-	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"Command > " + m_input.GetInputBuffer());                                     m_screen.Write(126, 30, L"│");
+	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"명령 > " + m_input.GetInputBuffer());
+	m_screen.Write(126, 30, L"│");
 	m_screen.Write(0, 31, L"└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
+
+	m_textPrompt.Render();
 }

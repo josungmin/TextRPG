@@ -7,7 +7,7 @@ PlayerCharacter::PlayerCharacter(const wstring& characterName, const wstring& de
 {
 	m_statContainer.stats[EStatType::HP].baseValue = 50;
 	m_statContainer.stats[EStatType::AttackPower].baseValue = 10;
-	m_statContainer.stats[EStatType::Defence].baseValue = 5;
+	m_statContainer.stats[EStatType::Defence].baseValue = 7;
 	m_statContainer.stats[EStatType::Agility].baseValue = 7;
 
 	m_currentHP = m_statContainer.GetStatValue(EStatType::HP);

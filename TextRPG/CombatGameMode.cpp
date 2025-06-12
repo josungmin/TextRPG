@@ -2,44 +2,139 @@
 #include <memory>
 
 #include "GameInstance.h"
+#include "Stat/StatDataType.h"
 #include "Character/PlayerCharacter.h"
+#include "Character/EnemyCharacter.h"
+#include "TextPrompt.h"
 #include "Scene/TitleScene.h"
 
-void CombatGameMode::ProcessCombat(CombatCharacter& enemy)
+CombatGameMode::CombatGameMode(TextPrompt& textPrompt)
+	: m_textPrompt(textPrompt), m_enemy(nullptr)
 {
-	PlayerCharacter player = GameInstance::Instance().GetPlayer();
+	currentCombatState = ECombatState::CombatStart;
+}
 
-	if (player.GetStats().GetStatValue(EStatType::Agility) < enemy.GetStats().GetStatValue(EStatType::Agility))
+CombatGameMode::~CombatGameMode()
+{
+	delete m_enemy;
+}
+
+void CombatGameMode::ProcessCombat()
+{
+	if (m_enemy == nullptr)
 	{
-		EnemyTurn(enemy);
-
-		if (player.GetIsDead() == false)
-		{
-			PlayerTurn(enemy);
-		}
-
+		return;
 	}
-	else
-	{
-		PlayerTurn(enemy);
 
-		if (enemy.GetIsDead() == false)
+	switch (currentCombatState)
+	{
+		if (m_isCombat == true)
 		{
-			EnemyTurn(enemy);
+			return;
+		}
+		//case ECombatState::PlayerInput:
+		//{
+		//	break;
+		//}
+		case ECombatState::CombatStart:
+		{
+			CombatStart();
+			break;
+		}
+		case ECombatState::CombatEnd:
+		{
+			CombatEnd();
+			break;
+		}			
+		case ECombatState::PlayerAction:
+		{
+			PlayerAction();
+			break;
+		}
+		case ECombatState::EnemyAction:
+		{
+			EnemyAction();
+			break;
+		}
+		default:
+		{
+			break;
 		}
 	}
 }
 
-void CombatGameMode::PlayerTurn(CombatCharacter& enemy)
+void CombatGameMode::SetEnemy(EnemyCharacter& newEnemy)
 {
-	PlayerCharacter player = GameInstance::Instance().GetPlayer();
+	if (m_isCombat == true)
+	{
+		return;
+	}
 
-	enemy.TakeDamage(player.GetStats().GetStatValue(EStatType::AttackPower));
+	if (m_enemy != nullptr)
+	{
+		delete m_enemy;
+	}
+
+	m_enemy = &newEnemy;
 }
 
-void CombatGameMode::EnemyTurn(CombatCharacter& enemy)
+void CombatGameMode::CombatStart()
 {
-	PlayerCharacter player = GameInstance::Instance().GetPlayer();
+	if (m_enemy == nullptr)
+	{
+		return;
+	}
 
-	player.TakeDamage(enemy.GetStats().GetStatValue(EStatType::AttackPower));
+	m_isCombat = true;
+	m_textPrompt.Enqueue(L"시스템 : 전투를 시작합니다.");
+
+	uint16_t playerAgility = GameInstance::Instance().GetPlayer().GetStats().GetStatValue(EStatType::Agility);
+	uint16_t enemyAgility = m_enemy->GetStats().GetStatValue(EStatType::Agility);
+
+	currentCombatState = playerAgility < enemyAgility ? ECombatState::EnemyAction : ECombatState::PlayerAction;
+	ProcessCombat();
+}
+
+void CombatGameMode::PlayerAction()
+{
+	m_textPrompt.Enqueue(L"시스템 : 플레이어가 공격합니다.");
+
+	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	m_enemy->TakeDamage(player.GetStats().GetStatValue(EStatType::AttackPower));
+
+	m_textPrompt.Enqueue(L"시스템 : 적 캐릭터 HP " + to_wstring(m_enemy->GetCurrentHP()));
+	
+	if (m_enemy->GetIsDead() == true)
+	{
+		m_textPrompt.Enqueue(L"시스템 : 적 캐릭터를 처치했습니다.");
+		currentCombatState = ECombatState::CombatEnd;
+	}
+
+	currentCombatState = ECombatState::EnemyAction;
+	ProcessCombat();
+}
+
+void CombatGameMode::EnemyAction()
+{
+	m_textPrompt.Enqueue(L"시스템 : 적 캐릭터가 공격합니다.");
+
+	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	player.TakeDamage(m_enemy->GetStats().GetStatValue(EStatType::AttackPower));
+
+	m_textPrompt.Enqueue(L"시스템 : 플레이어 캐릭터 HP " + to_wstring(player.GetCurrentHP()));
+
+	if (player.GetIsDead() == true)
+	{
+		m_textPrompt.Enqueue(L"시스템 : 플레이어 캐릭터가 사망했습니다.");
+		currentCombatState = ECombatState::CombatEnd;
+	}
+
+	currentCombatState = ECombatState::PlayerAction;
+	ProcessCombat();
+}
+
+void CombatGameMode::CombatEnd()
+{
+	m_isCombat = false;
+	m_textPrompt.Enqueue(L"시스템 : 전투를 종료합니다.");
 }

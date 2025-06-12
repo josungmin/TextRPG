@@ -1,5 +1,4 @@
 #include "Screen.h"
-#include <locale>
 #include <iostream>
 #include <cwchar>
 #include <cassert>
@@ -8,9 +7,6 @@ Screen::Screen()
 	: m_buffer(nullptr)
 {
 	SetConsoleOutputCP(CP_UTF8);
-	std::locale::global(std::locale("kor"));
-	std::wcin.imbue(std::locale());
-	std::wcout.imbue(std::locale());
 
 	for (int i = 0; i < 2; ++i)
 	{
@@ -47,7 +43,7 @@ Screen::~Screen()
 	delete[] m_buffer;
 }
 
-void Screen::Write(const SHORT x, const SHORT y, const std::wstring& text)
+void Screen::Write(const int16 x, const int16 y, const std::wstring& text)
 {
 	if (x < WIDTH && y < HEIGHT)
 	{
@@ -64,12 +60,6 @@ void Screen::Write(const SHORT x, const SHORT y, const std::wstring& text)
 			++pos;
 		}	
 	}
-
-	//if (x < WIDTH && y < HEIGHT)
-	//{
-	//	int pos = y * WIDTH + x;
-	//	wmemcpy(m_buffer + pos, text.c_str(), text.size());
-	//}
 }
 
 void Screen::Render()

@@ -5,13 +5,6 @@
 #include "Scene/TitleScene.h"
 #include "Scene/DungeonScene.h"
 
-Game::Game()
-{
-}
-
-Game::~Game()
-{
-}
 
 void Game::Run()
 {
@@ -37,9 +30,6 @@ void Game::Init()
 {
 	Scene* titleScene = new TitleScene(m_screen, m_input);
 	GameInstance::Instance().GetSceneManager().ChangeScene(*titleScene);
-
-	//Scene* dungeonScene = new DungeonScene(m_screen, m_input);
-	//GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
 }
 
 void Game::Update()

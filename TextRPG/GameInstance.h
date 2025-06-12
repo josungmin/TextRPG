@@ -26,7 +26,7 @@ public:
 
 private:
 	ItemTable m_itemTable;
-	PlayerCharacter m_player{ L"SungMin", L"Hero this game" };
+	PlayerCharacter m_player{ L"조성민", L"전설의 용사(진)" };
 	SceneManager m_sceneManager;
 };
 

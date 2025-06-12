@@ -19,7 +19,7 @@ void ItemTable::Load()
 {
 	// Sword item 1
 	EquipableItem* sword = new EquipableItem(
-		EEquipType::WEAPON, 
+		EEquipType::Weapon, 
 		EItemType::Equip, 
 		L"최하급 검", 
 		L"언제 부러질지 모르는 최하급 무기이다.",
@@ -36,7 +36,7 @@ void ItemTable::Load()
 	
 	// Sword Item 2
 	EquipableItem* lightSword = new EquipableItem(
-		EEquipType::WEAPON, 
+		EEquipType::Weapon, 
 		EItemType::Equip, 
 		L"하급 검", 
 		L"한두번 정도는 더 사용할 수 있을듯 한 하급 무기이다.", 
@@ -54,7 +54,7 @@ void ItemTable::Load()
 
 	// Sword item 3
 	EquipableItem* bronzeSword = new EquipableItem(
-		EEquipType::WEAPON, 
+		EEquipType::Weapon, 
 		EItemType::Equip, 
 		L"일반 검", 
 		L"좋지도 나쁘지도 않은 일반적인 무기이다.", 
@@ -71,10 +71,9 @@ void ItemTable::Load()
 	m_itemMap[lightSword->GetItemName()] = lightSword;
 
 
-
 	// Amor item
 	EquipableItem* amor = new EquipableItem(
-		EEquipType::ARMOR, 
+		EEquipType::Armor, 
 		EItemType::Equip, 
 		L"최하급 갑옷",
 		L"공격이 닿으면 부서질것 같은 최하급 갑옷이다.", 
@@ -91,7 +90,14 @@ void ItemTable::Load()
 
 
 	// Other items
-	Item* goblenBone = new Item(EItemType::Other, L"고블린의 뼈", L"고블린 처치 시 일정 확률로 획득할 수 있다.", 0, 2);
+	Item* goblenBone = new Item(
+		EItemType::Other, 
+		L"고블린의 뼈",
+		L"고블린 처치 시 일정 확률로 획득할 수 있다.", 
+		0, 
+		2
+	);
+
 	m_itemMap[goblenBone->GetItemName()] = goblenBone;
 }
 

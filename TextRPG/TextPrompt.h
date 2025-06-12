@@ -12,22 +12,24 @@ public:
     TextPrompt(Screen& screen, uint8_t posX, uint8_t posY);
     ~TextPrompt() = default;
 
+private:
+    const uint16 DELAY_MS = 500;
+    const uint8 MAX_LINE = 25;
+
+public:
     void Enqueue(const wstring& msg);
     void Update();                     
     void Render();
     void Clear();
 
+
 private:
-    const uint16_t DELAY_MS = 1000; //2√ 
-    const uint8_t MAX_LINE = 24;
-
     Screen& m_screen;
-    uint8_t m_pivotX;
-    uint8_t m_pivotY;
+    uint8 m_posX;
+    uint8 m_posY;
 
-    deque<wstring> m_inputMessageQueue;
-    deque<wstring> m_outputMessageQueue;
+    deque<wstring> m_waitMessageQueue;
+    deque<wstring> m_printMessageQueue;
 
     DWORD m_lastPrintTime = 0;
-    bool m_readyToPrint = true;
 };

@@ -5,8 +5,8 @@
 class Game
 {
 public:
-	Game();
-	~Game();
+	Game() = default;
+	~Game() = default;
 
 public:
 	void Run();

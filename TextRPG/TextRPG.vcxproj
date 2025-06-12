@@ -140,6 +140,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\DungeonScene.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
+    <ClCompile Include="Scene\ShopScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Stat\StatDataType.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Scene\MainScene.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Scene\ShopScene.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Stat\StatDataType.h" />

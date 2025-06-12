@@ -17,6 +17,8 @@ public:
 	bool AddItem(Item* item);
 	bool RemoveItem(const wstring& itemName);
 
+	inline vector<Item*>& GetItems() { return m_items; }
+
 private:
 	// TODO: 자료형 변경 고민중
 	vector<Item*> m_items;

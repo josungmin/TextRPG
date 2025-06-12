@@ -15,12 +15,12 @@ public:
 	~ItemTable();
 
 public:
-	Item* CreateItem(const wstring& id) const;
-	inline const std::unordered_map<std::wstring, Item*>& GetItemMap() const { return m_itemMap; }
+	Item* CreateItem(const wstring& name) const;
+	inline const unordered_map<wstring, Item*>& GetItemMap() const { return m_itemMap; }
 
 private:
 	void Load(); //TODO: 테스트 코드
 
 private:
-	std::unordered_map<wstring, Item*> m_itemMap;
+	unordered_map<wstring, Item*> m_itemMap;
 };

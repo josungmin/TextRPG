@@ -11,7 +11,7 @@ Inventory::~Inventory()
 
 bool Inventory::AddItem(Item* item)
 {
-	if (!item)
+	if (item == nullptr)
 	{
 		return false;
 	}

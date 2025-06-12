@@ -15,10 +15,6 @@ TitleScene::TitleScene(Screen& screen, Input& input)
 {
 }
 
-TitleScene::~TitleScene()
-{
-}
-
 void TitleScene::OnEnter()
 {
 	m_screen.Clear();
