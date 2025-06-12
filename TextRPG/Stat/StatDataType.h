@@ -139,6 +139,8 @@ struct Experience
 	int8 m_currentExp = 0;
 	int8 m_level = 1;
 
+	explicit Experience(int8_t level) : m_level(level), m_currentExp(0) {}
+
 	int8 GetRequiredExpForNextLevel() const
 	{
 		return 3 + (m_level - 1) * 5;
@@ -179,6 +181,8 @@ struct ExperienceTable
 struct Gold
 {
 	uint16 m_amount = 10000;
+
+	explicit Gold(uint16_t initialAmount) : m_amount(initialAmount) {}
 
 	void AddGold(const uint16 amount)
 	{

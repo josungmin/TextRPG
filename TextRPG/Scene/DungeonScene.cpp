@@ -14,12 +14,12 @@ DungeonScene::DungeonScene(Screen& screen, Input& input)
 	enemyStats.stats[EStatType::AttackPower].baseValue = 10;
 	enemyStats.stats[EStatType::Defence].baseValue = 5;
 	enemyStats.stats[EStatType::Agility].baseValue = 5;
-	m_enemy = new EnemyCharacter(L"Goblin", L"Goblin Soldier", enemyStats);
+	m_enemy = new EnemyCharacter(L"고블린", L"고블린 병사", 10, 5, enemyStats);
 }
 
 DungeonScene::~DungeonScene()
 {
-
+	delete m_enemy;
 }
 
 void DungeonScene::OnEnter()
@@ -27,8 +27,7 @@ void DungeonScene::OnEnter()
 	m_screen.Clear();
 	m_textPrompt.Clear();
 
-	m_textPrompt.Enqueue(L"시스템 : 던전에 입장합니다.");
-	m_textPrompt.Enqueue(L"시스템 : 던전에 들어서자 적을 마주합니다.");
+	m_textPrompt.Enqueue(L"시스템 : 던전에 입장합니다. 던전에 들어서자 적을 마주합니다.");
 	m_textPrompt.Enqueue(L"시스템 : 1.싸운다 2.도망간다");
 }
 
@@ -44,30 +43,53 @@ void DungeonScene::Update()
 
 	if (m_input.HasCommand())
 	{
-		std::wstring cmd = m_input.GetCommand();
+		std::wstring cmd = m_input.GetCommand(); 
 
 		if (m_currentSceneState == EDungeonSceneState::Default)
 		{
 			if (cmd == L"1" || cmd == L"싸운다" || cmd == L"1.싸운다")
 			{
-				m_combatGameMode.SetEnemy(*m_enemy);				
+				m_combatGameMode.SetEnemy(*m_enemy);
 				m_currentSceneState = EDungeonSceneState::Combat;
-
-				m_combatGameMode.ProcessCombat();
 			}
 			else if (cmd == L"2" || cmd == L"도망" || cmd == L"도망간다" || cmd == L"1.도망간다")
 			{
 				Scene* mainScene = new MainScene(m_screen, m_input);
 				GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
 			}
+			else
+			{
+				m_textPrompt.Enqueue(L"시스템 : 알 수 없는 명령입니다. 다시 입력해주세요.");
+			}
+		}
+		else if (m_currentSceneState == EDungeonSceneState::Combat)
+		{
+			m_combatGameMode.SetPlayerCommand(cmd);
 		}
 
-		if (m_currentSceneState == EDungeonSceneState::Combat)
+		if (m_currentSceneState == EDungeonSceneState::ContinueCombat)
 		{
-			
+			if (cmd == L"1" || cmd == L"이동" || cmd == L"1.이동" || cmd == L"1이동")
+			{
+				Scene* mainScene = new MainScene(m_screen, m_input);
+				GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
+			}
+		}
+	}
+
+	if (m_currentSceneState == EDungeonSceneState::Combat)
+	{
+		m_combatGameMode.ProcessCombat();
+
+		if (m_combatGameMode.IsCombatEnd())
+		{
+			m_textPrompt.Enqueue(L"시스템 : 전투를 종료합니다. 마을로 이동합니다.");
+			m_textPrompt.Enqueue(L"시스템 : 1.이동");
+			m_currentSceneState = EDungeonSceneState::ContinueCombat;
 		}
 	}
 }
+
 
 void DungeonScene::Render()
 {
@@ -90,14 +112,22 @@ void DungeonScene::Render()
 	m_screen.Write(1, 2, L"────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
 	m_screen.Write(2, 3, L"이름: " + player.GetName());
 	m_screen.Write(2, 4, L"정보: " + player.GetDescription());
-	m_screen.Write(2, 5, L"골드: " + to_wstring(player.GetGold().m_amount));
-	m_screen.Write(2, 6, L"HP: " + to_wstring(player.GetStats().GetStatValue(EStatType::HP)) + L"/" + to_wstring(player.GetCurrentHP()));
-	m_screen.Write(2, 7, L"공격력: " + to_wstring(player.GetStats().GetStatValue(EStatType::AttackPower)));
-	m_screen.Write(2, 8, L"방어력: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));
-	m_screen.Write(2, 9, L"민첩: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
-	m_screen.Write(2, 11, L"장착 아이템");
-	m_screen.Write(2, 12, L"무기: " + (player.GetEquipment().GetWeapon() == nullptr ? L"미장착" : player.GetEquipment().GetWeapon()->GetItemName()));
-	m_screen.Write(2, 13, L"방어구: " + (player.GetEquipment().GetArmor() == nullptr ? L"미장착" : player.GetEquipment().GetArmor()->GetItemName()));
+	m_screen.Write(2, 5, L"레벨: " + to_wstring(player.GetExperience().m_level));
+	m_screen.Write(2, 6, L"경험치: " + to_wstring(player.GetExperience().GetRequiredExpForNextLevel()) + L"/" + to_wstring(player.GetExperience().m_currentExp));
+	m_screen.Write(2, 7, L"골드: " + to_wstring(player.GetGold().m_amount));
+	m_screen.Write(2, 8, L"HP: " + to_wstring(player.GetStats().GetStatValue(EStatType::HP)) + L"/" + to_wstring(player.GetCurrentHP()));
+	m_screen.Write(2, 9, L"공격력: " + to_wstring(player.GetStats().GetStatValue(EStatType::AttackPower)));
+	m_screen.Write(2, 10, L"방어력: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));
+	m_screen.Write(2, 11, L"민첩: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
+	m_screen.Write(2, 13, L"장착 아이템");
+	m_screen.Write(2, 14, L"무기: " + (player.GetEquipment().GetWeapon() == nullptr ? L"미장착" : player.GetEquipment().GetWeapon()->GetItemName()));
+	m_screen.Write(2, 15, L"방어구: " + (player.GetEquipment().GetArmor() == nullptr ? L"미장착" : player.GetEquipment().GetArmor()->GetItemName()));
+	m_screen.Write(2, 17, L"인벤토리 ");
+	for (int i = 0; i < player.GetInventory().GetItems().size(); ++i)
+	{
+		m_screen.Write(2, 18 + i, player.GetInventory().GetItems()[i]->GetItemName());
+	}
+
 	m_screen.Write(0, 29, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");
 	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"Command > " + m_input.GetInputBuffer());                                     m_screen.Write(126, 30, L"│");
 	m_screen.Write(0, 31, L"└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");

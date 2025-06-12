@@ -9,6 +9,7 @@ enum class EDungeonSceneState : uint8_t
 {
 	Default,
 	Combat,
+	ContinueCombat,
 };
 
 class DungeonScene : public Scene
@@ -22,6 +23,9 @@ public:
 	virtual void OnExit() override;
 	virtual void Update() override;
 	virtual void Render() override;
+
+private:
+	void ShowDungeonMenu();
 
 private:
 	TextPrompt m_textPrompt;

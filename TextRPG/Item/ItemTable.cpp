@@ -9,9 +9,10 @@ ItemTable::ItemTable()
 
 ItemTable::~ItemTable()
 {
-	for (auto& pair : m_itemMap)
+	std::unordered_map<std::wstring, Item*>::iterator it;
+	for (it = m_itemMap.begin(); it != m_itemMap.end(); ++it)
 	{
-		delete pair.second;
+		delete it->second;
 	}
 }
 
@@ -50,7 +51,7 @@ void ItemTable::Load()
 	lightSwordMod.modifiers.push_back({ EStatType::Agility, EModifierType::Add, 1 });
 	lightSword->SetModifierContainer(lightSwordMod);
 
-	m_itemMap[lightSword->GetItemName()] = lightSword; //insert()?
+	m_itemMap[lightSword->GetItemName()] = lightSword; //insert()
 
 	// Sword item 3
 	EquipableItem* bronzeSword = new EquipableItem(
@@ -68,7 +69,7 @@ void ItemTable::Load()
 	bronzeSwordMod.modifiers.push_back({ EStatType::Agility, EModifierType::Add, 1 });
 	bronzeSword->SetModifierContainer(bronzeSwordMod);
 
-	m_itemMap[lightSword->GetItemName()] = lightSword;
+	m_itemMap[bronzeSword->GetItemName()] = bronzeSword;
 
 
 	// Amor item
@@ -101,13 +102,24 @@ void ItemTable::Load()
 	m_itemMap[goblenBone->GetItemName()] = goblenBone;
 }
 
-Item* ItemTable::CreateItem(const wstring& id) const
+Item* ItemTable::CreateItem(const wstring& name) const
 {
-	auto it = m_itemMap.find(id);
-	if (it == m_itemMap.end())
+	std::unordered_map<std::wstring, Item*>::const_iterator it = m_itemMap.find(name);
+	if (it != m_itemMap.end())
 	{
-		return nullptr;
+		return it->second->Clone();
 	}
+		
+	return nullptr;
+}
 
-	return it->second->Clone();
+const Item* ItemTable::GetItem(const wstring& name) const
+{
+	std::unordered_map<std::wstring, Item*>::const_iterator it = m_itemMap.find(name);
+	if (it != m_itemMap.end())
+	{
+		return it->second;
+	}
+		
+	return nullptr;
 }

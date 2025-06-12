@@ -23,7 +23,6 @@ public:
     void Render();
     void Clear();
 
-
 private:
     Screen& m_screen;
     uint8 m_posX;

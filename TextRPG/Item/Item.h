@@ -19,16 +19,19 @@ public:
 	{
 
 	}
-	~Item() = default;
+	virtual ~Item() = default;
 
+protected:
+	Item(const Item& other) = default;
+	Item& operator=(const Item& other) = default;
+
+public:
 	virtual Item* Clone() const
 	{
 		return new Item(*this);
 	}
 
 public:
-	inline void SetMaxCount(uint8 maxCount) { m_maxCount = maxCount; }
-
 	inline bool AddItem(uint8 num = 1)
 	{
 		if (m_count + num > m_maxCount)
@@ -58,6 +61,8 @@ public:
 	}
 
 public:
+	inline void SetMaxCount(uint8 maxCount) { m_maxCount = maxCount; }
+
 	inline const EItemType GetType() const { return m_itemType; }
 	inline const uint8 GetCount() const { return m_count; }
 	inline const uint8 GetMaxCount() const { return m_maxCount; }

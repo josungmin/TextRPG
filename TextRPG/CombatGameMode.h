@@ -1,5 +1,8 @@
 #pragma once
 #include "MyType.h"
+#include <string>
+
+using namespace std;
 
 class CombatCharacter;
 class EnemyCharacter;
@@ -11,7 +14,7 @@ enum class ECombatState : uint8
 	CombatEnd,
 	PlayerAction,
 	EnemyAction,
-	PlayerInput,
+	WaitForPlayerInput,
 };
 
 class CombatGameMode
@@ -23,6 +26,8 @@ public:
 public:
 	void ProcessCombat();
 	void SetEnemy(EnemyCharacter& Enemy);
+	void SetPlayerCommand(const wstring& command);
+	const bool IsCombatEnd() const { return m_isCombatEnded; }
 
 private:
 	void CombatStart();
@@ -34,6 +39,7 @@ private:
 	TextPrompt& m_textPrompt;
 	EnemyCharacter* m_enemy;
 
-	ECombatState currentCombatState;
-	bool m_isCombat = false;
+	ECombatState m_currentCombatState;
+	std::wstring m_command;
+	bool m_isCombatEnded = false;
 };

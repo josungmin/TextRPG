@@ -29,7 +29,6 @@ bool Inventory::RemoveItem(const wstring& itemName)
 
 	if (it != m_items.end())
 	{
-		delete* it;
 		m_items.erase(it);
 		return true;
 	}

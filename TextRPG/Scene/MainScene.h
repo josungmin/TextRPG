@@ -6,6 +6,7 @@ enum class EMainSceneState : uint8_t
 {
 	Default,
 	Healer,
+	Inventory,
 };
 
 

@@ -1,12 +1,12 @@
 #pragma once
 #include "Scene.h"
 #include <vector>
-
+#include <string>
 #include "../TextPrompt.h"
 
 using namespace std;
 
-enum class EShopSceneState : uint8_t
+enum class EShopSceneState : uint8
 {
 	Default,
 	Sell,
@@ -27,7 +27,14 @@ public:
 	virtual void Render() override;
 
 private:
+	void ShowShopMenu();
+	void ShowBuyMenu();
+	void ShowSellMenu();
+	void HandleBuyCommand(const wstring& cmd);
+	void HandleSellCommand(const wstring& cmd);
+
+private:
 	TextPrompt m_textPrompt;
-	vector<wstring> m_sellingItems; //TODO: 변수명 변경?
+	vector<wstring> m_sellingItems; //TODO: 변수명 변경
 	EShopSceneState m_currentSceneState;
 };
