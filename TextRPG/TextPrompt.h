@@ -14,7 +14,7 @@ public:
     ~TextPrompt() = default;
 
 private:
-    const uint16 DELAY_MS = 500;
+    const uint16 DELAY_MS = 0; //500
     const uint8 MAX_LINE = 25;
 
 public:

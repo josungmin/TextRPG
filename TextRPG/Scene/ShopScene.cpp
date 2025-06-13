@@ -37,7 +37,7 @@ void ShopScene::Update()
 {
 	m_textPrompt.Update();
 
-	if (m_input.HasCommand())
+	if (m_input.HasCommand() == true)
 	{
 		std::wstring cmd = m_input.GetCommand();
 

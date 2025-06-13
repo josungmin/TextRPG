@@ -36,14 +36,14 @@ void MainScene::Update()
 {
 	m_textPrompt.Update();
 
-	if (m_input.HasCommand()) 
+	if (m_input.HasCommand() == true)
 	{
 		const wstring cmd = m_input.GetCommand();
 
 		if (m_currentSceneState == EMainSceneState::Default)
 		{
-			m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
-			m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
+			//m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+			//m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
 
 			if (cmd == L"1" || cmd == L"힐러" || cmd == L"1.힐러" || cmd == L"1힐러" || cmd == L"힐")
 			{
@@ -131,9 +131,9 @@ void MainScene::Update()
 					}
 
 					player.GetEquipment().Equip(equip, player.GetStats());
+					player.GetInventory().RemoveItem(equip->GetItemName());
 					m_textPrompt.Enqueue(L"시스템 : [" + name + L"] 을(를) 장착했습니다.");
 					m_textPrompt.Enqueue(L"시스템 : '아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '나가기'를 입력하세요.");
-					m_currentSceneState = EMainSceneState::Default;
 					return;
 				}
 				else if (cmd == name + L" 해제")
@@ -148,7 +148,6 @@ void MainScene::Update()
 					player.GetEquipment().Unequip(equip->GetEquipType(), player.GetStats());
 					m_textPrompt.Enqueue(L"시스템 : [" + name + L"] 을(를) 해제했습니다.");
 					m_textPrompt.Enqueue(L"시스템 : '아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '나가기'를 입력하세요.");
-					m_currentSceneState = EMainSceneState::Default;
 					return;
 				}
 				else

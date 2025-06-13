@@ -24,7 +24,7 @@ void TitleScene::OnExit()
 
 void TitleScene::Update()
 {
-	if (m_input.HasCommand())
+	if (m_input.HasCommand() == true)
 	{
 		const std::wstring cmd = m_input.GetCommand();
 
