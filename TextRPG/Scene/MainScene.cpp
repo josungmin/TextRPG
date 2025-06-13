@@ -77,9 +77,9 @@ void MainScene::Update()
 				{
 					HandleHealCommand();
 				}
-				else if (cmd == L"2" || cmd == L"거절" || cmd == L"1.거절")
+				else if (cmd == L"2" || cmd == L"거절" || cmd == L"2.거절")
 				{
-					m_textPrompt.Enqueue(L"힐러 : 다음에 또와!");
+					m_textPrompt.Enqueue(L"힐러 : 다음에 또와.");
 					m_currentSceneState = EMainSceneState::Default;
 					ShowMainMenu();
 				}
@@ -241,10 +241,8 @@ void MainScene::Update()
 
 void MainScene::Render()
 {
-	//m_textPrompt.Render(m_screen);
-
 	// Frame
-	m_screen.Write(0, 0, L"┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐");
+	m_screen.Write(0, 0, L"┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐");
 
 	for (int y = 1; y <= 28; ++y)
 	{
@@ -290,14 +288,15 @@ void MainScene::ShowMainMenu()
 void MainScene::HandleHealCommand()
 {
 	PlayerCharacter player = GameInstance::Instance().GetPlayer();
+	const uint16 playerMaxHP = player.GetStats().GetStatValue(EStatType::HP);
 
-	if (player.GetCurrentHP() == player.GetStats().GetStatValue(EStatType::HP))
+	if (player.GetCurrentHP() == playerMaxHP)
 	{
 		m_textPrompt.Enqueue({ L"힐러 : 너 이미 체력이 다 회복된것 같아..." });
 	}
 	else if (player.GetGold().RemoveGold(500))
 	{
-		player.HealHp(UINT16_MAX);
+		player.HealHp(playerMaxHP);
 		m_textPrompt.Enqueue({ L"힐러 : 너의 체력을 모두 회복시켰어!" });
 	}
 	else

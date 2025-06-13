@@ -143,7 +143,6 @@
     <ClCompile Include="Scene\ShopScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="Stat\StatDataType.cpp" />
     <ClCompile Include="TextPrompt.cpp" />
   </ItemGroup>
   <ItemGroup>

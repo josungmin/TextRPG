@@ -1,4 +1,6 @@
 #include "CombatCharacter.h"
+#include <algorithm>
+#include <iostream>
 
 CombatCharacter::CombatCharacter(const wstring& characterName, const wstring& description)
 	:Character(characterName, description)
@@ -17,13 +19,9 @@ void CombatCharacter::TakeDamage(uint16 damage)
 
 void CombatCharacter::HealHp(uint16 amount)
 {
-	const uint32_t total = static_cast<uint32_t>(m_currentHP + amount);
-	const uint32_t maxHP = static_cast<uint32_t>(m_statContainer.GetStatValue(EStatType::HP));
-
-	if (total > maxHP)
-	{
-		m_currentHP = maxHP;
-	}
+	const uint16 maxHP = m_statContainer.GetStatValue(EStatType::HP);
+	const uint16 result = std::min((m_currentHP + amount), (int32)maxHP);
+	m_currentHP = result;
 }
 
 uint16 CombatCharacter::CalculateDamage(uint16 damage)

@@ -17,7 +17,7 @@ void Game::Run()
 
 	while (1)
 	{
-		DWORD frameStart = GetTickCount();
+		const uint32 frameStart = GetTickCount();
 
 		if (m_textPrompt.IsRunning() == false)
 		{
@@ -27,10 +27,10 @@ void Game::Run()
 		Update();
 		Render();
 
-		DWORD frameEnd = GetTickCount();
-		DWORD elapsed = frameEnd - frameStart;
+		const uint32 frameEnd = GetTickCount();
+		const uint32 elapsed = frameEnd - frameStart;
 
-		if (elapsed < (DWORD)FRAME_TIME_MS)
+		if (elapsed < FRAME_TIME_MS)
 		{
 			Sleep(FRAME_TIME_MS - elapsed);
 		}

@@ -27,7 +27,6 @@ private:
 	void HandleInventoryCommand(const wstring& cmd, const wstring& itemName);
 
 private:
-	//TextPrompt m_textPrompt;
 	EMainSceneState m_currentSceneState;
 };
 
