@@ -7,7 +7,11 @@ class Screen
 {
 public:
 	Screen();
+	Screen(const int16 width, const int16 height);
 	~Screen();
+
+	Screen(const Screen& rhs) = delete;
+	Screen& operator=(const Screen& rhs) = delete;
 
 private:
 	const int16 WIDTH = 128;
@@ -22,10 +26,11 @@ public:
 	void ShowConsoleCursor(bool isShow);
 
 private:
+	//bool Init();
 	uint8 GetCharWidth(wchar_t c);
 
 private:
 	int64 m_consoleBuffers[2];
-	uint8 m_bufferIndex = 0;
-	wchar_t* m_buffer = nullptr;
+	uint8 m_consoleBufferIndex = 0;
+	wchar_t* m_writeBuffer = nullptr;
 };

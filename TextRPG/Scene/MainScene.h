@@ -12,7 +12,7 @@ enum class EMainSceneState : uint8
 class MainScene : public Scene
 {
 public:
-	MainScene(Screen& screen, Input& input);
+	MainScene(Screen& screen, Input& input, TextPrompt& textPrompt);
 	~MainScene();
 
 public:
@@ -22,7 +22,12 @@ public:
 	virtual void Render() override;
 
 private:
-	TextPrompt m_textPrompt;
+	void ShowMainMenu();
+	void HandleHealCommand();
+	void HandleInventoryCommand(const wstring& cmd, const wstring& itemName);
+
+private:
+	//TextPrompt m_textPrompt;
 	EMainSceneState m_currentSceneState;
 };
 

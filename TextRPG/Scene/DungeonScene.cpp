@@ -4,8 +4,8 @@
 #include "MainScene.h"
 
 
-DungeonScene::DungeonScene(Screen& screen, Input& input)
-	:Scene(screen, input), m_textPrompt(screen, 34, 3), m_combatGameMode(m_textPrompt)
+DungeonScene::DungeonScene(Screen& screen, Input& input, TextPrompt& textPrompt)
+	:Scene(screen, input, textPrompt), m_combatGameMode(m_textPrompt)
 {
 	m_currentSceneState = EDungeonSceneState::Default;
 
@@ -54,7 +54,7 @@ void DungeonScene::Update()
 			}
 			else if (cmd == L"2" || cmd == L"紫蜂" || cmd == L"紫蜂除棻" || cmd == L"1.紫蜂除棻")
 			{
-				Scene* mainScene = new MainScene(m_screen, m_input);
+				Scene* mainScene = new MainScene(m_screen, m_input, m_textPrompt);
 				GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
 			}
 			else
@@ -71,7 +71,7 @@ void DungeonScene::Update()
 		{
 			if (cmd == L"1" || cmd == L"檜翕" || cmd == L"1.檜翕" || cmd == L"1檜翕")
 			{
-				Scene* mainScene = new MainScene(m_screen, m_input);
+				Scene* mainScene = new MainScene(m_screen, m_input, m_textPrompt);
 				GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
 			}
 		}
@@ -93,7 +93,7 @@ void DungeonScene::Update()
 
 void DungeonScene::Render()
 {
-	m_textPrompt.Render();
+	//m_textPrompt.Render(m_screen);
 
 	// Frame
 	m_screen.Write(0, 0, L"忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖");
