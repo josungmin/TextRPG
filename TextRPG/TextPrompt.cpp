@@ -1,7 +1,7 @@
 #include "TextPrompt.h"
 
-TextPrompt::TextPrompt()
-	:m_posX(34), m_posY(3)
+TextPrompt::TextPrompt(Screen& screen, int16 posX, int16 posY)
+	:m_screen(screen), m_posX(posX), m_posY(posY)
 {
 }
 
@@ -27,7 +27,7 @@ void TextPrompt::Update()
 	}
 }
 
-void TextPrompt::Render(Screen& m_screen)
+void TextPrompt::Render()
 {
 	int16 y = m_posY;
 	for (const wstring& msg : m_printMessageQueue)

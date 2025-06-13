@@ -6,8 +6,8 @@
 class Scene
 {
 public:
-	Scene(Screen& screen, Input& input, TextPrompt& textPrompt)
-		: m_screen(screen), m_input(input), m_textPrompt(textPrompt)
+	Scene(Screen& screen, Input& input)
+		: m_screen(screen), m_input(input)
 	{
 
 	}
@@ -20,5 +20,4 @@ public:
 protected:
 	Screen& m_screen;
 	Input& m_input;
-	TextPrompt& m_textPrompt;
 };

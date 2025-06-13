@@ -6,8 +6,8 @@
 #include "DungeonScene.h"
 
 
-MainScene::MainScene(Screen& screen, Input& input, TextPrompt& textPrompt)
-	:Scene(screen, input, textPrompt)
+MainScene::MainScene(Screen& screen, Input& input)
+	:Scene(screen, input), m_textPrompt(screen, 34, 3)
 {
 	m_currentSceneState = EMainSceneState::Default;
 }
@@ -22,7 +22,8 @@ void MainScene::OnEnter()
 	m_textPrompt.Clear();
 
 	m_textPrompt.Enqueue(L"시스템 : 마을에 입장합니다.");
-	ShowMainMenu();
+	m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+	m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
 }
 
 void MainScene::OnExit()
@@ -39,147 +40,67 @@ void MainScene::Update()
 	{
 		const wstring cmd = m_input.GetCommand();
 
-		switch (m_currentSceneState)
+		if (m_currentSceneState == EMainSceneState::Default)
 		{
-			case EMainSceneState::Default:
-			{
-				if (cmd == L"1" || cmd == L"힐러" || cmd == L"1.힐러")
-				{
-					m_textPrompt.Enqueue(L"시스템 : 힐러에게 다가가 말을 겁니다.");
-					m_textPrompt.Enqueue(L"힐러 : 500골드를 주면 너의 체력을 모두 회복시켜 줄게!");
-					m_textPrompt.Enqueue(L"시스템 : 1.수락 2.거절");
-					m_currentSceneState = EMainSceneState::Healer;
-				}
-				else if (cmd == L"2" || cmd == L"상점" || cmd == L"2.상점")
-				{
-					Scene* shopScene = new ShopScene(m_screen, m_input, m_textPrompt);
-					GameInstance::Instance().GetSceneManager().ChangeScene(*shopScene);
-				}
-				else if (cmd == L"3" || cmd == L"인벤토리" || cmd == L"3.인벤토리")
-				{
-					m_textPrompt.Enqueue(L"시스템 : '[아이템명] 장착', '[아이템명] 해제' 혹은 '나가기'를 입력하세요.");
-					m_currentSceneState = EMainSceneState::Inventory;
-				}
-				else if (cmd == L"4" || cmd == L"던전" || cmd == L"4.던전")
-				{
-					Scene* dungeonScene = new DungeonScene(m_screen, m_input, m_textPrompt);
-					GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
-				}
-				else
-				{
-					m_textPrompt.Enqueue(L"시스템 : 인식할 수 없는 명령입니다. 다시 입력해 주세요.");
-				}
-				break;
-			}
-			case EMainSceneState::Healer:
-			{
-				if (cmd == L"1" || cmd == L"수락" || cmd == L"1.수락")
-				{
-					HandleHealCommand();
-				}
-				else if (cmd == L"2" || cmd == L"거절" || cmd == L"1.거절")
-				{
-					m_textPrompt.Enqueue(L"힐러 : 다음에 또와!");
-					m_currentSceneState = EMainSceneState::Default;
-					ShowMainMenu();
-				}
-				else
-				{
-					m_textPrompt.Enqueue(L"시스템 : 인식할 수 없는 명령입니다. 다시 입력해 주세요.");
-				}
-				break;
-			}
-			case EMainSceneState::Inventory:
-			{
-				if (cmd == L"나가기")
-				{
-					ShowMainMenu();
-					m_currentSceneState = EMainSceneState::Default;
-					return;
-				}
+			//m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+			//m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
 
-				/*PlayerCharacter& player = GameInstance::Instance().GetPlayer();
-				const vector<Item*>& items = player.GetInventory().GetItems();
-
-				for (Item* item : items)
-				{
-					if (item == nullptr || item->GetType() != EItemType::Equip)
-					{
-						continue;
-					}
-
-					const wstring name = item->GetItemName();
-					
-				}*/
-			}
-			default:
+			if (cmd == L"1" || cmd == L"힐러" || cmd == L"1.힐러" || cmd == L"1힐러" || cmd == L"힐")
 			{
-				break;
+				m_textPrompt.Enqueue(L"시스템 : 힐러에게 다가가 말을 겁니다.");
+				m_textPrompt.Enqueue(L"힐러 : 500골드를 주면 너의 체력을 모두 회복시켜 줄게!");
+				m_textPrompt.Enqueue(L"시스템 : 1.수락한다 2.거절한다");
+				m_currentSceneState = EMainSceneState::Healer;
+			}
+			else if (cmd == L"2" || cmd == L"상점" || cmd == L"2.상점" || cmd == L"2상점")
+			{
+				Scene* shopScene = new ShopScene(m_screen, m_input);
+				GameInstance::Instance().GetSceneManager().ChangeScene(*shopScene);
+			}
+			else if (cmd == L"3" || cmd == L"인벤" || cmd == L"인벤토리" || cmd == L"3.인벤" || cmd == L"3인벤" || cmd == L"3인벤토리" || cmd == L"3.인벤토리")
+			{
+				m_textPrompt.Enqueue(L"시스템 : '아이템명 장착', '아이템명 해제' 혹은 '취소'를 입력하세요.");
+				m_currentSceneState = EMainSceneState::Inventory;
+			}
+			else if (cmd == L"4" || cmd == L"던전" || cmd == L"4던전" || cmd == L"4.던전")
+			{
+				Scene* dungeonScene = new DungeonScene(m_screen, m_input);
+				GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
 			}
 		}
+		else if (m_currentSceneState == EMainSceneState::Healer)
+		{
+			if (cmd == L"1" || cmd == L"수락" || cmd == L"수락한다" || cmd == L"1.수락" || cmd == L"1수락" || cmd == L"1수락한다" || cmd == L"1.수락한다")
+			{
+				PlayerCharacter player = GameInstance::Instance().GetPlayer();
 
-		//if (m_currentSceneState == EMainSceneState::Default)
-		//{
-		//	//m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
-		//	//m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
+				if (player.GetCurrentHP() == player.GetStats().GetStatValue(EStatType::HP))
+				{
+					m_textPrompt.Enqueue({ L"힐러 : 너 이미 체력이 다 회복된것 같아..." });
+				}
+				else if (GameInstance::Instance().GetPlayer().GetGold().RemoveGold(500))
+				{
+					GameInstance::Instance().GetPlayer().HealHp(UINT16_MAX);
+					m_textPrompt.Enqueue({ L"힐러 : 너의 체력을 모두 회복시켰어!" });
+				}
+				else
+				{
+					m_textPrompt.Enqueue({ L"힐러 : 너 돈이 부족하구나..." });
+				}
 
-		//	if (cmd == L"1" || cmd == L"힐러" || cmd == L"1.힐러")
-		//	{
-		//		m_textPrompt.Enqueue(L"시스템 : 힐러에게 다가가 말을 겁니다.");
-		//		m_textPrompt.Enqueue(L"힐러 : 500골드를 주면 너의 체력을 모두 회복시켜 줄게!");
-		//		m_textPrompt.Enqueue(L"시스템 : 1.수락한다 2.거절한다");
-		//		m_currentSceneState = EMainSceneState::Healer;
-		//	}
-		//	else if (cmd == L"2" || cmd == L"상점" || cmd == L"2.상점")
-		//	{
-		//		Scene* shopScene = new ShopScene(m_screen, m_input, m_textPrompt);
-		//		GameInstance::Instance().GetSceneManager().ChangeScene(*shopScene);
-		//	}
-		//	else if (cmd == L"3" || cmd == L"인벤토리" || cmd == L"3.인벤토리")
-		//	{
-		//		m_textPrompt.Enqueue(L"시스템 : '아이템명 장착', '아이템명 해제' 혹은 '취소'를 입력하세요.");
-		//		m_currentSceneState = EMainSceneState::Inventory;
-		//	}
-		//	else if (cmd == L"4" || cmd == L"던전" || cmd == L"4.던전")
-		//	{
-		//		Scene* dungeonScene = new DungeonScene(m_screen, m_input, m_textPrompt);
-		//		GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
-		//	}
-		//}
-		//else if (m_currentSceneState == EMainSceneState::Healer)
-		//{
-		//	if (cmd == L"1" || cmd == L"수락" || cmd == L"수락한다" || cmd == L"1.수락" || cmd == L"1수락" || cmd == L"1수락한다" || cmd == L"1.수락한다")
-		//	{
-		//		PlayerCharacter player = GameInstance::Instance().GetPlayer();
-
-		//		if (player.GetCurrentHP() == player.GetStats().GetStatValue(EStatType::HP))
-		//		{
-		//			m_textPrompt.Enqueue({ L"힐러 : 너 이미 체력이 다 회복된것 같아..." });
-		//		}
-		//		else if (GameInstance::Instance().GetPlayer().GetGold().RemoveGold(500))
-		//		{
-		//			GameInstance::Instance().GetPlayer().HealHp(UINT16_MAX);
-		//			m_textPrompt.Enqueue({ L"힐러 : 너의 체력을 모두 회복시켰어!" });
-		//		}
-		//		else
-		//		{
-		//			m_textPrompt.Enqueue({ L"힐러 : 너 돈이 부족하구나..." });
-		//		}
-
-		//		m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
-		//		m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
-		//		m_currentSceneState = EMainSceneState::Default;
-		//	}
-		//	else if (cmd == L"2" || cmd == L"거절" || cmd == L"거절한다" || cmd == L"1.거절" || cmd == L"1거절" || cmd == L"1거절한다" || cmd == L"1.거절한다")
-		//	{
-		//		m_textPrompt.Enqueue({ L"힐러 : 너 돈이 부족하구나..." });
-		//		m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
-		//		m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
-		//		m_currentSceneState = EMainSceneState::Default;
-		//	}
-		//}
-
-		/*else if (m_currentSceneState == EMainSceneState::Inventory)
+				m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+				m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
+				m_currentSceneState = EMainSceneState::Default;
+			}
+			else if (cmd == L"2" || cmd == L"거절" || cmd == L"거절한다" || cmd == L"1.거절" || cmd == L"1거절" || cmd == L"1거절한다" || cmd == L"1.거절한다")
+			{
+				m_textPrompt.Enqueue({ L"힐러 : 너 돈이 부족하구나..." });
+				m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+				m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
+				m_currentSceneState = EMainSceneState::Default;
+			}
+		}
+		else if (m_currentSceneState == EMainSceneState::Inventory)
 		{
 			PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 			const vector<Item*>& items = player.GetInventory().GetItems();
@@ -235,14 +156,12 @@ void MainScene::Update()
 					m_textPrompt.Enqueue(L"시스템 : '아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '나가기'를 입력하세요.");
 				}
 			}
-		}*/
+		}
 	}
 }
 
 void MainScene::Render()
 {
-	//m_textPrompt.Render(m_screen);
-
 	// Frame
 	m_screen.Write(0, 0, L"┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐");
 
@@ -276,74 +195,9 @@ void MainScene::Render()
 		m_screen.Write(2, 18 + i, player.GetInventory().GetItems()[i]->GetItemName());
 	}
 	m_screen.Write(0, 29, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");
-	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"명령 > " + m_input.GetInputBuffer());
+	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"명령 > " + m_input.GetInputBuffer());                                    
 	m_screen.Write(126, 30, L"│");
 	m_screen.Write(0, 31, L"└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
-}
 
-void MainScene::ShowMainMenu()
-{
-	m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
-	m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
-}
-
-void MainScene::HandleHealCommand()
-{
-	PlayerCharacter player = GameInstance::Instance().GetPlayer();
-
-	if (player.GetCurrentHP() == player.GetStats().GetStatValue(EStatType::HP))
-	{
-		m_textPrompt.Enqueue({ L"힐러 : 너 이미 체력이 다 회복된것 같아..." });
-	}
-	else if (player.GetGold().RemoveGold(500))
-	{
-		player.HealHp(UINT16_MAX);
-		m_textPrompt.Enqueue({ L"힐러 : 너의 체력을 모두 회복시켰어!" });
-	}
-	else
-	{
-		m_textPrompt.Enqueue({ L"힐러 : 돈이 있어야 회복을 시켜줄 수 있어!" });
-	}
-
-	m_currentSceneState = EMainSceneState::Default;
-	ShowMainMenu();
-}
-
-void MainScene::HandleInventoryCommand(const wstring& cmd, const wstring& itemName)
-{
-	//PlayerCharacter& player = GameInstance::Instance().GetPlayer();
-	////const vector<Item*>& items = player.GetInventory().GetItems();
-
-	//if (cmd == itemName + L" 장착")
-	//{
-	//	EquipableItem* equip = dynamic_cast<EquipableItem*>(item);
-	//	if (equip == nullptr)
-	//	{
-	//		m_textPrompt.Enqueue(L"[오류] : [" + name + L"] 은 장착 가능한 아이템이 아닙니다.");
-	//	}
-
-	//	player.GetEquipment().Equip(equip, player.GetStats());
-	//	player.GetInventory().RemoveItem(equip->GetItemName());
-	//	m_textPrompt.Enqueue(L"시스템 : [" + itemName + L"] 을(를) 장착했습니다.");
-	//	m_textPrompt.Enqueue(L"시스템 : '아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '나가기'를 입력하세요.");
-	//	return;
-	//}
-	//else if (cmd == itemName + L" 해제")
-	//{
-	//	const EquipableItem* equip = dynamic_cast<EquipableItem*>(item);
-	//	if (equip == nullptr)
-	//	{
-	//		m_textPrompt.Enqueue(L"[오류] : [" + itemName + L"] 은 해제 가능한 아이템이 아닙니다.");
-	//	}
-
-	//	player.GetEquipment().Unequip(equip->GetEquipType(), player.GetStats());
-	//	m_textPrompt.Enqueue(L"시스템 : [" + itemName + L"] 을(를) 해제했습니다.");
-	//	m_textPrompt.Enqueue(L"시스템 : '아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '나가기'를 입력하세요.");
-	//	return;
-	//}
-	//else
-	//{
-	//	m_textPrompt.Enqueue(L"시스템 : 인식할 수 없는 명령입니다.");
-	//	m_textPrompt.Enqueue(L"시스템 : '아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '나가기'를 입력하세요.");
-	//}
+	m_textPrompt.Render();
 }

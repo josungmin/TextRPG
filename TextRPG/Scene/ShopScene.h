@@ -16,7 +16,7 @@ enum class EShopSceneState : uint8
 class ShopScene : public Scene
 {
 public:
-	ShopScene(Screen& screen, Input& input, TextPrompt& textPrompt);
+	ShopScene(Screen& screen, Input& input);
 	~ShopScene();
 
 public:
@@ -33,7 +33,7 @@ private:
 	void HandleSellCommand(const wstring& cmd);
 
 private:
-	//TextPrompt m_textPrompt;
+	TextPrompt m_textPrompt;
 	vector<wstring> m_sellingItems; //TODO: 변수명 변경
 	EShopSceneState m_currentSceneState;
 };

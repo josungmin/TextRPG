@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <deque>
+//#include <windows.h>
 #include "MyType.h"
 #include "Screen.h"
 
@@ -9,8 +10,7 @@ using namespace std;
 class TextPrompt
 {
 public:
-    TextPrompt();
-    //TextPrompt(int16 posX, int16 posY);
+    TextPrompt(Screen& screen, int16 posX, int16 posY);
     ~TextPrompt() = default;
 
 private:
@@ -20,14 +20,13 @@ private:
 public:
     void Enqueue(const wstring& msg);
     void Update();                     
-    void Render(Screen& m_screen);
+    void Render();
     void Clear();
 
-    const bool IsRunning() const { return m_waitMessageQueue.size() != 0; }
-
 private:
-    const int16 m_posX = 34;
-    const int16 m_posY = 3;
+    Screen& m_screen;
+    int16 m_posX;
+    int16 m_posY;
 
     deque<wstring> m_waitMessageQueue;
     deque<wstring> m_printMessageQueue;
