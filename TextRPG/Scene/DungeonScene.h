@@ -1,11 +1,12 @@
 #pragma once
 #include "Scene.h"
-#include <memory>
 #include "../TextPrompt.h"
 #include "../Character/EnemyCharacter.h"
 #include "../CombatGameMode.h"
 
-enum class EDungeonSceneState : uint8_t
+using namespace std;
+
+enum class EDungeonSceneState : uint8
 {
 	Default,
 	Combat,
@@ -23,9 +24,6 @@ public:
 	virtual void OnExit() override;
 	virtual void Update() override;
 	virtual void Render() override;
-
-private:
-	void ShowDungeonMenu();
 
 private:
 	TextPrompt m_textPrompt;

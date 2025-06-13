@@ -1,6 +1,6 @@
 #include "TextPrompt.h"
 
-TextPrompt::TextPrompt(Screen& screen, uint8 posX, uint8 posY)
+TextPrompt::TextPrompt(Screen& screen, int16 posX, int16 posY)
 	:m_screen(screen), m_posX(posX), m_posY(posY)
 {
 }
@@ -29,7 +29,7 @@ void TextPrompt::Update()
 
 void TextPrompt::Render()
 {
-	uint8 y = m_posY;
+	int16 y = m_posY;
 	for (const wstring& msg : m_printMessageQueue)
 	{
 		m_screen.Write(m_posX, y, msg);

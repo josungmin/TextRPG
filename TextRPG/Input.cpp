@@ -41,4 +41,3 @@ const wstring Input::GetCommand()
 
 	return cmd;
 }
-

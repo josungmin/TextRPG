@@ -13,7 +13,6 @@ enum class EShopSceneState : uint8
 	Buy,
 };
 
-
 class ShopScene : public Scene
 {
 public:

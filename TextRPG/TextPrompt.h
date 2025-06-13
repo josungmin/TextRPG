@@ -10,7 +10,7 @@ using namespace std;
 class TextPrompt
 {
 public:
-    TextPrompt(Screen& screen, uint8 posX, uint8 posY);
+    TextPrompt(Screen& screen, int16 posX, int16 posY);
     ~TextPrompt() = default;
 
 private:
@@ -25,8 +25,8 @@ public:
 
 private:
     Screen& m_screen;
-    uint8 m_posX;
-    uint8 m_posY;
+    int16 m_posX;
+    int16 m_posY;
 
     deque<wstring> m_waitMessageQueue;
     deque<wstring> m_printMessageQueue;

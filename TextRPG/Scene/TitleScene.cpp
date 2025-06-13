@@ -1,8 +1,5 @@
 #include "TitleScene.h"
 #include <string>
-#include <memory>
-#include <cassert>
-
 #include "../GameInstance.h"
 #include "../Screen.h"
 #include "../Input.h"
@@ -29,7 +26,8 @@ void TitleScene::Update()
 {
 	if (m_input.HasCommand())
 	{
-		std::wstring cmd = m_input.GetCommand();
+		const std::wstring cmd = m_input.GetCommand();
+
 		if (cmd == L"시작" || cmd == L"1" || cmd == L"1.시작" || cmd == L"1시작")
 		{
 			Scene* mainScene = new MainScene(m_screen, m_input);

@@ -12,8 +12,8 @@ public:
     bool Equip(EquipableItem* item, StatContainer& ownerStatContainer);
     bool Unequip(EEquipType type, StatContainer& ownerStatContainer);
 
-    inline EquipableItem* GetWeapon() const { return m_weapon; }
-    inline EquipableItem* GetArmor() const { return m_armor; }
+    inline const EquipableItem* GetWeapon() const { return m_weapon; }
+    inline const EquipableItem* GetArmor() const { return m_armor; }
 
 private:
     EquipableItem* m_weapon = nullptr;

@@ -1,4 +1,5 @@
 #include "MainScene.h"
+#include <string>
 #include "../GameInstance.h"
 #include "../Character/PlayerCharacter.h"
 #include "ShopScene.h"
@@ -37,7 +38,7 @@ void MainScene::Update()
 
 	if (m_input.HasCommand()) 
 	{
-		std::wstring cmd = m_input.GetCommand();
+		const wstring cmd = m_input.GetCommand();
 
 		if (m_currentSceneState == EMainSceneState::Default)
 		{
@@ -99,7 +100,7 @@ void MainScene::Update()
 		else if (m_currentSceneState == EMainSceneState::Inventory)
 		{
 			PlayerCharacter& player = GameInstance::Instance().GetPlayer();
-			std::vector<Item*>& items = player.GetInventory().GetItems();
+			const vector<Item*>& items = player.GetInventory().GetItems();
 
 			if (cmd == L"취소")
 			{
@@ -112,25 +113,31 @@ void MainScene::Update()
 			for (Item* item : items)
 			{
 				if (item == nullptr || item->GetType() != EItemType::Equip)
+				{
 					continue;
+				}
 
-				const wstring& name = item->GetItemName();
+				const wstring name = item->GetItemName();
 				if (cmd == name + L" 장착")
 				{
 					EquipableItem* equip = dynamic_cast<EquipableItem*>(item);
 					if (equip == nullptr)
+					{
+						m_textPrompt.Enqueue(L"[오류] : [" + name + L"] 은 장착 가능한 아이템이 아닙니다.");
 						continue;
+					}
 
 					player.GetEquipment().Equip(equip, player.GetStats());
 					m_textPrompt.Enqueue(L"시스템 : [" + name + L"] 을(를) 장착했습니다.");
-					
 					m_currentSceneState = EMainSceneState::Default;
+					return;
 				}
 				else if (cmd == name + L" 해제")
 				{
-					EquipableItem* equip = dynamic_cast<EquipableItem*>(item);
+					const EquipableItem* equip = dynamic_cast<EquipableItem*>(item);
 					if (equip == nullptr)
 					{
+						m_textPrompt.Enqueue(L"[오류] : [" + name + L"] 은 해제 가능한 아이템이 아닙니다.");
 						continue;
 					}
 
@@ -145,8 +152,6 @@ void MainScene::Update()
 					m_textPrompt.Enqueue(L"'아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '취소'를 입력하세요.");
 				}
 			}
-
-
 		}
 	}
 }

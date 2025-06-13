@@ -85,8 +85,8 @@ void CombatGameMode::CombatStart()
 	m_isCombatEnded = false;
 	m_textPrompt.Enqueue(L"시스템 : 전투를 시작합니다.");
 
-	uint16 playerAgility = GameInstance::Instance().GetPlayer().GetStats().GetStatValue(EStatType::Agility);
-	uint16 enemyAgility = m_enemy->GetStats().GetStatValue(EStatType::Agility);
+	const uint16 playerAgility = GameInstance::Instance().GetPlayer().GetStats().GetStatValue(EStatType::Agility);
+	const uint16 enemyAgility = m_enemy->GetStats().GetStatValue(EStatType::Agility);
 
 	if (playerAgility >= enemyAgility)
 	{
@@ -107,14 +107,14 @@ void CombatGameMode::PlayerAction()
 
 	if (m_command == L"1" || m_command == L"공격" || m_command == L"1공격" || m_command == L"1.공격")
 	{
-		uint16 damage = player.GetStats().GetStatValue(EStatType::AttackPower);
+		const uint16 damage = player.GetStats().GetStatValue(EStatType::AttackPower);
 		m_enemy->TakeDamage(damage);
 
 		m_textPrompt.Enqueue(L"플레이어 : [" + m_enemy->GetName() + L"]" + L"에게 " + to_wstring(damage) + L" 피해를 입혔습니다. 현재 적 HP " + std::to_wstring(m_enemy->GetCurrentHP()));
 	}
 	else if (m_command == L"2" || m_command == L"회복" || m_command == L"2회복" || m_command == L"2.회복")
 	{
-		uint16 amount = 10;
+		const uint16 amount = 10;
 		player.HealHp(amount);
 		m_textPrompt.Enqueue(L"플레이어 : HP를 " + std::to_wstring(amount) + L" 회복했습니다.");
 	}
@@ -127,7 +127,7 @@ void CombatGameMode::PlayerAction()
 
 	m_command.clear();
 
-	if (m_enemy->GetIsDead())
+	if (m_enemy->GetIsDead() == true)
 	{
 		m_textPrompt.Enqueue(L"시스템 : 적을 처치했습니다!");
 		m_currentCombatState = ECombatState::CombatEnd;
@@ -142,12 +142,12 @@ void CombatGameMode::EnemyAction()
 {
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 
-	uint16_t damage = m_enemy->GetStats().GetStatValue(EStatType::AttackPower);
+	const uint16 damage = m_enemy->GetStats().GetStatValue(EStatType::AttackPower);
 	player.TakeDamage(damage);
 
 	m_textPrompt.Enqueue(m_enemy->GetName() + L" : " + L"[" + player.GetName() + L"]" + L"에게 " + to_wstring(damage) + L" 피해를 입혔습니다. 현재 플레이어 HP " + std::to_wstring(player.GetCurrentHP()));
 
-	if (player.GetIsDead())
+	if (player.GetIsDead() == true)
 	{
 		m_textPrompt.Enqueue(L"시스템 : 당신은 쓰러졌습니다...");
 		m_currentCombatState = ECombatState::CombatEnd;
@@ -164,17 +164,25 @@ void CombatGameMode::CombatEnd()
 {
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 
-	int8 dropExp = m_enemy->GetDropExp();
+	const int8 dropExp = m_enemy->GetDropExp();
 	player.GetExperience().AddExperience(dropExp);
 	m_textPrompt.Enqueue(L"시스템 : " + std::to_wstring(dropExp) + L" 경험치를 획득했습니다.");
 
-	uint16 dropGold = m_enemy->GetDropGold();
+	const uint16 dropGold = m_enemy->GetDropGold();
 	player.GetGold().AddGold(dropGold);
 	m_textPrompt.Enqueue(L"시스템 : " + std::to_wstring(dropGold) + L" 골드를 획득했습니다.");
 
 	vector<wstring> dropItems = m_enemy->GetDropItems();
-	size_t randNum = rand() % dropItems.size();
+	const uint64 randNum = rand() % dropItems.size();
+
 	Item* dropItem = GameInstance::Instance().GetItemTable().CreateItem(dropItems[randNum]);
+	if (dropItem == nullptr)
+	{
+		m_textPrompt.Enqueue(L"[오류] : [" + dropItems[randNum] + L"] 해당 아이템이 존재하지 않습니다.");
+		m_isCombatEnded = true;
+		return;
+	}
+
 	player.GetInventory().AddItem(dropItem);
 	m_textPrompt.Enqueue(L"시스템 : 전리품으로 [" + dropItem->GetItemName() + L"] 를 획득했습니다.");
 

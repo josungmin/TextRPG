@@ -46,14 +46,14 @@ void ShopScene::Update()
 			case EShopSceneState::Default:
 			{
 				if (cmd == L"1" || cmd == L"구매")
-				{				
-					ShowBuyMenu();
+				{	
 					m_currentSceneState = EShopSceneState::Buy;
+					ShowBuyMenu();			
 				}
 				else if (cmd == L"2" || cmd == L"판매")
-				{					
-					ShowSellMenu();
+				{
 					m_currentSceneState = EShopSceneState::Sell;
+					ShowSellMenu();		
 				}
 				else if (cmd == L"3" || cmd == L"나가기")
 				{
@@ -65,16 +65,17 @@ void ShopScene::Update()
 			case EShopSceneState::Buy:
 			{
 				if (cmd == L"취소")
-				{			
-					ShowShopMenu();
+				{
 					m_currentSceneState = EShopSceneState::Default;
+					ShowShopMenu();
 					return;
 				}
 
-				int idx = std::stoi(cmd) - 1;
-				if (idx < 0 || idx >= m_sellingItems.size())
+				const int index = std::stoi(cmd) - 1;
+				if (index < 0 || index >= m_sellingItems.size())
 				{
 					m_textPrompt.Enqueue(L"시스템 : 잘못된 입력입니다.");
+					m_currentSceneState = EShopSceneState::Default;
 					return;
 				}
 
@@ -85,18 +86,19 @@ void ShopScene::Update()
 			{
 				if (cmd == L"취소")
 				{
-					ShowShopMenu();
-					m_currentSceneState = EShopSceneState::Default;			
+					m_currentSceneState = EShopSceneState::Default;
+					ShowShopMenu();	
 					return;
 				}
 
 				PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 				const vector<Item*>& items = player.GetInventory().GetItems();
 
-				int idx = std::stoi(cmd) - 1;
-				if (idx < 0 || idx >= items.size())
+				const int index = stoi(cmd) - 1;
+				if (index < 0 || index >= items.size())
 				{
 					m_textPrompt.Enqueue(L"시스템 : 잘못된 입력입니다.");
+					m_currentSceneState = EShopSceneState::Default;
 					return;
 				}
 
@@ -169,7 +171,7 @@ void ShopScene::ShowBuyMenu()
 			continue;
 		}
 
-		uint8 price = item->GetSellPrice();
+		const uint8 price = item->GetSellPrice();
 		m_textPrompt.Enqueue(std::to_wstring(i + 1) + L". " + item->GetItemName() + L" - " + std::to_wstring(price) + L"G");
 	}
 
@@ -209,11 +211,11 @@ void ShopScene::ShowSellMenu()
 
 void ShopScene::HandleBuyCommand(const wstring& cmd)
 {
-	const int idx = std::stoi(cmd) - 1;
-	const Item* item = GameInstance::Instance().GetItemTable().GetItem(m_sellingItems[idx]);
+	const int index = std::stoi(cmd) - 1;
+	const Item* item = GameInstance::Instance().GetItemTable().GetItem(m_sellingItems[index]);
 	if(item == nullptr)
 	{
-		m_textPrompt.Enqueue(L"[오류] '" + m_sellingItems[idx] + L"' 아이템을 찾을 수 없습니다.");
+		m_textPrompt.Enqueue(L"[오류] '" + m_sellingItems[index] + L"' 아이템을 찾을 수 없습니다.");
 		return;
 	}
 
@@ -241,11 +243,11 @@ void ShopScene::HandleSellCommand(const wstring& cmd)
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 	const vector<Item*>& items = player.GetInventory().GetItems();
 
-	const int idx = std::stoi(cmd) - 1;
-	const Item* item = items[idx];
+	const int index = std::stoi(cmd) - 1;
+	const Item* item = items[index];
 	if (item == nullptr)
 	{
-		m_textPrompt.Enqueue(L"[오류] '" + items[idx]->GetItemName() + L"' 아이템을 찾을 수 없습니다.");
+		m_textPrompt.Enqueue(L"[오류] '" + items[index]->GetItemName() + L"' 아이템을 찾을 수 없습니다.");
 		return;
 	}
 

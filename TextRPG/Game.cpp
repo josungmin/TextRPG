@@ -22,7 +22,9 @@ void Game::Run()
 		DWORD elapsed = frameEnd - frameStart;
 
 		if (elapsed < (DWORD)FRAME_TIME_MS)
+		{
 			Sleep(FRAME_TIME_MS - elapsed);
+		}
 	}
 }
 

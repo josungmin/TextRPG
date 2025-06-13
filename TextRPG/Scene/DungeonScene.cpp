@@ -43,7 +43,7 @@ void DungeonScene::Update()
 
 	if (m_input.HasCommand())
 	{
-		std::wstring cmd = m_input.GetCommand(); 
+		const wstring cmd = m_input.GetCommand(); 
 
 		if (m_currentSceneState == EDungeonSceneState::Default)
 		{
@@ -81,7 +81,7 @@ void DungeonScene::Update()
 	{
 		m_combatGameMode.ProcessCombat();
 
-		if (m_combatGameMode.IsCombatEnd())
+		if (m_combatGameMode.IsCombatEnd() == true)
 		{
 			m_textPrompt.Enqueue(L"시스템 : 전투를 종료합니다. 마을로 이동합니다.");
 			m_textPrompt.Enqueue(L"시스템 : 1.이동");

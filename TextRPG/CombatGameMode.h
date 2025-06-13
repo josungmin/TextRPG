@@ -40,6 +40,6 @@ private:
 	EnemyCharacter* m_enemy;
 
 	ECombatState m_currentCombatState;
-	std::wstring m_command;
+	wstring m_command;
 	bool m_isCombatEnded = false;
 };

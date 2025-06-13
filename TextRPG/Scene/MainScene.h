@@ -2,13 +2,12 @@
 #include "Scene.h"
 #include "../TextPrompt.h"
 
-enum class EMainSceneState : uint8_t
+enum class EMainSceneState : uint8
 {
 	Default,
 	Healer,
 	Inventory,
 };
-
 
 class MainScene : public Scene
 {

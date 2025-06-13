@@ -1,7 +1,6 @@
 #include "Screen.h"
 #include <iostream>
 #include <cwchar>
-#include <cassert>
 
 Screen::Screen()
 	: m_buffer(nullptr)
@@ -10,13 +9,13 @@ Screen::Screen()
 
 	for (int i = 0; i < 2; ++i)
 	{
-		m_consoleBuffers[i] = CreateConsoleScreenBuffer(
+		m_consoleBuffers[i] = (int64)CreateConsoleScreenBuffer(
 			GENERIC_READ | GENERIC_WRITE,
 			0, nullptr,
 			CONSOLE_TEXTMODE_BUFFER,
 			nullptr
 		);
-		SetConsoleScreenBufferSize(m_consoleBuffers[i], { WIDTH, HEIGHT });
+		SetConsoleScreenBufferSize((HANDLE)m_consoleBuffers[i], { WIDTH, HEIGHT });
 
 		SMALL_RECT rect = {
 			0,
@@ -24,7 +23,7 @@ Screen::Screen()
 			WIDTH - 1,
 			HEIGHT - 1
 		};
-		SetConsoleWindowInfo(m_consoleBuffers[i], TRUE, &rect);
+		SetConsoleWindowInfo((HANDLE)m_consoleBuffers[i], TRUE, &rect);
 	}
 
 	m_buffer = new wchar_t[HEIGHT * WIDTH];
@@ -37,7 +36,7 @@ Screen::~Screen()
 {
 	for (int i = 0; i < 2; ++i)
 	{
-		CloseHandle(m_consoleBuffers[i]);
+		CloseHandle((HANDLE)m_consoleBuffers[i]);
 	}
 
 	delete[] m_buffer;
@@ -66,18 +65,18 @@ void Screen::Render()
 {
 	unsigned long written;
 
-	for (SHORT i = 0; i < BUFFER_SIZE; i++)
+	for (int16 i = 0; i < BUFFER_SIZE; i++)
 	{
 		WriteConsoleOutputCharacterW(
-			m_consoleBuffers[m_bufferIndex],
+			(HANDLE)m_consoleBuffers[m_bufferIndex],
 			&m_buffer[i],
 			1,
-			{ i % WIDTH, i / WIDTH },
+			{ (int16)(i % WIDTH), (int16)(i / WIDTH) },
 			&written
 		);
 	}
 
-	SetConsoleActiveScreenBuffer(m_consoleBuffers[m_bufferIndex]);
+	SetConsoleActiveScreenBuffer((HANDLE)m_consoleBuffers[m_bufferIndex]);
 	m_bufferIndex = 1 - m_bufferIndex;
 }
 
@@ -91,10 +90,10 @@ void Screen::ShowConsoleCursor(bool bIsShow)
 	for (int i = 0; i < 2; ++i)
 	{
 		CONSOLE_CURSOR_INFO cursorInfo;
-		GetConsoleCursorInfo(m_consoleBuffers[i], &cursorInfo);
+		GetConsoleCursorInfo((HANDLE)m_consoleBuffers[i], &cursorInfo);
 
 		cursorInfo.bVisible = bIsShow;
-		SetConsoleCursorInfo(m_consoleBuffers[i], &cursorInfo);
+		SetConsoleCursorInfo((HANDLE)m_consoleBuffers[i], &cursorInfo);
 	}
 }
 
