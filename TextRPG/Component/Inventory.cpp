@@ -1,6 +1,12 @@
 #include "Inventory.h"
 #include "../Item/Item.h"
 
+Inventory::Inventory()
+	:m_size(5)
+{
+	m_items.reserve(m_size);
+}
+
 Inventory::~Inventory()
 {
 	for (Item* item : m_items)
@@ -11,7 +17,7 @@ Inventory::~Inventory()
 
 bool Inventory::AddItem(Item* item)
 {
-	if (item == nullptr)
+	if (item == nullptr || m_items.size() == m_size)
 	{
 		return false;
 	}

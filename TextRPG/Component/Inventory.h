@@ -10,7 +10,7 @@ class Item;
 class Inventory
 {
 public:
-	Inventory() = default;
+	Inventory();
 	~Inventory();
 
 public:
@@ -20,5 +20,6 @@ public:
 	inline vector<Item*>& GetItems() { return m_items; }
 
 private:
+	const uint8 m_size = 5;
 	vector<Item*> m_items;
 };

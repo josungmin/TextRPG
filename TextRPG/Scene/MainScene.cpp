@@ -42,6 +42,9 @@ void MainScene::Update()
 
 		if (m_currentSceneState == EMainSceneState::Default)
 		{
+			m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
+			m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
+
 			if (cmd == L"1" || cmd == L"힐러" || cmd == L"1.힐러" || cmd == L"1힐러" || cmd == L"힐")
 			{
 				m_textPrompt.Enqueue(L"시스템 : 힐러에게 다가가 말을 겁니다.");
@@ -49,17 +52,17 @@ void MainScene::Update()
 				m_textPrompt.Enqueue(L"시스템 : 1.수락한다 2.거절한다");
 				m_currentSceneState = EMainSceneState::Healer;
 			}
-			if (cmd == L"2" || cmd == L"상점" || cmd == L"2.상점" || cmd == L"2상점")
+			else if (cmd == L"2" || cmd == L"상점" || cmd == L"2.상점" || cmd == L"2상점")
 			{
 				Scene* shopScene = new ShopScene(m_screen, m_input);
 				GameInstance::Instance().GetSceneManager().ChangeScene(*shopScene);
 			}
-			if (cmd == L"3" || cmd == L"인벤" || cmd == L"인벤토리" || cmd == L"3.인벤" || cmd == L"3인벤" || cmd == L"3인벤토리" || cmd == L"3.인벤토리")
+			else if (cmd == L"3" || cmd == L"인벤" || cmd == L"인벤토리" || cmd == L"3.인벤" || cmd == L"3인벤" || cmd == L"3인벤토리" || cmd == L"3.인벤토리")
 			{
 				m_textPrompt.Enqueue(L"시스템 : '아이템명 장착', '아이템명 해제' 혹은 '취소'를 입력하세요.");
 				m_currentSceneState = EMainSceneState::Inventory;
 			}
-			if (cmd == L"4" || cmd == L"던전" || cmd == L"4던전" || cmd == L"4.던전")
+			else if (cmd == L"4" || cmd == L"던전" || cmd == L"4던전" || cmd == L"4.던전")
 			{
 				Scene* dungeonScene = new DungeonScene(m_screen, m_input);
 				GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
@@ -102,11 +105,11 @@ void MainScene::Update()
 			PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 			const vector<Item*>& items = player.GetInventory().GetItems();
 
-			if (cmd == L"취소")
+			if (cmd == L"나가기")
 			{
-				m_currentSceneState = EMainSceneState::Default;
 				m_textPrompt.Enqueue(L"시스템 : 어떤 행동을 하시겠습니까?");
 				m_textPrompt.Enqueue(L"시스템 : 1.회복 2.상점 3.인벤토리 4.던전");
+				m_currentSceneState = EMainSceneState::Default;
 				return;
 			}
 
@@ -129,6 +132,7 @@ void MainScene::Update()
 
 					player.GetEquipment().Equip(equip, player.GetStats());
 					m_textPrompt.Enqueue(L"시스템 : [" + name + L"] 을(를) 장착했습니다.");
+					m_textPrompt.Enqueue(L"시스템 : '아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '나가기'를 입력하세요.");
 					m_currentSceneState = EMainSceneState::Default;
 					return;
 				}
@@ -143,13 +147,14 @@ void MainScene::Update()
 
 					player.GetEquipment().Unequip(equip->GetEquipType(), player.GetStats());
 					m_textPrompt.Enqueue(L"시스템 : [" + name + L"] 을(를) 해제했습니다.");
+					m_textPrompt.Enqueue(L"시스템 : '아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '나가기'를 입력하세요.");
 					m_currentSceneState = EMainSceneState::Default;
 					return;
 				}
 				else
 				{
 					m_textPrompt.Enqueue(L"시스템 : 인식할 수 없는 명령입니다.");
-					m_textPrompt.Enqueue(L"'아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '취소'를 입력하세요.");
+					m_textPrompt.Enqueue(L"시스템 : '아이템명 장착' 또는 '아이템명 해제'를 입력하거나, '나가기'를 입력하세요.");
 				}
 			}
 		}

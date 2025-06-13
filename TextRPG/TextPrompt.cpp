@@ -12,7 +12,7 @@ void TextPrompt::Enqueue(const wstring& msg)
 
 void TextPrompt::Update()
 {
-	unsigned long currentTime = GetTickCount();
+	const uint32 currentTime = GetTickCount();
 
 	if (m_waitMessageQueue.empty() == false && (currentTime - m_lastPrintTime >= DELAY_MS))
 	{

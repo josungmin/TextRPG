@@ -229,9 +229,15 @@ void ShopScene::HandleBuyCommand(const wstring& cmd)
 	}
 
 	Item* itemInstance = GameInstance::Instance().GetItemTable().CreateItem(item->GetItemName());
-	player.GetInventory().AddItem(itemInstance);
-	player.GetGold().AddGold(-static_cast<int32_t>(price));
+	const bool addItemResult = player.GetInventory().AddItem(itemInstance);
+	if(addItemResult == false)
+	{
+		m_textPrompt.Enqueue(L"시스템 : 인벤토리가 가득 차 아이템을 구매하지 못했습니다.");
+		ShowShopMenu();
+		m_currentSceneState = EShopSceneState::Default;
+	}
 
+	player.GetGold().AddGold(price);
 	m_textPrompt.Enqueue(L"시스템 : [" + itemInstance->GetItemName() + L"] 구매가 완료되었습니다.");
 	
 	ShowShopMenu();
