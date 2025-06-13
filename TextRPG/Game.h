@@ -1,11 +1,12 @@
 #pragma once
 #include "Screen.h"
 #include "Input.h"
+#include "TextPrompt.h"
 
 class Game
 {
 public:
-	Game() = default;
+	Game();
 	~Game() = default;
 
 public:
@@ -23,4 +24,5 @@ private:
 private:
 	Screen m_screen;
 	Input m_input;
+	TextPrompt m_textPrompt;
 };

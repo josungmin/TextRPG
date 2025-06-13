@@ -4,7 +4,7 @@
 class TitleScene : public Scene
 {
 public:
-	TitleScene(Screen& screen, Input& input);
+	TitleScene(Screen& screen, Input& input, TextPrompt& textPrompt);
 
 public:
 	virtual void OnEnter() override;

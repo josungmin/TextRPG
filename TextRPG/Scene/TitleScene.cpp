@@ -7,8 +7,8 @@
 #include "MainScene.h"
 
 
-TitleScene::TitleScene(Screen& screen, Input& input)
-	:Scene(screen, input)
+TitleScene::TitleScene(Screen& screen, Input& input, TextPrompt& textPrompt)
+	:Scene(screen, input, textPrompt)
 {
 }
 
@@ -30,7 +30,7 @@ void TitleScene::Update()
 
 		if (cmd == L"시작" || cmd == L"1" || cmd == L"1.시작" || cmd == L"1시작")
 		{
-			Scene* mainScene = new MainScene(m_screen, m_input);
+			Scene* mainScene = new MainScene(m_screen, m_input, m_textPrompt);
 			GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
 		}
 	}

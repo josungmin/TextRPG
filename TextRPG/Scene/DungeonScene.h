@@ -16,7 +16,7 @@ enum class EDungeonSceneState : uint8
 class DungeonScene : public Scene
 {
 public:
-	DungeonScene(Screen& screen, Input& input);
+	DungeonScene(Screen& screen, Input& input, TextPrompt& textPrompt);
 	~DungeonScene();
 
 public:
@@ -26,7 +26,7 @@ public:
 	virtual void Render() override;
 
 private:
-	TextPrompt m_textPrompt;
+	//TextPrompt m_textPrompt;
 	CombatGameMode m_combatGameMode;
 
 	EnemyCharacter* m_enemy;

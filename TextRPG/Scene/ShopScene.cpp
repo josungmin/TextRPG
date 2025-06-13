@@ -2,8 +2,8 @@
 #include "../GameInstance.h"
 #include "MainScene.h"
 
-ShopScene::ShopScene(Screen& screen, Input& input)
-	:Scene(screen, input), m_textPrompt(screen, 34, 3)
+ShopScene::ShopScene(Screen& screen, Input& input, TextPrompt& textPrompt)
+	:Scene(screen, input, textPrompt)
 {
 	m_sellingItems.reserve(4);
 	m_sellingItems.push_back(L"최하급 검");
@@ -57,7 +57,7 @@ void ShopScene::Update()
 				}
 				else if (cmd == L"3" || cmd == L"나가기")
 				{
-					Scene* mainScene = new MainScene(m_screen, m_input);
+					Scene* mainScene = new MainScene(m_screen, m_input, m_textPrompt);
 					GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
 				}
 				break;
@@ -105,12 +105,19 @@ void ShopScene::Update()
 				HandleSellCommand(cmd);
 				break;
 			}
+			default:
+			{
+				break;
+			}
 		}
+
 	}
 }
 
 void ShopScene::Render()
 {
+	// m_textPrompt.Render(m_screen);
+
 	// Frame
 	m_screen.Write(0, 0, L"┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐");
 
@@ -148,8 +155,6 @@ void ShopScene::Render()
 	m_screen.Write(0, 29, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");
 	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"명령 > " + m_input.GetInputBuffer()); m_screen.Write(126, 30, L"│");
 	m_screen.Write(0, 31, L"└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
-
-	m_textPrompt.Render();
 }
 
 void ShopScene::ShowShopMenu()
