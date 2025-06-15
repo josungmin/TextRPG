@@ -1,6 +1,9 @@
 #pragma once
 #include "Scene.h"
 #include "../TextPrompt.h"
+#include "../Item/EquipableItem.h"
+
+class EquipableItem;
 
 enum class EMainSceneState : uint8
 {
@@ -24,9 +27,9 @@ public:
 private:
 	void ShowMainMenu();
 	void HandleHealCommand();
-	void HandleInventoryCommand(const wstring& cmd, const wstring& itemName);
+	void HandleEquipCommand(const EquipableItem* equipItem);
+	void HandleUnequipCommand(const EEquipType equipType);
 
 private:
 	EMainSceneState m_currentSceneState;
 };
-

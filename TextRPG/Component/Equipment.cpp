@@ -2,18 +2,26 @@
 
 Equipment::~Equipment()
 {
-    delete m_weapon;
-    delete m_armor;
+    if (m_weapon != nullptr)
+    {
+        delete m_weapon;
+    }
+    
+    if (m_armor != nullptr)
+    {
+        delete m_armor;
+    }
 }
 
-bool Equipment::Equip(EquipableItem* item, StatContainer& statContainer)
+const bool Equipment::Equip(const EquipableItem* item, StatContainer& statContainer)
 {
     if (!item)
     {
         return false;
     }
 
-    const ModifierContainer& modifierContainer = item->GetModifierContainer();
+    EquipableItem* equipItem = static_cast<EquipableItem*>(item->Clone());
+    const ModifierContainer& modifierContainer = equipItem->GetModifierContainer();
 
     switch (item->GetEquipType())
     {
@@ -22,10 +30,12 @@ bool Equipment::Equip(EquipableItem* item, StatContainer& statContainer)
             if (m_weapon)
             {
                 statContainer.RemoveModifierContainer(m_weapon->GetModifierContainer().id);
+                delete m_weapon;
             }
 
-            m_weapon = item;
+            m_weapon = equipItem;
             statContainer.AddModifierContainer(modifierContainer);
+            return true;
 
             return true;
         }         
@@ -34,22 +44,24 @@ bool Equipment::Equip(EquipableItem* item, StatContainer& statContainer)
             if (m_armor)
             {
                 statContainer.RemoveModifierContainer(m_armor->GetModifierContainer().id);
+                delete m_armor;
             }
             
-            m_armor = item;
+            m_armor = equipItem;
             statContainer.AddModifierContainer(modifierContainer);
-
             return true;
         }
         default:
         {
+            delete equipItem;
             return false;
         }      
     }
 }
 
-bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
+const EquipableItem* Equipment::Unequip(EEquipType type, StatContainer& statContainer)
 {
+    EquipableItem* unequipItem = nullptr;
 
     switch (type)
     {
@@ -58,25 +70,54 @@ bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
             if (m_weapon)
             {
                 statContainer.RemoveModifierContainer(m_weapon->GetModifierContainer().id);
+                unequipItem = m_weapon;
                 m_weapon = nullptr;
-                return true;
+                return unequipItem;
             }
             break;
-        }   
+        }
         case EEquipType::Armor:
         {
             if (m_armor)
             {
                 statContainer.RemoveModifierContainer(m_armor->GetModifierContainer().id);
+                unequipItem = m_armor;
                 m_armor = nullptr;
-                return true;
+                return unequipItem;
             }
             break;
-        }     
+        }
         default:
         {
             break;
-        }   
+        }
+    }
+
+    return nullptr;
+}
+
+const bool Equipment::IsEquiped(EEquipType equipType) const
+{
+    switch (equipType)
+    {
+        case EEquipType::NONE:
+        {
+            break;
+        }        
+        case EEquipType::Weapon:
+        {
+            return m_weapon != nullptr;
+            break;
+        }
+        case EEquipType::Armor:
+        {
+            return m_armor != nullptr;
+            break;
+        }
+        default:
+        {
+            break;
+        }
     }
 
     return false;

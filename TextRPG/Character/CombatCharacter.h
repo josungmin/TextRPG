@@ -9,8 +9,8 @@ public:
 	CombatCharacter(const wstring& characterName, const wstring& description);
 
 public:
-	virtual void TakeDamage(uint16 damage);
-	virtual void HealHp(uint16 amount);
+	virtual void TakeDamage(const uint16 damage);
+	virtual void HealHp(const uint16 amount);
 
 public:
 	inline const uint16 GetCurrentHP() const { return m_currentHP; }
@@ -18,7 +18,7 @@ public:
 	inline StatContainer& GetStats() { return m_statContainer; }
 
 protected:
-	virtual uint16 CalculateDamage(uint16 damage);
+	virtual const uint16 CalculateDamage(uint16 damage);
 
 protected:
 	uint16 m_currentHP = 0;

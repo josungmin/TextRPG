@@ -21,10 +21,6 @@ public:
 	}
 	virtual ~Item() = default;
 
-protected:
-	Item(const Item& other) = default;
-	Item& operator=(const Item& other) = default;
-
 public:
 	virtual Item* Clone() const
 	{
@@ -61,10 +57,12 @@ public:
 	}
 
 public:
-	inline void SetMaxCount(uint8 maxCount) { m_maxCount = maxCount; }
+	inline void SetMaxCount(const uint8 maxCount) { m_maxCount = maxCount; }
+	inline const bool IsFull() const { return m_count == m_maxCount; }
 
 	inline const EItemType GetType() const { return m_itemType; }
 	inline const uint8 GetCount() const { return m_count; }
+	inline const uint8 GetRemainCount() const { return m_maxCount - m_count; }
 	inline const uint8 GetMaxCount() const { return m_maxCount; }
 	inline const wstring& GetItemName() const { return m_itemName; }
 	inline const wstring& GetDescription() const { return m_description; }

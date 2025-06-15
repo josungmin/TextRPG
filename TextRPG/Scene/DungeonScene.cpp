@@ -123,9 +123,9 @@ void DungeonScene::Render()
 	m_screen.Write(2, 14, L"무기: " + (player.GetEquipment().GetWeapon() == nullptr ? L"미장착" : player.GetEquipment().GetWeapon()->GetItemName()));
 	m_screen.Write(2, 15, L"방어구: " + (player.GetEquipment().GetArmor() == nullptr ? L"미장착" : player.GetEquipment().GetArmor()->GetItemName()));
 	m_screen.Write(2, 17, L"인벤토리 ");
-	for (int i = 0; i < player.GetInventory().GetItems().size(); ++i)
+	for (int i = 0; i < player.GetInventory().GetItemList().size(); ++i)
 	{
-		m_screen.Write(2, 18 + i, player.GetInventory().GetItems()[i]->GetItemName());
+		m_screen.Write(2, 18 + i, player.GetInventory().GetItemList()[i]->GetItemName());
 	}
 
 	m_screen.Write(0, 29, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");

@@ -29,10 +29,10 @@ private:
 	void ShowShopMenu();
 	void ShowBuyMenu();
 	void ShowSellMenu();
-	void HandleBuyCommand(const wstring& cmd);
+	void HandleBuyCommand(const uint8 shopItemIndex);
 	void HandleSellCommand(const wstring& cmd);
 
 private:
-	vector<wstring> m_sellingItems;
+	vector<wstring> m_shopItemList;
 	EShopSceneState m_currentSceneState;
 };

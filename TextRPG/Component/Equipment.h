@@ -9,8 +9,9 @@ public:
     ~Equipment();
 
 public:
-    bool Equip(EquipableItem* item, StatContainer& ownerStatContainer);
-    bool Unequip(EEquipType type, StatContainer& ownerStatContainer);
+    const bool Equip(const EquipableItem* item, StatContainer& ownerStatContainer);
+    const EquipableItem* Unequip(EEquipType type, StatContainer& ownerStatContainer);
+    const bool IsEquiped(EEquipType equipType) const;
 
     inline const EquipableItem* GetWeapon() const { return m_weapon; }
     inline const EquipableItem* GetArmor() const { return m_armor; }
