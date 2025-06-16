@@ -172,10 +172,10 @@ void CombatGameMode::CombatEnd()
 	player.GetGold().AddGold(dropGold);
 	m_textPrompt.Enqueue(L"시스템 : " + std::to_wstring(dropGold) + L" 골드를 획득했습니다.");
 
-	vector<wstring> dropItems = m_enemy->GetDropItems();
+	const vector<wstring> dropItems = m_enemy->GetDropItems();
 	const uint64 randNum = rand() % dropItems.size();
 
-	Item* dropItem = GameInstance::Instance().GetItemTable().CreateItem(dropItems[randNum]);
+	const Item* dropItem = GameInstance::Instance().GetItemTable().CreateItem(dropItems[randNum]);
 	if (dropItem == nullptr)
 	{
 		m_textPrompt.Enqueue(L"[오류] : [" + dropItems[randNum] + L"] 해당 아이템이 존재하지 않습니다.");
@@ -191,4 +191,5 @@ void CombatGameMode::CombatEnd()
 	m_textPrompt.Enqueue(L"시스템 : 전리품으로 [" + dropItem->GetItemName() + L"] 를 획득했습니다.");
 
 	m_isCombatEnded = true;
+	delete dropItem;
 }

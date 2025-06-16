@@ -36,8 +36,6 @@ const bool Equipment::Equip(const EquipableItem* item, StatContainer& statContai
             m_weapon = equipItem;
             statContainer.AddModifierContainer(modifierContainer);
             return true;
-
-            return true;
         }         
         case EEquipType::Armor:
         {
@@ -59,10 +57,8 @@ const bool Equipment::Equip(const EquipableItem* item, StatContainer& statContai
     }
 }
 
-const EquipableItem* Equipment::Unequip(EEquipType type, StatContainer& statContainer)
+const bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
 {
-    EquipableItem* unequipItem = nullptr;
-
     switch (type)
     {
         case EEquipType::Weapon:
@@ -70,9 +66,9 @@ const EquipableItem* Equipment::Unequip(EEquipType type, StatContainer& statCont
             if (m_weapon)
             {
                 statContainer.RemoveModifierContainer(m_weapon->GetModifierContainer().id);
-                unequipItem = m_weapon;
+                //delete m_weapon;
                 m_weapon = nullptr;
-                return unequipItem;
+                return true;
             }
             break;
         }
@@ -81,9 +77,9 @@ const EquipableItem* Equipment::Unequip(EEquipType type, StatContainer& statCont
             if (m_armor)
             {
                 statContainer.RemoveModifierContainer(m_armor->GetModifierContainer().id);
-                unequipItem = m_armor;
+                //delete m_armor;
                 m_armor = nullptr;
-                return unequipItem;
+                return true;
             }
             break;
         }
@@ -93,17 +89,13 @@ const EquipableItem* Equipment::Unequip(EEquipType type, StatContainer& statCont
         }
     }
 
-    return nullptr;
+    return false;
 }
 
 const bool Equipment::IsEquiped(EEquipType equipType) const
 {
     switch (equipType)
     {
-        case EEquipType::NONE:
-        {
-            break;
-        }        
         case EEquipType::Weapon:
         {
             return m_weapon != nullptr;

@@ -10,7 +10,7 @@ public:
 
 public:
     const bool Equip(const EquipableItem* item, StatContainer& ownerStatContainer);
-    const EquipableItem* Unequip(EEquipType type, StatContainer& ownerStatContainer);
+    const bool Unequip(EEquipType type, StatContainer& ownerStatContainer);
     const bool IsEquiped(EEquipType equipType) const;
 
     inline const EquipableItem* GetWeapon() const { return m_weapon; }

@@ -15,18 +15,13 @@ public:
 	~Inventory();
 
 public:
+	const bool AddItem(const wstring& itemName, const uint8 amount = 1);
 	const bool AddItem(const Item* item, const uint8 amount = 1);
 	const bool RemoveItem(const wstring& itemName, const uint8 amount = 1);
 	inline const bool IsFull() const { return m_itemList.size() == m_inventorySize; }
 
 public:
-	inline vector<Item*>& GetItemList() { return m_itemList; }
-
-private:
-	const bool FindPred(Item& item1, Item& item2) const
-	{
-		return item1.GetItemName() == item2.GetItemName();
-	}
+	inline const vector<Item*>& GetItemList() { return m_itemList; } // const?
 
 private:
 	const uint8 m_inventorySize = 5;

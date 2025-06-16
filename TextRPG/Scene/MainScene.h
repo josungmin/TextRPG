@@ -25,10 +25,9 @@ public:
 	virtual void Render() override;
 
 private:
-	void ShowMainMenu();
+	void EnableMainMenu();
+	void EnableHealMenu();
 	void HandleHealCommand();
-	void HandleEquipCommand(const EquipableItem* equipItem);
-	void HandleUnequipCommand(const EEquipType equipType);
 
 private:
 	EMainSceneState m_currentSceneState;

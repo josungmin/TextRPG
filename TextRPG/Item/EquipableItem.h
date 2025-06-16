@@ -4,9 +4,8 @@
 
 enum class EEquipType : uint8_t
 {
-	NONE,
-	Weapon,
-	Armor,
+	Weapon = 0,
+	Armor = 1,
 };
 
 class EquipableItem : public Item
@@ -27,6 +26,6 @@ public:
 	inline void SetModifierContainer(const ModifierContainer& container) { m_modifierContainer = container; }
 
 private:
-	EEquipType m_equipType = EEquipType::NONE;
+	EEquipType m_equipType;
 	ModifierContainer m_modifierContainer;
 };

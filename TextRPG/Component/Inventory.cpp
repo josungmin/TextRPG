@@ -1,5 +1,5 @@
 #include "Inventory.h"
-
+#include "../GameInstance.h"
 
 Inventory::Inventory()
 	:m_inventorySize(5)
@@ -13,6 +13,19 @@ Inventory::~Inventory()
 	{
 		delete item;
 	}
+}
+
+const bool Inventory::AddItem(const wstring& itemName, const uint8 amount)
+{
+	const Item* newItem = GameInstance::Instance().GetItemTable().CreateItem(itemName);
+	if (AddItem(newItem, amount) == false)
+	{
+		delete newItem;
+		return false;
+	}
+
+	delete newItem;
+	return true;
 }
 
 const bool Inventory::AddItem(const Item* item, const uint8 amount)

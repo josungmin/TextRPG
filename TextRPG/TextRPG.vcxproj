@@ -139,6 +139,7 @@
     <ClCompile Include="Item\ItemTable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\DungeonScene.cpp" />
+    <ClCompile Include="Scene\InventoryScene.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
     <ClCompile Include="Scene\ShopScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Item\ItemTable.h" />
     <ClInclude Include="MyType.h" />
     <ClInclude Include="Scene\DungeonScene.h" />
+    <ClInclude Include="Scene\InventoryScene.h" />
     <ClInclude Include="Scene\MainScene.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneManager.h" />

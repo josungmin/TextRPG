@@ -69,6 +69,15 @@ public:
 	inline const uint8 GetBuyPrice() const { return m_buyPrice; }
 	inline const uint8 GetSellPrice() const { return m_sellPrice; }
 
+	//TODO: 임시코드
+	inline const wstring GetItemNameNoneSpace() 
+	{
+		wstring noneSpaceName = m_itemName;
+		noneSpaceName.erase(remove(noneSpaceName.begin(), noneSpaceName.end(), ' '), noneSpaceName.end());
+
+		return noneSpaceName;
+	}
+
 private:
 	uint8 m_maxCount = 99;
 
