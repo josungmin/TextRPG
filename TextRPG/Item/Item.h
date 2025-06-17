@@ -13,50 +13,28 @@ enum class EItemType : uint8
 
 class Item
 {
-public:
-	Item(const EItemType itemType, const wstring& itemName, const wstring& description, const uint8 buyPrice, const uint8 sellPrice)
-		:m_itemType(itemType), m_itemName(itemName), m_description(description), m_buyPrice(buyPrice), m_sellPrice(sellPrice)
-	{
-
-	}
-	virtual ~Item() = default;
+	friend class ItemTable;
 
 public:
+	Item(const EItemType itemType, const wstring& itemName, const wstring& description, const uint8 buyPrice, const uint8 sellPrice);
+	virtual ~Item();
+	Item& operator=(const Item& rhs) = delete;
+
+protected:
+	Item(const Item& rhs) = default;
+
+
+public://private:
 	virtual Item* Clone() const
 	{
 		return new Item(*this);
 	}
 
-public:
-	inline bool AddItem(uint8 num = 1)
-	{
-		if (m_count + num > m_maxCount)
-		{
-			return false;
-		}
-
-		m_count += num;
-		return true;
-	}
-
-	inline bool RemoveItem(uint8 num = 1)
-	{
-		if (m_count <= 0 || m_count - num < 0)
-		{
-			return false;
-		}
-
-		m_count -= num;
-
-		if (m_count < 0)
-		{
-			m_count = 0;
-		}
-
-		return true;
-	}
 
 public:
+	bool AddItem(uint8 num = 1);
+	bool RemoveItem(uint8 num = 1);
+
 	inline void SetMaxCount(const uint8 maxCount) { m_maxCount = maxCount; }
 	inline const bool IsFull() const { return m_count == m_maxCount; }
 

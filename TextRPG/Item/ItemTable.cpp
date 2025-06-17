@@ -9,7 +9,7 @@ ItemTable::ItemTable()
 
 ItemTable::~ItemTable()
 {
-	std::unordered_map<std::wstring, Item*>::iterator it;
+	unordered_map<wstring, Item*>::iterator it;
 	for (it = m_itemMap.begin(); it != m_itemMap.end(); ++it)
 	{
 		delete it->second;
@@ -104,7 +104,7 @@ void ItemTable::Load()
 
 Item* ItemTable::CreateItem(const wstring& name) const
 {
-	std::unordered_map<std::wstring, Item*>::const_iterator it = m_itemMap.find(name);
+	unordered_map<wstring, Item*>::const_iterator it = m_itemMap.find(name);
 	if (it != m_itemMap.end())
 	{
 		return it->second->Clone();

@@ -1,6 +1,5 @@
 #include "Game.h"
 #include <windows.h>
-
 #include "GameInstance.h"
 #include "Scene/TitleScene.h"
 #include "Scene/DungeonScene.h"
@@ -17,7 +16,7 @@ void Game::Run()
 
 	while (1)
 	{
-		const uint32 frameStart = GetTickCount();
+		DWORD frameStart = GetTickCount();
 
 		if (m_textPrompt.IsRunning() == false)
 		{
@@ -27,8 +26,8 @@ void Game::Run()
 		Update();
 		Render();
 
-		const uint32 frameEnd = GetTickCount();
-		const uint32 elapsed = frameEnd - frameStart;
+		DWORD frameEnd = GetTickCount();
+		DWORD elapsed = frameEnd - frameStart;
 
 		if (elapsed < FRAME_TIME_MS)
 		{

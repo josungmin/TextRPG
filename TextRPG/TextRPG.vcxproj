@@ -136,6 +136,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Item\EquipableItem.cpp" />
+    <ClCompile Include="Item\Item.cpp" />
     <ClCompile Include="Item\ItemTable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\DungeonScene.cpp" />

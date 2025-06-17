@@ -3,9 +3,9 @@
 #include <unordered_map>
 #include "Item.h"
 
-class Item;
-
 using namespace std;
+
+class Item;
 
 class ItemTable
 {

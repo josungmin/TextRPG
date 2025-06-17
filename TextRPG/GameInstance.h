@@ -14,7 +14,7 @@ public:
 	};
 
 public:
-	~GameInstance() = default;
+	virtual ~GameInstance() = default;
 
 private:
 	GameInstance() = default;

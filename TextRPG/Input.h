@@ -7,13 +7,13 @@ class Input
 {
 public:
 	Input() = default;
-	~Input() = default;
+	virtual ~Input() = default;
 
 public:
 	void InputProcess();
-	const bool HasCommand() const;
-
 	const wstring GetCommand();
+
+	inline const bool HasCommand() const { return m_command.empty() == false; }
 	inline const wstring& GetInputBuffer() const { return m_inputBuffer; };
 
 private:

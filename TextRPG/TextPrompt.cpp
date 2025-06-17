@@ -3,6 +3,7 @@
 TextPrompt::TextPrompt()
 	:m_posX(34), m_posY(3)
 {
+
 }
 
 void TextPrompt::Enqueue(const wstring& msg)
@@ -12,7 +13,7 @@ void TextPrompt::Enqueue(const wstring& msg)
 
 void TextPrompt::Update()
 {
-	const uint32 currentTime = GetTickCount();
+	DWORD currentTime = GetTickCount();
 
 	if (m_waitMessageQueue.empty() == false && (currentTime - m_lastPrintTime >= DELAY_MS))
 	{

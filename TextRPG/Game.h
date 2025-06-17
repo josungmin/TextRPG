@@ -7,7 +7,7 @@ class Game
 {
 public:
 	Game();
-	~Game() = default;
+	virtual ~Game() = default;
 
 public:
 	void Run();

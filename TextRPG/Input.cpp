@@ -29,11 +29,6 @@ void Input::InputProcess()
 	}
 }
 
-const bool Input::HasCommand() const
-{
-	return m_command.empty() == false;
-}
-
 const wstring Input::GetCommand()
 {
 	wstring cmd = m_command;
