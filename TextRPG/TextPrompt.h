@@ -11,14 +11,19 @@ class TextPrompt
 public:
     TextPrompt();
     virtual ~TextPrompt() = default;
+    
+    TextPrompt(const TextPrompt& rhs) = delete;
+    TextPrompt(const TextPrompt&& rhs) = delete;
+    TextPrompt& operator=(const TextPrompt& rhs) = delete;
+    TextPrompt& operator=(TextPrompt&& rhs) = delete;
 
 public:
-    void Enqueue(const wstring& msg);
+    void Enqueue(const wstring& message);
     void Update();                     
     void Render(Screen& m_screen);
     void Clear();
 
-    const bool IsRunning() const { return m_waitMessageQueue.size() != 0; }
+    inline const bool IsRunning() const { return m_waitMessageQueue.size() != 0; }
 
 private:
     const uint16 DELAY_MS = 0;

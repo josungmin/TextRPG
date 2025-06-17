@@ -6,9 +6,9 @@ TextPrompt::TextPrompt()
 
 }
 
-void TextPrompt::Enqueue(const wstring& msg)
+void TextPrompt::Enqueue(const wstring& message)
 {
-	m_waitMessageQueue.push_back(msg);
+	m_waitMessageQueue.push_back(message);
 }
 
 void TextPrompt::Update()

@@ -3,11 +3,17 @@
 #include "Input.h"
 #include "TextPrompt.h"
 
+
 class Game
 {
 public:
-	Game();
+	Game() = default;
 	virtual ~Game() = default;
+
+	Game(const Game& rhs) = delete;
+	Game(const Game&& rhs) = delete;
+	Game& operator=(const Game& rhs) = delete;
+	Game& operator=(Game&& rhs) = delete;
 
 public:
 	void Run();

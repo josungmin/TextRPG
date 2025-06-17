@@ -2,13 +2,7 @@
 #include <windows.h>
 #include "GameInstance.h"
 #include "Scene/TitleScene.h"
-#include "Scene/DungeonScene.h"
 
-
-Game::Game()
-{
-
-}
 
 void Game::Run()
 {
