@@ -35,7 +35,7 @@ const bool Inventory::AddItem(const Item* item, const uint8 amount)
 		return false;
 	}
 
-	if (item->GetType() == EItemType::Equip)
+	if (item->GetType() == EquipableItem::EItemType::Equip)
 	{
 		if (IsFull())
 		{

@@ -6,18 +6,21 @@
 
 using namespace std;
 
-enum class EShopSceneState : uint8
-{
-	Default,
-	Sell,
-	Buy,
-};
-
 class ShopScene : public Scene
 {
 public:
+	enum class EShopSceneState : uint8
+	{
+		None,
+		Default,
+		Sell,
+		Buy,
+		Max,
+	};
+
+public:
 	ShopScene(Screen& screen, Input& input, TextPrompt& textPrompt);
-	~ShopScene();
+	virtual ~ShopScene() = default;
 
 public:
 	virtual void OnEnter() override;
@@ -26,9 +29,9 @@ public:
 	virtual void Render() override;
 
 private:
-	void ShowShopMenu();
-	void ShowBuyMenu();
-	void ShowSellMenu();
+	void EnableShopMenu();
+	void EnableBuyMenu();
+	void EnableSellMenu();
 	void HandleBuyCommand(const uint8 shopItemIndex);
 	void HandleSellCommand(const wstring& cmd);
 

@@ -25,7 +25,7 @@ const bool Equipment::Equip(const EquipableItem* item, StatContainer& statContai
 
     switch (item->GetEquipType())
     {
-        case EEquipType::Weapon:
+    case EquipableItem::EEquipType::Weapon:
         {
             if (m_weapon)
             {
@@ -37,7 +37,7 @@ const bool Equipment::Equip(const EquipableItem* item, StatContainer& statContai
             statContainer.AddModifierContainer(modifierContainer);
             return true;
         }         
-        case EEquipType::Armor:
+    case EquipableItem::EEquipType::Armor:
         {
             if (m_armor)
             {
@@ -57,11 +57,11 @@ const bool Equipment::Equip(const EquipableItem* item, StatContainer& statContai
     }
 }
 
-const bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
+const bool Equipment::Unequip(EquipableItem::EEquipType type, StatContainer& statContainer)
 {
     switch (type)
     {
-        case EEquipType::Weapon:
+    case EquipableItem::EEquipType::Weapon:
         {
             if (m_weapon)
             {
@@ -72,7 +72,7 @@ const bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
             }
             break;
         }
-        case EEquipType::Armor:
+    case EquipableItem::EEquipType::Armor:
         {
             if (m_armor)
             {
@@ -92,16 +92,16 @@ const bool Equipment::Unequip(EEquipType type, StatContainer& statContainer)
     return false;
 }
 
-const bool Equipment::IsEquiped(EEquipType equipType) const
+const bool Equipment::IsEquiped(EquipableItem::EEquipType equipType) const
 {
     switch (equipType)
     {
-        case EEquipType::Weapon:
+        case EquipableItem::EEquipType::Weapon:
         {
             return m_weapon != nullptr;
             break;
         }
-        case EEquipType::Armor:
+        case EquipableItem::EEquipType::Armor:
         {
             return m_armor != nullptr;
             break;

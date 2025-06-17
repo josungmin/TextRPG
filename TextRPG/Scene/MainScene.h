@@ -1,22 +1,20 @@
 #pragma once
 #include "Scene.h"
 #include "../TextPrompt.h"
-#include "../Item/EquipableItem.h"
-
-class EquipableItem;
-
-enum class EMainSceneState : uint8
-{
-	Default,
-	Healer,
-	Inventory,
-};
 
 class MainScene : public Scene
 {
 public:
+	enum class EMainSceneState : uint8
+	{
+		Default,
+		Healer,
+		Inventory,
+	};
+
+public:
 	MainScene(Screen& screen, Input& input, TextPrompt& textPrompt);
-	~MainScene();
+	virtual ~MainScene() = default;
 
 public:
 	virtual void OnEnter() override;

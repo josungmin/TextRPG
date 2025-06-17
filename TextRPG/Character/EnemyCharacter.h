@@ -7,6 +7,7 @@ class EnemyCharacter : public CombatCharacter
 {
 public:
 	EnemyCharacter(const wstring& characterName, const wstring& description, const int8 dropExp, const uint16 m_dropGold, const StatContainer& statContainer);
+	virtual ~EnemyCharacter() = default;
 
 public:
 	inline const int8 GetDropExp() const { return m_dropExp; }

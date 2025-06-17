@@ -6,12 +6,13 @@
 class Equipment
 {
 public:
-    ~Equipment();
+    Equipment() = default;
+    virtual ~Equipment();
 
 public:
     const bool Equip(const EquipableItem* item, StatContainer& ownerStatContainer);
-    const bool Unequip(EEquipType type, StatContainer& ownerStatContainer);
-    const bool IsEquiped(EEquipType equipType) const;
+    const bool Unequip(EquipableItem::EEquipType type, StatContainer& ownerStatContainer);
+    const bool IsEquiped(EquipableItem::EEquipType equipType) const;
 
     inline const EquipableItem* GetWeapon() const { return m_weapon; }
     inline const EquipableItem* GetArmor() const { return m_armor; }

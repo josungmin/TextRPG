@@ -11,11 +11,6 @@ class TextPrompt
 public:
     TextPrompt();
     virtual ~TextPrompt() = default;
-    
-    TextPrompt(const TextPrompt& rhs) = delete;
-    TextPrompt(const TextPrompt&& rhs) = delete;
-    TextPrompt& operator=(const TextPrompt& rhs) = delete;
-    TextPrompt& operator=(TextPrompt&& rhs) = delete;
 
 public:
     void Enqueue(const wstring& message);

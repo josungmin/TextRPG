@@ -12,7 +12,7 @@ public:
 		
 	}
 
-	~SceneManager() 
+	virtual ~SceneManager() 
 	{
 		delete m_currentScene;
 	}

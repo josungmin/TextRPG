@@ -9,11 +9,6 @@ public:
 	Screen();
 	virtual ~Screen();
 
-	Screen(const Screen& rhs) = delete;
-	Screen(const Screen&& rhs) = delete;
-	Screen& operator=(const Screen& rhs) = delete;
-	Screen& operator=(Screen&& rhs) = delete;
-
 public:
 	void Write(const int16 x, const int16 y, const std::wstring& text);
 	void Render();

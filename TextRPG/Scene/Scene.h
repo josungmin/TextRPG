@@ -8,10 +8,10 @@ class Scene
 public:
 	Scene(Screen& screen, Input& input, TextPrompt& textPrompt)
 		: m_screen(screen), m_input(input), m_textPrompt(textPrompt)
-	{
+	{ }
+	virtual ~Scene() = default;
 
-	}
-
+public:
 	virtual void OnEnter() = 0;
 	virtual void OnExit() = 0;
 	virtual void Update() = 0;

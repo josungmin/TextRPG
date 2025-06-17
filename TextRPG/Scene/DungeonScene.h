@@ -6,18 +6,19 @@
 
 using namespace std;
 
-enum class EDungeonSceneState : uint8
-{
-	Default,
-	Combat,
-	ContinueCombat,
-};
-
 class DungeonScene : public Scene
 {
 public:
+	enum class EDungeonSceneState : uint8
+	{
+		Default,
+		Combat,
+		ContinueCombat,
+	};
+
+public:
 	DungeonScene(Screen& screen, Input& input, TextPrompt& textPrompt);
-	~DungeonScene();
+	virtual ~DungeonScene();
 
 public:
 	virtual void OnEnter() override;
@@ -26,9 +27,7 @@ public:
 	virtual void Render() override;
 
 private:
-	//TextPrompt m_textPrompt;
 	CombatGameMode m_combatGameMode;
-
 	EnemyCharacter* m_enemy;
 	EDungeonSceneState m_currentSceneState = EDungeonSceneState::Default;
 };

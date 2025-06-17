@@ -10,11 +10,6 @@ public:
 	Game() = default;
 	virtual ~Game() = default;
 
-	Game(const Game& rhs) = delete;
-	Game(const Game&& rhs) = delete;
-	Game& operator=(const Game& rhs) = delete;
-	Game& operator=(Game&& rhs) = delete;
-
 public:
 	void Run();
 

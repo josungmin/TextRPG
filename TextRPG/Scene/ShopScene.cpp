@@ -14,17 +14,12 @@ ShopScene::ShopScene(Screen& screen, Input& input, TextPrompt& textPrompt)
 	m_currentSceneState = EShopSceneState::Default;
 }
 
-ShopScene::~ShopScene()
-{
-	
-}
-
 void ShopScene::OnEnter()
 {
 	m_screen.Clear();
 	m_textPrompt.Clear();
 
-	ShowShopMenu();
+	EnableShopMenu();
 }
 
 void ShopScene::OnExit()
@@ -48,12 +43,12 @@ void ShopScene::Update()
 				if (cmd == L"1" || cmd == L"구매")
 				{	
 					m_currentSceneState = EShopSceneState::Buy;
-					ShowBuyMenu();			
+					EnableBuyMenu();			
 				}
 				else if (cmd == L"2" || cmd == L"판매")
 				{
 					m_currentSceneState = EShopSceneState::Sell;
-					ShowSellMenu();		
+					EnableSellMenu();		
 				}
 				else if (cmd == L"3" || cmd == L"나가기")
 				{
@@ -67,7 +62,7 @@ void ShopScene::Update()
 				if (cmd == L"취소")
 				{
 					m_currentSceneState = EShopSceneState::Default;
-					ShowShopMenu();
+					EnableShopMenu();
 					return;
 				}
 
@@ -75,6 +70,7 @@ void ShopScene::Update()
 				if (index < 0 || index >= m_shopItemList.size())
 				{
 					m_textPrompt.Enqueue(L"시스템 : 잘못된 입력입니다.");
+					EnableShopMenu();
 					m_currentSceneState = EShopSceneState::Default;
 					return;
 				}
@@ -87,7 +83,7 @@ void ShopScene::Update()
 				if (cmd == L"취소")
 				{
 					m_currentSceneState = EShopSceneState::Default;
-					ShowShopMenu();	
+					EnableShopMenu();	
 					return;
 				}
 
@@ -98,6 +94,7 @@ void ShopScene::Update()
 				if (index < 0 || index >= items.size())
 				{
 					m_textPrompt.Enqueue(L"시스템 : 잘못된 입력입니다.");
+					EnableShopMenu();
 					m_currentSceneState = EShopSceneState::Default;
 					return;
 				}
@@ -155,13 +152,13 @@ void ShopScene::Render()
 	m_screen.Write(0, 31, L"└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
 }
 
-void ShopScene::ShowShopMenu()
+void ShopScene::EnableShopMenu()
 {
 	m_textPrompt.Enqueue(L"시스템 : 상점에 입장합니다.");
 	m_textPrompt.Enqueue(L"1.구매  2.판매  3.나가기");
 }
 
-void ShopScene::ShowBuyMenu()
+void ShopScene::EnableBuyMenu()
 {
 	m_textPrompt.Enqueue(L"시스템 : 구매 가능 아이템:");
 
@@ -181,7 +178,7 @@ void ShopScene::ShowBuyMenu()
 	m_textPrompt.Enqueue(L"시스템 : '취소' 또는 아이템의 '번호'를 입력해 주세요.");
 }
 
-void ShopScene::ShowSellMenu()
+void ShopScene::EnableSellMenu()
 {
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 	const vector<Item*>& items = player.GetInventory().GetItemList();
@@ -190,7 +187,7 @@ void ShopScene::ShowSellMenu()
 	{
 		m_textPrompt.Enqueue(L"시스템 : 판매 가능 아이템이 없습니다.");
 		m_currentSceneState = EShopSceneState::Default;
-		ShowShopMenu();
+		EnableShopMenu();
 		return;
 	}
 
@@ -235,14 +232,14 @@ void ShopScene::HandleBuyCommand(const uint8 shopItemIndex)
 	if(addItemResult == false)
 	{
 		m_textPrompt.Enqueue(L"시스템 : 인벤토리가 가득 차 아이템을 구매하지 못했습니다.");
-		ShowShopMenu();
+		EnableShopMenu();
 		m_currentSceneState = EShopSceneState::Default;
 	}
 
-	player.GetGold().AddGold(price);
+	player.GetGold().RemoveGold(price);
 	m_textPrompt.Enqueue(L"시스템 : [" + itemInstance->GetItemName() + L"] 구매가 완료되었습니다.");
 	
-	ShowShopMenu();
+	EnableShopMenu();
 	m_currentSceneState = EShopSceneState::Default;
 }
 
@@ -264,6 +261,6 @@ void ShopScene::HandleSellCommand(const wstring& cmd)
 	player.GetInventory().RemoveItem(item->GetItemName());
 	m_textPrompt.Enqueue(L"시스템 : [" + item->GetItemName() + L"] 판매하였습니다. (+" + std::to_wstring(price) + L"G)");
 
-	ShowShopMenu();
+	EnableShopMenu();
 	m_currentSceneState = EShopSceneState::Default;
 }

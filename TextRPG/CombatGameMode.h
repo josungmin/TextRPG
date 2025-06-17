@@ -21,7 +21,7 @@ class CombatGameMode
 {
 public:
 	CombatGameMode(TextPrompt& textPrompt);
-	~CombatGameMode();
+	virtual ~CombatGameMode();
 
 public:
 	void ProcessCombat();

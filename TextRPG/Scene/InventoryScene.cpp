@@ -9,11 +9,6 @@ InventoryScene::InventoryScene(Screen& screen, Input& input, TextPrompt& textPro
 	m_currentScene = EInventorySceneState::Default;
 }
 
-InventoryScene::~InventoryScene()
-{
-
-}
-
 void InventoryScene::OnEnter()
 {
 	m_screen.Clear();

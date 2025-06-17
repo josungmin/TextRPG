@@ -9,11 +9,6 @@ public:
 	Input() = default;
 	virtual ~Input() = default;
 
-	Input(const Input& rhs) = delete;
-	Input(const Input&& rhs) = delete;
-	Input& operator=(const Input& rhs) = delete;
-	Input& operator=(Input&& rhs) = delete;
-
 public:
 	void InputProcess();
 	const wstring GetCommand();

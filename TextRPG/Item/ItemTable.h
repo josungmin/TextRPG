@@ -11,7 +11,7 @@ class ItemTable
 {
 public:
 	ItemTable();
-	~ItemTable();
+	virtual ~ItemTable();
 
 public:
 	Item* CreateItem(const wstring& name) const;

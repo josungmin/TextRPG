@@ -9,15 +9,10 @@
 #include "DungeonScene.h"
 
 
-
 MainScene::MainScene(Screen& screen, Input& input, TextPrompt& textPrompt)
 	:Scene(screen, input, textPrompt)
 {
 	m_currentSceneState = EMainSceneState::Default;
-}
-
-MainScene::~MainScene()
-{
 }
 
 void MainScene::OnEnter()

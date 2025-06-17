@@ -8,6 +8,7 @@ class PlayerCharacter : public CombatCharacter
 {
 public:
 	PlayerCharacter(const wstring& characterName, const wstring& description);
+	virtual ~PlayerCharacter() = default;
 	
 public:
 	inline Experience& GetExperience() { return m_experience; }

@@ -4,16 +4,18 @@
 
 using namespace std;
 
-enum class EItemType : uint8
-{
-	None,
-	Equip,
-	Other,
-};
-
 class Item
 {
 	friend class ItemTable;
+
+public:
+	enum class EItemType : uint8
+	{
+		None,
+		Equip,
+		Other,
+		Max,
+	};
 
 public:
 	Item(const EItemType itemType, const wstring& itemName, const wstring& description, const uint8 buyPrice, const uint8 sellPrice);

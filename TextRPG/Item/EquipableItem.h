@@ -2,16 +2,18 @@
 #include "Item.h"
 #include "../Stat/StatDataType.h"
 
-enum class EEquipType : uint8_t
-{
-	Weapon = 0,
-	Armor = 1,
-};
-
 class EquipableItem : public Item
 {
 public:
+	enum class EEquipType : uint8_t
+	{
+		Weapon = 0,
+		Armor = 1,
+	};
+
+public:
 	EquipableItem(const EEquipType equipType, const EItemType itemType, const std::wstring& itemName, const std::wstring& description, const uint8_t buyPrice, const uint8_t sellPrice);
+	virtual ~EquipableItem() = default;
 
 public://private:
 	virtual Item* Clone() const override 

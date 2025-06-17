@@ -12,7 +12,7 @@ class Inventory
 {
 public:
 	Inventory();
-	~Inventory();
+	virtual ~Inventory();
 
 public:
 	const bool AddItem(const wstring& itemName, const uint8 amount = 1);

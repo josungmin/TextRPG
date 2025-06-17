@@ -5,7 +5,7 @@ class InventoryScene : public Scene
 {
 public:
 	InventoryScene(Screen& screen, Input& input, TextPrompt& textPrompt);
-	~InventoryScene();
+	virtual ~InventoryScene() = default;
 
 public:
 	enum class EInventorySceneState : uint8

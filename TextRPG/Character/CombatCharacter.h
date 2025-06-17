@@ -7,6 +7,7 @@ class CombatCharacter : public Character
 {
 public:
 	CombatCharacter(const wstring& characterName, const wstring& description);
+	virtual ~CombatCharacter() = default;
 
 public:
 	virtual void TakeDamage(const uint16 damage);
