@@ -28,7 +28,7 @@ public:
 	inline const ModifierContainer& GetModifierContainer() const { return m_modifierContainer; }
 	inline void SetModifierContainer(const ModifierContainer& container) { m_modifierContainer = container; }
 
-private:
+protected:
 	EEquipType m_equipType;
 	ModifierContainer m_modifierContainer;
 };

@@ -49,7 +49,7 @@ void DungeonScene::Update()
 		{
 			if (cmd == L"1" || cmd == L"諄遴棻" || cmd == L"1.諄遴棻")
 			{
-				m_combatGameMode.SetEnemy(*m_enemy);
+				m_combatGameMode.SetEnemy(m_enemy);
 				m_currentSceneState = EDungeonSceneState::Combat;
 			}
 			else if (cmd == L"2" || cmd == L"紫蜂" || cmd == L"紫蜂除棻" || cmd == L"1.紫蜂除棻")
@@ -112,9 +112,9 @@ void DungeonScene::Render()
 	m_screen.Write(1, 2, L"式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式");
 	m_screen.Write(2, 3, L"檜葷: " + player.GetName());
 	m_screen.Write(2, 4, L"薑爾: " + player.GetDescription());
-	m_screen.Write(2, 5, L"溯漣: " + to_wstring(player.GetExperience().m_level));
-	m_screen.Write(2, 6, L"唳я纂: " + to_wstring(player.GetExperience().GetRequiredExpForNextLevel()) + L"/" + to_wstring(player.GetExperience().m_currentExp));
-	m_screen.Write(2, 7, L"埤萄: " + to_wstring(player.GetGold().m_amount));
+	m_screen.Write(2, 5, L"溯漣: " + to_wstring(player.GetExperience().level));
+	m_screen.Write(2, 6, L"唳я纂: " + to_wstring(player.GetExperience().GetRequiredExpForNextLevel()) + L"/" + to_wstring(player.GetExperience().currentExp));
+	m_screen.Write(2, 7, L"埤萄: " + to_wstring(player.GetGold().amount));
 	m_screen.Write(2, 8, L"HP: " + to_wstring(player.GetStats().GetStatValue(EStatType::HP)) + L"/" + to_wstring(player.GetCurrentHP()));
 	m_screen.Write(2, 9, L"奢問溘: " + to_wstring(player.GetStats().GetStatValue(EStatType::AttackPower)));
 	m_screen.Write(2, 10, L"寞橫溘: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));

@@ -47,20 +47,20 @@ struct StatContainer
 
 	uint16 GetStatValue(EStatType statType)
 	{
-		auto it = stats.find(statType);
-		if (it == stats.end())
+		unordered_map<EStatType, Stat>::iterator stats_it = stats.find(statType);
+		if (stats_it == stats.end())
 		{
 			return 0;
 		}
 
-		if (!it->second.bIsChanged)
+		if (!stats_it->second.bIsChanged)
 		{
-			return it->second.finalValue;
+			return stats_it->second.finalValue;
 		}
 
 		uint16 calculated = CalculateStatValue(statType);
-		it->second.finalValue = calculated;
-		it->second.bIsChanged = false;
+		stats_it->second.finalValue = calculated;
+		stats_it->second.bIsChanged = false;
 
 		return calculated;
 	}
@@ -84,36 +84,36 @@ struct StatContainer
 private:
 	uint16 CalculateStatValue(EStatType statType) const
 	{
-		auto it = stats.find(statType);
-		if (it == stats.end())
+		unordered_map<EStatType, Stat>::const_iterator stats_it = stats.find(statType);
+		if (stats_it == stats.end())
 		{
 			return 0;
 		}
 
-		uint16 result = it->second.baseValue + it->second.bonusValue;
+		uint16 result = stats_it->second.baseValue + stats_it->second.bonusValue;
 
-		for (const auto& pair : modifierContainers)
+		for (unordered_map<wstring, ModifierContainer>::const_iterator modifierContainer_it = modifierContainers.begin(); modifierContainer_it != modifierContainers.end(); modifierContainer_it++)
 		{
-			const auto& container = pair.second;
+			const ModifierContainer& container = (*modifierContainer_it).second;
 
-			for (const auto& modifier : container.modifiers)
+			for (vector<Modifier>::const_iterator modifier_it = container.modifiers.begin(); modifier_it != container.modifiers.end(); modifier_it++)
 			{
-				if (modifier.targetStatType != statType)
+				if ((*modifier_it).targetStatType != statType)
 				{
 					continue;
 				}
 
-				switch (modifier.modifierType)
+				switch ((*modifier_it).modifierType)
 				{
-				case EModifierType::Add:
-				{
-					result += modifier.value;
-					break;
-				}
-				default:
-				{
-					break;
-				}
+					case EModifierType::Add:
+					{
+						result += (*modifier_it).value;
+						break;
+					}
+					default:
+					{
+						break;
+					}
 				}
 			}
 		}
@@ -123,12 +123,12 @@ private:
 
 	void SetChangeStats(const ModifierContainer& container)
 	{
-		for (const auto& mod : container.modifiers)
+		for (vector<Modifier>::const_iterator modifier_it = container.modifiers.begin(); modifier_it != container.modifiers.end(); modifier_it++)
 		{
-			auto it = stats.find(mod.targetStatType);
-			if (it != stats.end())
+			unordered_map<EStatType, Stat>::iterator stat = stats.find((*modifier_it).targetStatType);
+			if (stat != stats.end())
 			{
-				it->second.bIsChanged = true;
+				stat->second.bIsChanged = true;
 			}
 		}
 	}
@@ -136,26 +136,26 @@ private:
 
 struct Experience
 {
-	int8 m_currentExp = 0;
-	int8 m_level = 1;
+	uint8 currentExp = 0;
+	uint8 level = 1;
 
-	Experience() : m_level(1), m_currentExp(0) {}
-	explicit Experience(int8 level) : m_level(level), m_currentExp(0) {}
+	Experience() : level(1), currentExp(0) {}
+	explicit Experience(int8 level) : level(level), currentExp(0) {}
 
-	int8 GetRequiredExpForNextLevel() const
+	uint8 GetRequiredExpForNextLevel() const
 	{
-		return 3 + (m_level - 1) * 5;
+		return 3 + (level - 1) * 5;
 	}
 
-	bool AddExperience(const int8 amount)
+	bool AddExperience(const uint8 amount)
 	{
-		m_currentExp += amount;
+		currentExp += amount;
 		bool leveledUp = false;
 
-		while (m_currentExp >= GetRequiredExpForNextLevel())
+		while (currentExp >= GetRequiredExpForNextLevel())
 		{
-			m_currentExp -= GetRequiredExpForNextLevel();
-			m_level++;
+			currentExp -= GetRequiredExpForNextLevel();
+			level++;
 			leveledUp = true;
 		}
 
@@ -181,31 +181,31 @@ struct ExperienceTable
 
 struct Gold
 {
-	uint16 m_amount = 10000;
+	uint16 amount = 10000;
 
-	Gold() : m_amount(10000) {}
-	explicit Gold(uint16 initialAmount) : m_amount(initialAmount) {}
+	Gold() : amount(10000) {}
+	explicit Gold(uint16 initialAmount) : amount(initialAmount) {}
 
-	void AddGold(const uint16 amount)
+	void AddGold(const uint16 addAmount)
 	{
-		uint32 total = (m_amount + amount);
+		uint32 total = (amount + addAmount);
 
 		if (total > UINT8_MAX)
 		{
-			m_amount = UINT8_MAX;
+			amount = UINT8_MAX;
 		}
 
-		m_amount = (uint16)total;
+		amount = (uint16)total;
 	}
 
-	bool RemoveGold(const uint16 amount)
+	bool RemoveGold(const uint16 removeAmount)
 	{
-		if (m_amount < amount)
+		if (amount < removeAmount)
 		{
 			return false;
 		}
 
-		m_amount -= amount;
+		amount -= removeAmount;
 		return true;
 	}
 };

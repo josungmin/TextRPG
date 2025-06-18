@@ -25,7 +25,7 @@ public:
 
 public:
 	void ProcessCombat();
-	void SetEnemy(EnemyCharacter& Enemy);
+	void SetEnemy(EnemyCharacter* Enemy);
 	void SetPlayerCommand(const wstring& command);
 	const bool IsCombatEnd() const { return m_isCombatEnded; }
 

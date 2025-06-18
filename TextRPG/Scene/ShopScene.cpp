@@ -130,9 +130,9 @@ void ShopScene::Render()
 	m_screen.Write(1, 2, L"────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
 	m_screen.Write(2, 3, L"이름: " + player.GetName());
 	m_screen.Write(2, 4, L"정보: " + player.GetDescription());
-	m_screen.Write(2, 5, L"레벨: " + to_wstring(player.GetExperience().m_level));
-	m_screen.Write(2, 6, L"경험치: " + to_wstring(player.GetExperience().GetRequiredExpForNextLevel()) + L"/" + to_wstring(player.GetExperience().m_currentExp));
-	m_screen.Write(2, 7, L"골드: " + to_wstring(player.GetGold().m_amount));
+	m_screen.Write(2, 5, L"레벨: " + to_wstring(player.GetExperience().level));
+	m_screen.Write(2, 6, L"경험치: " + to_wstring(player.GetExperience().GetRequiredExpForNextLevel()) + L"/" + to_wstring(player.GetExperience().currentExp));
+	m_screen.Write(2, 7, L"골드: " + to_wstring(player.GetGold().amount));
 	m_screen.Write(2, 8, L"HP: " + to_wstring(player.GetStats().GetStatValue(EStatType::HP)) + L"/" + to_wstring(player.GetCurrentHP()));
 	m_screen.Write(2, 9, L"공격력: " + to_wstring(player.GetStats().GetStatValue(EStatType::AttackPower)));
 	m_screen.Write(2, 10, L"방어력: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));
@@ -202,7 +202,7 @@ void ShopScene::EnableSellMenu()
 			continue;
 		}
 
-		const uint8 price = item->GetBuyPrice();
+		const uint8 price = item->GetSellPrice();
 		m_textPrompt.Enqueue(std::to_wstring(i + 1) + L". " + item->GetItemName() + L" - " + std::to_wstring(price) + L"G");
 	}
 
@@ -220,8 +220,16 @@ void ShopScene::HandleBuyCommand(const uint8 shopItemIndex)
 
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
 	const uint8 price = item->GetBuyPrice();
+
+	if (player.GetInventory().IsFull() == true)
+	{
+		m_textPrompt.Enqueue(L"시스템 : 인벤토리 공간이 부족합니다.");
+		EnableShopMenu();
+		m_currentSceneState = EShopSceneState::Default;
+		return;
+	}
 	
-	if (player.GetGold().m_amount < price)
+	if (player.GetGold().amount < price)
 	{
 		m_textPrompt.Enqueue(L"시스템 : 골드가 부족합니다.");
 		return;

@@ -57,9 +57,9 @@ void CombatGameMode::ProcessCombat()
 	}
 }
 
-void CombatGameMode::SetEnemy(EnemyCharacter& newEnemy)
+void CombatGameMode::SetEnemy(EnemyCharacter* newEnemy)
 {
-	m_enemy = &newEnemy;
+	m_enemy = newEnemy;
 	m_currentCombatState = ECombatState::CombatStart;
 	m_isCombatEnded = false;
 }
@@ -151,6 +151,7 @@ void CombatGameMode::EnemyAction()
 	{
 		m_textPrompt.Enqueue(L"시스템 : 당신은 쓰러졌습니다...");
 		m_currentCombatState = ECombatState::CombatEnd;
+		return;
 	}
 	else
 	{
@@ -163,6 +164,12 @@ void CombatGameMode::EnemyAction()
 void CombatGameMode::CombatEnd()
 {
 	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+
+	if (player.GetIsDead() == true)
+	{
+		m_isCombatEnded = true;
+		return;
+	}
 
 	const int8 dropExp = m_enemy->GetDropExp();
 	player.GetExperience().AddExperience(dropExp);
