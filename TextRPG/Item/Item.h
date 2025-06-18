@@ -20,13 +20,9 @@ public:
 public:
 	Item(const EItemType itemType, const wstring& itemName, const wstring& description, const uint8 buyPrice, const uint8 sellPrice);
 	virtual ~Item();
-	Item& operator=(const Item& rhs) = delete;
-
-protected:
-	Item(const Item& rhs) = default;
 
 
-public://private:
+public:
 	virtual Item* Clone() const
 	{
 		return new Item(*this);

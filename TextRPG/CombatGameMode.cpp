@@ -59,6 +59,11 @@ void CombatGameMode::ProcessCombat()
 
 void CombatGameMode::SetEnemy(EnemyCharacter* newEnemy)
 {
+	if (newEnemy == nullptr)
+	{
+		return;
+	}
+
 	m_enemy = newEnemy;
 	m_currentCombatState = ECombatState::CombatStart;
 	m_isCombatEnded = false;
@@ -93,11 +98,13 @@ void CombatGameMode::CombatStart()
 		m_textPrompt.Enqueue(L"시스템 : 플레이어가 공격합니다. 어떤 행동을 하시겠습니까?");
 		m_textPrompt.Enqueue(L"시스템 : 1.공격 2.회복");
 		m_currentCombatState = ECombatState::WaitForPlayerInput;
+		return;
 	}
 	else
 	{
 		m_textPrompt.Enqueue(L"시스템 : 적 캐릭터가 공격합니다.");
 		m_currentCombatState = ECombatState::EnemyAction;
+		return;
 	}
 }
 
@@ -131,10 +138,12 @@ void CombatGameMode::PlayerAction()
 	{
 		m_textPrompt.Enqueue(L"시스템 : 적을 처치했습니다!");
 		m_currentCombatState = ECombatState::CombatEnd;
+		return;
 	}
 	else
 	{
 		m_currentCombatState = ECombatState::EnemyAction;
+		return;
 	}
 }
 
@@ -158,6 +167,7 @@ void CombatGameMode::EnemyAction()
 		m_textPrompt.Enqueue(L"시스템 : 플레이어가 공격합니다. 어떤 행동을 하시겠습니까?");
 		m_textPrompt.Enqueue(L"시스템 : 1.공격 2.회복");
 		m_currentCombatState = ECombatState::WaitForPlayerInput;
+		return;
 	}
 }
 
@@ -179,7 +189,7 @@ void CombatGameMode::CombatEnd()
 	player.GetGold().AddGold(dropGold);
 	m_textPrompt.Enqueue(L"시스템 : " + std::to_wstring(dropGold) + L" 골드를 획득했습니다.");
 
-	const vector<wstring> dropItems = m_enemy->GetDropItems();
+	const vector<wstring>& dropItems = m_enemy->GetDropItems();
 	const uint64 randNum = rand() % dropItems.size();
 
 	const Item* dropItem = GameInstance::Instance().GetItemTable().CreateItem(dropItems[randNum]);
@@ -190,11 +200,12 @@ void CombatGameMode::CombatEnd()
 		return;
 	}
 
-	const bool addItemResult = player.GetInventory().AddItem(dropItem);
-	if (addItemResult == false)
+	if (player.GetInventory().AddItem(dropItem) == false)
 	{
 		m_textPrompt.Enqueue(L"시스템 : 인벤토리가 가득 차 아이템을 획득하지 못했습니다.");
+		return;
 	}
+
 	m_textPrompt.Enqueue(L"시스템 : 전리품으로 [" + dropItem->GetItemName() + L"] 를 획득했습니다.");
 
 	m_isCombatEnded = true;

@@ -29,5 +29,5 @@ private:
 	void HandleUnequipCommand(const wstring& cmd);
 
 private:
-	EInventorySceneState m_currentScene;
+	EInventorySceneState m_currentSceneState;
 };

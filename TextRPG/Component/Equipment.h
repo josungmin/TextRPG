@@ -6,7 +6,7 @@
 class Equipment
 {
 public:
-    Equipment() = default;
+    Equipment();
     virtual ~Equipment();
 
 public:
@@ -20,4 +20,9 @@ public:
 private:
     EquipableItem* m_weapon = nullptr;
     EquipableItem* m_armor = nullptr;
+
+    // TODO: 임시코드
+    vector<EquipableItem*> equipedItemList;
 };
+
+

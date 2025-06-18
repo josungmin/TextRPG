@@ -21,7 +21,7 @@ public:
 	inline const bool IsFull() const { return m_itemList.size() == m_inventorySize; }
 
 public:
-	inline const vector<Item*>& GetItemList() { return m_itemList; } // const?
+	inline const vector<Item*>& GetItemList() const { return m_itemList; }
 
 private:
 	const uint8 m_inventorySize = 5;

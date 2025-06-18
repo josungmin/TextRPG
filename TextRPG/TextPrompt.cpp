@@ -31,9 +31,9 @@ void TextPrompt::Update()
 void TextPrompt::Render(Screen& m_screen)
 {
 	int16 y = m_posY;
-	for (const wstring& msg : m_printMessageQueue)
+	for (const wstring& message : m_printMessageQueue)
 	{
-		m_screen.Write(m_posX, y, msg);
+		m_screen.Write(m_posX, y, message);
 		y += 2;
 	}
 }

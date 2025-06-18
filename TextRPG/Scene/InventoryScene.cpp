@@ -6,7 +6,7 @@
 InventoryScene::InventoryScene(Screen& screen, Input& input, TextPrompt& textPrompt)
 	:Scene(screen, input, textPrompt)
 {
-	m_currentScene = EInventorySceneState::Default;
+	m_currentSceneState = EInventorySceneState::Default;
 }
 
 void InventoryScene::OnEnter()
@@ -32,19 +32,19 @@ void InventoryScene::Update()
 	{
 		const wstring cmd = m_input.GetCommand();
 
-		switch (m_currentScene)
+		switch (m_currentSceneState)
 		{
 			case InventoryScene::EInventorySceneState::Default:
 			{
 				if (cmd == L"1" || cmd == L"장착" || cmd == L"아이템장착" || cmd == L"1.아이템장착")
 				{
+					m_currentSceneState = EInventorySceneState::Equip;
 					EnableEquipMenu();
-					m_currentScene = EInventorySceneState::Equip;
 				}
 				else if (cmd == L"2" || cmd == L"해제" || cmd == L"아이템해제" || cmd == L"1.아이템해제")
 				{
+					m_currentSceneState = EInventorySceneState::Unequip;
 					EnableUnequipMenu();
-					m_currentScene = EInventorySceneState::Unequip;
 				}
 				else if (cmd == L"3" || cmd == L"나가기")
 				{
@@ -125,11 +125,11 @@ void InventoryScene::EnableEquipMenu()
 {	
 	const vector<Item*>& inventoryItems = GameInstance::Instance().GetPlayer().GetInventory().GetItemList();
 
-	if (inventoryItems.size() == 0)
+	if (inventoryItems.empty() == true)
 	{
 		m_textPrompt.Enqueue(L"시스템 : 장착할 아이템이 존재하지 않습니다.");
 		EnableInventoryMenu();
-		m_currentScene = EInventorySceneState::Default;
+		m_currentSceneState = EInventorySceneState::Default;
 		return;
 	}
 
@@ -161,6 +161,8 @@ void InventoryScene::HandleEquipCommand(const wstring& cmd)
 	if (index > inventory.GetItemList().size())
 	{
 		m_textPrompt.Enqueue({ L"[시스템] : 잘못된 번호를 입력했습니다." });
+		EnableInventoryMenu();
+		m_currentSceneState = EInventorySceneState::Default;
 		return;
 	}
 
@@ -214,7 +216,7 @@ void InventoryScene::HandleEquipCommand(const wstring& cmd)
 	m_textPrompt.Enqueue(L"시스템 : [" + targetItem->GetItemName() + L"] 을(를) 장착했습니다.");
 
 	EnableInventoryMenu();
-	m_currentScene = EInventorySceneState::Default;
+	m_currentSceneState = EInventorySceneState::Default;
 	return;
 }
 
@@ -229,7 +231,7 @@ void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 	{
 		m_textPrompt.Enqueue({ L"[시스템] : 인벤토리 공간이 부족합니다." });
 		EnableInventoryMenu();
-		m_currentScene = EInventorySceneState::Default;
+		m_currentSceneState = EInventorySceneState::Default;
 	}
 
 	const uint8 index = static_cast<uint8>(stoi(cmd));
@@ -240,7 +242,7 @@ void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 		{
 			m_textPrompt.Enqueue({ L"시스템 : 아이템을 장착하고 있지 않습니다." });
 			EnableInventoryMenu();
-			m_currentScene = EInventorySceneState::Default;
+			m_currentSceneState = EInventorySceneState::Default;
 			return;
 		}
 
@@ -266,7 +268,7 @@ void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 		{
 			m_textPrompt.Enqueue({ L"시스템 : 아이템을 장착하고 있지 않습니다." });
 			EnableInventoryMenu();
-			m_currentScene = EInventorySceneState::Default;
+			m_currentSceneState = EInventorySceneState::Default;
 			return;
 		}
 
@@ -294,6 +296,6 @@ void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 	}
 
 	EnableInventoryMenu();
-	m_currentScene = EInventorySceneState::Default;
+	m_currentSceneState = EInventorySceneState::Default;
 	return;
 }

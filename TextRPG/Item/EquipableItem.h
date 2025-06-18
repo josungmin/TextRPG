@@ -5,17 +5,18 @@
 class EquipableItem : public Item
 {
 public:
-	enum class EEquipType : uint8_t
+	enum class EEquipType : uint8
 	{
-		Weapon = 0,
-		Armor = 1,
+		Weapon,
+		Armor,
+		Max,
 	};
 
 public:
 	EquipableItem(const EEquipType equipType, const EItemType itemType, const std::wstring& itemName, const std::wstring& description, const uint8_t buyPrice, const uint8_t sellPrice);
 	virtual ~EquipableItem() = default;
 
-public://private:
+public:
 	virtual Item* Clone() const override 
 	{ 
 		return new EquipableItem(*this); 

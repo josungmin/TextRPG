@@ -70,8 +70,8 @@ void ShopScene::Update()
 				if (index < 0 || index >= m_shopItemList.size())
 				{
 					m_textPrompt.Enqueue(L"시스템 : 잘못된 입력입니다.");
-					EnableShopMenu();
 					m_currentSceneState = EShopSceneState::Default;
+					EnableShopMenu();
 					return;
 				}
 
@@ -94,8 +94,8 @@ void ShopScene::Update()
 				if (index < 0 || index >= items.size())
 				{
 					m_textPrompt.Enqueue(L"시스템 : 잘못된 입력입니다.");
-					EnableShopMenu();
 					m_currentSceneState = EShopSceneState::Default;
+					EnableShopMenu();
 					return;
 				}
 

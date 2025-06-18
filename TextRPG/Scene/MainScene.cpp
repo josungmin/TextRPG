@@ -45,8 +45,8 @@ void MainScene::Update()
 			{
 				if (cmd == L"1" || cmd == L"Èú·¯" || cmd == L"1.Èú·¯")
 				{
-					EnableHealMenu();
 					m_currentSceneState = EMainSceneState::Healer;
+					EnableHealMenu();
 				}
 				else if (cmd == L"2" || cmd == L"»óÁ¡" || cmd == L"2.»óÁ¡")
 				{
