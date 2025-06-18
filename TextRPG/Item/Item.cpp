@@ -24,7 +24,7 @@ bool Item::AddItem(uint8 num)
 
 bool Item::RemoveItem(uint8 num)
 {
-	if (m_count <= 0 || m_count - num < 0)
+	if (m_count <= 0 || m_count < num)
 	{
 		return false;
 	}
