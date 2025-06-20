@@ -55,7 +55,7 @@ void DungeonScene::Update()
 			else if (cmd == L"2" || cmd == L"도망" || cmd == L"도망간다" || cmd == L"1.도망간다")
 			{
 				Scene* mainScene = new MainScene(m_screen, m_input, m_textPrompt);
-				GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
+				GameInstance::GetInstance().GetSceneManager().ChangeScene(*mainScene);
 			}
 			else
 			{
@@ -72,7 +72,7 @@ void DungeonScene::Update()
 			if (cmd == L"1" || cmd == L"이동" || cmd == L"1.이동" || cmd == L"1이동")
 			{
 				Scene* mainScene = new MainScene(m_screen, m_input, m_textPrompt);
-				GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
+				GameInstance::GetInstance().GetSceneManager().ChangeScene(*mainScene);
 			}
 		}
 	}
@@ -108,7 +108,7 @@ void DungeonScene::Render()
 	m_screen.Write(13, 1, L"[ 능력치 ]");
 	m_screen.Write(73, 1, L"<< 던전 >>");
 
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 	m_screen.Write(1, 2, L"────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
 	m_screen.Write(2, 3, L"이름: " + player.GetName());
 	m_screen.Write(2, 4, L"정보: " + player.GetDescription());

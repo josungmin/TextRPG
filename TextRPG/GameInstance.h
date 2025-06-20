@@ -7,7 +7,7 @@
 class GameInstance
 {
 public:
-	static GameInstance& Instance()
+	static GameInstance& GetInstance()
 	{
 		static GameInstance m_instance;
 		return m_instance;

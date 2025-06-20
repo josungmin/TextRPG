@@ -90,7 +90,7 @@ void CombatGameMode::CombatStart()
 	m_isCombatEnded = false;
 	m_textPrompt.Enqueue(L"시스템 : 전투를 시작합니다.");
 
-	const uint16 playerAgility = GameInstance::Instance().GetPlayer().GetStats().GetStatValue(EStatType::Agility);
+	const uint16 playerAgility = GameInstance::GetInstance().GetPlayer().GetStats().GetStatValue(EStatType::Agility);
 	const uint16 enemyAgility = m_enemy->GetStats().GetStatValue(EStatType::Agility);
 
 	if (playerAgility >= enemyAgility)
@@ -110,7 +110,7 @@ void CombatGameMode::CombatStart()
 
 void CombatGameMode::PlayerAction()
 {
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 
 	if (m_command == L"1" || m_command == L"공격" || m_command == L"1공격" || m_command == L"1.공격")
 	{
@@ -149,7 +149,7 @@ void CombatGameMode::PlayerAction()
 
 void CombatGameMode::EnemyAction()
 {
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 
 	const uint16 damage = m_enemy->GetStats().GetStatValue(EStatType::AttackPower);
 	player.TakeDamage(damage);
@@ -173,7 +173,7 @@ void CombatGameMode::EnemyAction()
 
 void CombatGameMode::CombatEnd()
 {
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 
 	if (player.GetIsDead() == true)
 	{
@@ -192,7 +192,7 @@ void CombatGameMode::CombatEnd()
 	const vector<wstring>& dropItems = m_enemy->GetDropItems();
 	const uint64 randNum = rand() % dropItems.size();
 
-	const Item* dropItem = GameInstance::Instance().GetItemTable().CreateItem(dropItems[randNum]);
+	const Item* dropItem = GameInstance::GetInstance().GetItemTable().CreateItem(dropItems[randNum]);
 	if (dropItem == nullptr)
 	{
 		m_textPrompt.Enqueue(L"[오류] : [" + dropItems[randNum] + L"] 해당 아이템이 존재하지 않습니다.");

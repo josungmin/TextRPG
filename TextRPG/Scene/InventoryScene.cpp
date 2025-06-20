@@ -49,7 +49,7 @@ void InventoryScene::Update()
 				else if (cmd == L"3" || cmd == L"나가기")
 				{
 					Scene* mainScene = new MainScene(m_screen, m_input, m_textPrompt);
-					GameInstance::Instance().GetSceneManager().ChangeScene(*mainScene);
+					GameInstance::GetInstance().GetSceneManager().ChangeScene(*mainScene);
 				}
 				else
 				{
@@ -90,7 +90,7 @@ void InventoryScene::Render()
 	m_screen.Write(13, 1, L"[ 능력치 ]");
 	m_screen.Write(73, 1, L"<< 인벤토리 >>");
 
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 	m_screen.Write(1, 2, L"────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
 	m_screen.Write(2, 3, L"이름: " + player.GetName());
 	m_screen.Write(2, 4, L"정보: " + player.GetDescription());
@@ -123,7 +123,7 @@ void InventoryScene::EnableInventoryMenu()
 
 void InventoryScene::EnableEquipMenu()
 {	
-	const vector<Item*>& inventoryItems = GameInstance::Instance().GetPlayer().GetInventory().GetItemList();
+	const vector<Item*>& inventoryItems = GameInstance::GetInstance().GetPlayer().GetInventory().GetItemList();
 
 	if (inventoryItems.empty() == true)
 	{
@@ -142,7 +142,7 @@ void InventoryScene::EnableEquipMenu()
 
 void InventoryScene::EnableUnequipMenu()
 {
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 	Equipment& equipment = player.GetEquipment();
 
 	m_textPrompt.Enqueue(L"시스템 : 어떤 아이템을 [해제] 하시겠습니까? 번호를 입력해주세요.");
@@ -152,7 +152,7 @@ void InventoryScene::EnableUnequipMenu()
 
 void InventoryScene::HandleEquipCommand(const wstring& cmd)
 {
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 	Equipment& equipment = player.GetEquipment();
 	Inventory& inventory = player.GetInventory();
 	StatContainer& stats = player.GetStats();
@@ -222,7 +222,7 @@ void InventoryScene::HandleEquipCommand(const wstring& cmd)
 
 void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 {
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 	Equipment& equipment = player.GetEquipment();
 	Inventory& inventory = player.GetInventory();
 	StatContainer& stats = player.GetStats();

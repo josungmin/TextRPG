@@ -33,13 +33,13 @@ void Game::Run()
 void Game::Init()
 {
 	Scene* titleScene = new TitleScene(m_screen, m_input, m_textPrompt);
-	GameInstance::Instance().GetSceneManager().ChangeScene(*titleScene);
+	GameInstance::GetInstance().GetSceneManager().ChangeScene(*titleScene);
 }
 
 void Game::Update()
 {
 	m_textPrompt.Update();
-	GameInstance::Instance().GetSceneManager().GetCurrentScene().Update();
+	GameInstance::GetInstance().GetSceneManager().GetCurrentScene().Update();
 }
 
 void Game::Render()
@@ -47,7 +47,7 @@ void Game::Render()
 	m_screen.Clear();
 
 	m_textPrompt.Render(m_screen);
-	GameInstance::Instance().GetSceneManager().GetCurrentScene().Render();
+	GameInstance::GetInstance().GetSceneManager().GetCurrentScene().Render();
 
 	m_screen.Render();
 }

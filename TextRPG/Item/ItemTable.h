@@ -16,6 +16,7 @@ public:
 public:
 	Item* CreateItem(const wstring& name) const;
 	const Item* GetItem(const wstring& name) const;
+	const bool HasItem(const wstring& name) const;
 	inline const unordered_map<wstring, Item*>& GetItemMap() const { return m_itemMap; }
 
 private:

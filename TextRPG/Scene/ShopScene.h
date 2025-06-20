@@ -34,6 +34,7 @@ private:
 	void EnableSellMenu();
 	void HandleBuyCommand(const uint8 shopItemIndex);
 	void HandleSellCommand(const wstring& cmd);
+	void HandleSellCommand(const uint8 inventoryItemIndex);
 
 private:
 	vector<wstring> m_shopItemList;

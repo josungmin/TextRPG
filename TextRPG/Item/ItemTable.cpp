@@ -73,7 +73,7 @@ void ItemTable::Load()
 	m_itemMap[bronzeSword->GetItemName()] = bronzeSword;
 
 
-	// Amor item
+	// Armor item
 	EquipableItem* amor = new EquipableItem(
 		EquipableItem::EEquipType::Armor,
 		EquipableItem::EItemType::Equip,
@@ -116,11 +116,22 @@ Item* ItemTable::CreateItem(const wstring& name) const
 
 const Item* ItemTable::GetItem(const wstring& name) const
 {
-	std::unordered_map<std::wstring, Item*>::const_iterator it = m_itemMap.find(name);
+	unordered_map<wstring, Item*>::const_iterator it = m_itemMap.find(name);
 	if (it != m_itemMap.end())
 	{
 		return it->second;
 	}
 		
 	return nullptr;
+}
+
+const bool ItemTable::HasItem(const wstring& name) const
+{
+	unordered_map<wstring, Item*>::const_iterator it = m_itemMap.find(name);
+	if (it != m_itemMap.end())
+	{
+		return true;
+	}
+
+	return false;
 }

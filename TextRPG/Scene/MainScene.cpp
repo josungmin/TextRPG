@@ -37,7 +37,7 @@ void MainScene::Update()
 	if (m_input.HasCommand() == true)
 	{
 		const wstring cmd = m_input.GetCommand();
-		PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+		PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 
 		switch (m_currentSceneState)
 		{
@@ -51,12 +51,12 @@ void MainScene::Update()
 				else if (cmd == L"2" || cmd == L"상점" || cmd == L"2.상점")
 				{
 					Scene* shopScene = new ShopScene(m_screen, m_input, m_textPrompt);
-					GameInstance::Instance().GetSceneManager().ChangeScene(*shopScene);
+					GameInstance::GetInstance().GetSceneManager().ChangeScene(*shopScene);
 				}
 				else if (cmd == L"3" || cmd == L"인벤토리" || cmd == L"3.인벤토리")
 				{
 					Scene* inventoryScene = new InventoryScene(m_screen, m_input, m_textPrompt);
-					GameInstance::Instance().GetSceneManager().ChangeScene(*inventoryScene);
+					GameInstance::GetInstance().GetSceneManager().ChangeScene(*inventoryScene);
 				}
 				else if (cmd == L"4" || cmd == L"던전" || cmd == L"4.던전")
 				{
@@ -67,7 +67,7 @@ void MainScene::Update()
 					}
 
 					Scene* dungeonScene = new DungeonScene(m_screen, m_input, m_textPrompt);
-					GameInstance::Instance().GetSceneManager().ChangeScene(*dungeonScene);
+					GameInstance::GetInstance().GetSceneManager().ChangeScene(*dungeonScene);
 				}
 				else
 				{
@@ -116,7 +116,7 @@ void MainScene::Render()
 	m_screen.Write(13, 1, L"[ 능력치 ]");
 	m_screen.Write(73, 1, L"<< 마을 >>");
 
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 	m_screen.Write(1, 2, L"────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
 	m_screen.Write(2, 3, L"이름: " + player.GetName());
 	m_screen.Write(2, 4, L"정보: " + player.GetDescription());
@@ -156,7 +156,7 @@ void MainScene::EnableHealMenu()
 
 void MainScene::HandleHealCommand()
 {
-	PlayerCharacter& player = GameInstance::Instance().GetPlayer();
+	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 	const uint16 playerMaxHP = player.GetStats().GetStatValue(EStatType::HP);
 
 	if (player.GetCurrentHP() == playerMaxHP)

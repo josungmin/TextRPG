@@ -17,15 +17,14 @@ Inventory::~Inventory()
 
 const bool Inventory::AddItem(const wstring& itemName, const uint8 amount)
 {
-	const Item* newItem = GameInstance::Instance().GetItemTable().CreateItem(itemName);
-	if (AddItem(newItem, amount) == false)
-	{
-		delete newItem;
-		return false;
-	}
+	const Item* newItem = GameInstance::GetInstance().GetItemTable().CreateItem(itemName);
+	//if (AddItem(newItem, amount) == false)
+	//{
+	//	return false;
+	//}
 
-	delete newItem;
-	return true;
+	//return true;
+	return AddItem(newItem, amount);
 }
 
 const bool Inventory::AddItem(const Item* item, const uint8 amount)
@@ -42,13 +41,12 @@ const bool Inventory::AddItem(const Item* item, const uint8 amount)
 			return false;
 		}
 
-		m_itemList.push_back(item->Clone());
+		m_itemList.push_back(const_cast<Item*>(item));
 		return true;
 	}
 
-	for (uint8 i = 0; i < m_itemList.size(); i++)
+	for (Item * targetItem : m_itemList)
 	{
-		Item* targetItem = m_itemList[i];
 		if (targetItem->GetItemName() != item->GetItemName())
 		{
 			continue;
@@ -72,7 +70,7 @@ const bool Inventory::AddItem(const Item* item, const uint8 amount)
 		return false;
 	}
 
-	m_itemList.push_back(item->Clone());
+	m_itemList.push_back(const_cast<Item*>(item));
 	return true;
 }
 
@@ -92,11 +90,18 @@ const bool Inventory::RemoveItem(const wstring& itemName, const uint8 amount)
 	}
 
 	Item* targetItem = *it;
+	if (targetItem->GetCount() < amount)
+	{
+		return false;
+	}
+
 	if (targetItem->GetCount() == amount)
 	{
+		delete targetItem;
 		m_itemList.erase(it);
 		return true;
 	}
 	
 	return targetItem->RemoveItem(amount);
 }
+
