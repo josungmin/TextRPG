@@ -13,7 +13,7 @@ public:
 
 public:
     const bool EquipItemInstance(const ItemInstance& itemInstance, StatContainer& ownerStatContainer);
-    const ItemInstance& UnequipItemInstance(EquipableItem::EEquipType type, StatContainer& ownerStatContainer);
+    ItemInstance UnequipItemInstance(EquipableItem::EEquipType type, StatContainer& ownerStatContainer);
 
     const EquipableItem* GetEquipedItem(EquipableItem::EEquipType equipType) const;
     const bool IsEquiped(EquipableItem::EEquipType equipType) const;

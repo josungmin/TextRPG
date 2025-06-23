@@ -9,93 +9,70 @@ Inventory::Inventory()
 
 Inventory::~Inventory()
 {
-	for (Item* item : m_itemList)
-	{
-		delete item;
-	}
+	m_itemList.clear();
 }
 
-const bool Inventory::AddItem(const wstring& itemName, const uint8 amount)
+const bool Inventory::AddItem(const Item& item, const uint8 amount)
 {
-	const Item* newItem = GameInstance::GetInstance().GetItemTable().CreateItem(itemName);
-	return AddItem(newItem, amount);
-}
-
-const bool Inventory::AddItem(const Item* item, const uint8 amount)
-{
-	if (item == nullptr)
+	if (IsFull() == true)
 	{
 		return false;
 	}
 
-	if (item->GetType() == EquipableItem::EItemType::Equip)
+	if (item.GetType() == EquipableItem::EItemType::Equip)
 	{
-		if (IsFull())
-		{
-			return false;
-		}
-
-		m_itemList.push_back(const_cast<Item*>(item));
+		m_itemList.emplace_back(item);
 		return true;
 	}
 
-	for (Item * targetItem : m_itemList)
+	for (ItemInstance& inst : m_itemList)
 	{
-		if (targetItem->GetItemName() != item->GetItemName())
+		if (inst.Get()->GetItemName() == item.GetItemName())
 		{
-			continue;
-		}
+			if (inst.Get()->IsFull())
+			{
+				continue;
+			}				
 
-		if (targetItem->IsFull())
-		{
-			continue;
+			if (inst.Get()->GetRemainCount() < amount)
+			{
+				return false;
+			}
+				
+			return inst.Get()->AddItem(amount);
 		}
-
-		if (targetItem->GetRemainCount() < amount)
-		{
-			return false;
-		}
-
-		return targetItem->AddItem(amount);
 	}
 
-	if (IsFull())
-	{
-		return false;
-	}
-
-	m_itemList.push_back(const_cast<Item*>(item));
+	m_itemList.emplace_back(item);
 	return true;
 }
 
 const bool Inventory::RemoveItem(const wstring& itemName, const uint8 amount)
 {
-	vector<Item*>::iterator it = std::find_if(
-		m_itemList.begin(), 
-		m_itemList.end(), 
-		[=](Item* item)
-		{ 
-			return item->GetItemName() == itemName; 
+	auto it = std::find_if(
+		m_itemList.begin(),
+		m_itemList.end(),
+		[&](const ItemInstance& inst) {
+			return inst.Get()->GetItemName() == itemName;
 		});
 
 	if (it == m_itemList.end())
 	{
 		return false;
-	}
+	}		
 
-	Item* targetItem = *it;
+	Item* targetItem = it->Get();
 	if (targetItem->GetCount() < amount)
 	{
 		return false;
-	}
+	}	
 
 	if (targetItem->GetCount() == amount)
 	{
-		delete targetItem;
 		m_itemList.erase(it);
 		return true;
 	}
-	
+
 	return targetItem->RemoveItem(amount);
 }
 

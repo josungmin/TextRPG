@@ -119,11 +119,13 @@ void InventoryScene::Render()
 	m_screen.Write(2, 11, L"민첩: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
 	m_screen.Write(2, 13, L"장착 아이템");
 	m_screen.Write(2, 14, L"무기: " + (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Weapon) == nullptr ? L"미장착" : (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Weapon)->GetItemName())));
-	m_screen.Write(2, 15, L"방어구: " + (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Armor) == nullptr ? L"미장착" : (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Weapon)->GetItemName())));
+	m_screen.Write(2, 15, L"방어구: " + (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Armor) == nullptr ? L"미장착" : (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::
+	Armor)->GetItemName())));
 	m_screen.Write(2, 17, L"인벤토리 ");
-	for (int i = 0; i < player.GetInventory().GetItemList().size(); ++i)
+	const vector<ItemInstance>& itemList = player.GetInventory().GetItemList();
+	for (int i = 0; i < itemList.size(); ++i)
 	{
-		m_screen.Write(2, 18 + i, player.GetInventory().GetItemList()[i]->GetItemName());
+		m_screen.Write(2, 18 + i, itemList[i].Get()->GetItemName());
 	}
 	m_screen.Write(0, 29, L"│─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────│");
 	m_screen.Write(0, 30, L"│"); m_screen.Write(2, 30, L"명령 > " + m_input.GetInputBuffer());
@@ -139,9 +141,9 @@ void InventoryScene::EnableInventoryMenu()
 
 void InventoryScene::EnableEquipMenu()
 {	
-	const vector<Item*>& inventoryItems = GameInstance::GetInstance().GetPlayer().GetInventory().GetItemList();
+	const vector<ItemInstance>& itemList = GameInstance::GetInstance().GetPlayer().GetInventory().GetItemList();
 
-	if (inventoryItems.empty() == true)
+	if (itemList.empty() == true)
 	{
 		m_textPrompt.Enqueue(L"시스템 : 장착할 아이템이 존재하지 않습니다.");
 		EnableInventoryMenu();
@@ -150,9 +152,10 @@ void InventoryScene::EnableEquipMenu()
 	}
 
 	m_textPrompt.Enqueue(L"시스템 : 어떤 아이템을 [장착] 하시겠습니까? 번호를 입력해주세요.");
-	for (uint8 i = 0; i < inventoryItems.size(); i++)
+
+	for (uint8 i = 0; i < itemList.size(); ++i)
 	{
-		m_textPrompt.Enqueue(L"인벤토리 : [" + to_wstring(i) + L"] " + inventoryItems[i]->GetItemName());
+		m_textPrompt.Enqueue(L"인벤토리 : [" + to_wstring(i) + L"] " + itemList[i].Get()->GetItemName());
 	}
 }
 
@@ -163,49 +166,44 @@ void InventoryScene::EnableUnequipMenu()
 	const EquipableItem* armor = equipment.GetEquipedItem(EquipableItem::EEquipType::Armor);
 
 	m_textPrompt.Enqueue(L"시스템 : 어떤 아이템을 [해제] 하시겠습니까? 번호를 입력해주세요.");
-	m_textPrompt.Enqueue(L"인벤토리 : [0]" + (weapon == nullptr) ? L"비어있음" : weapon->GetItemName());
-	m_textPrompt.Enqueue(L"인벤토리 : [1]" + (armor == nullptr) ? L"비어있음" : armor->GetItemName());
+	m_textPrompt.Enqueue(L"인벤토리 : [0] " + (weapon == nullptr ? L"비어있음" : weapon->GetItemName()));
+	m_textPrompt.Enqueue(L"인벤토리 : [1] " + (armor == nullptr ? L"비어있음" : armor->GetItemName()));
 }
 
 void InventoryScene::HandleEquipCommand(const uint8 equipItemIndex)
 {
 	Inventory& inventory = GameInstance::GetInstance().GetPlayer().GetInventory();
 	Equipment& equipment = GameInstance::GetInstance().GetPlayer().GetEquipment();
-	StatContainer&  statContainer = GameInstance::GetInstance().GetPlayer().GetStats();
+	StatContainer& statContainer = GameInstance::GetInstance().GetPlayer().GetStats();
 
+	const ItemInstance& selected = inventory.GetItemList()[equipItemIndex];
+	ItemInstance equipItemInstance(*selected.Get());
 
-	ItemInstance equipItem(*inventory.GetItemList()[equipItemIndex]);
-	const EquipableItem::EEquipType targetType = static_cast<EquipableItem::EEquipType>(equipItemIndex);
+	const EquipableItem* equipItem = equipItemInstance.Get<EquipableItem>();
+	if (equipItem == nullptr)
+	{
+		m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
+		return;
+	}
 
+	const EquipableItem::EEquipType targetType = equipItem->GetEquipType();
 
 	if (equipment.IsEquiped(targetType) == true)
 	{
-		const ItemInstance& unequipItem = equipment.UnequipItemInstance(targetType, statContainer);
-
-		if (inventory.AddItem(unequipItem.Get()) == false)
-		{
-			m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
-			return;
-		}
+		ItemInstance unequipItem = equipment.UnequipItemInstance(targetType, statContainer);
+		inventory.AddItem(*unequipItem.Get());
 	}
 
-	if (equipment.EquipItemInstance(equipItem, statContainer) == false)
+	if (equipment.EquipItemInstance(equipItemInstance, statContainer) == false)
 	{
 		m_textPrompt.Enqueue({ L"[오류] : 아이템 장착에 실패했습니다." });
 		return;
 	}
 
-	if (inventory.RemoveItem(equipItem.Get()->GetItemName()) == false)
-	{
-		m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 삭제에 실패했습니다." });
-		return;
-	}
-
-
-	m_textPrompt.Enqueue(L"시스템 : [" + equipItem.Get()->GetItemName() + L"] 을(를) 장착했습니다.");
+	inventory.RemoveItem(equipItem->GetItemName());
+	m_textPrompt.Enqueue(L"시스템 : [" + equipItem->GetItemName() + L"] 을(를) 장착했습니다.");
 	EnableInventoryMenu();
 	m_currentSceneState = EInventorySceneState::Default;
-	return;
 }
 
 void InventoryScene::HandleUnequipCommand(const wstring& cmd)
@@ -222,10 +220,16 @@ void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 	}
 
 	const uint8 index = static_cast<uint8>(stoi(cmd));
-	const EquipableItem::EEquipType targetType = static_cast<EquipableItem::EEquipType>(index);
-	const ItemInstance& unequipItem = equipment.UnequipItemInstance(targetType, statContainer);
+	if (index >= static_cast<uint8>(EquipableItem::EEquipType::Max))
+	{
+		m_textPrompt.Enqueue(L"[오류] : 유효하지 않은 장비 타입입니다.");
+		return;
+	}
 
-	if (inventory.AddItem(unequipItem.Get()) == false)
+	const EquipableItem::EEquipType targetType = static_cast<EquipableItem::EEquipType>(index);
+	ItemInstance unequipItem = equipment.UnequipItemInstance(targetType, statContainer);
+
+	if (inventory.AddItem(*unequipItem.Get()) == false)
 	{
 		m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
 		return;

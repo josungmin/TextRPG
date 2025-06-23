@@ -34,7 +34,7 @@ const bool Equipment::EquipItemInstance(const ItemInstance& itemInstance, StatCo
 	return true;
 }
 
-const ItemInstance& Equipment::UnequipItemInstance(EquipableItem::EEquipType type, StatContainer& ownerStatContainer)
+ItemInstance Equipment::UnequipItemInstance(EquipableItem::EEquipType type, StatContainer& ownerStatContainer)
 {
 	vector<ItemInstance>::iterator it = equipedItemList.begin();
 	for (it; it != equipedItemList.end(); ++it)
@@ -45,7 +45,9 @@ const ItemInstance& Equipment::UnequipItemInstance(EquipableItem::EEquipType typ
 		}
 	}
 
-	return ItemInstance(*it->Get());
+	ItemInstance unequipped = std::move(*it);
+	equipedItemList.erase(it);
+	return unequipped;
 }
 
 const EquipableItem* Equipment::GetEquipedItem(EquipableItem::EEquipType equipType) const

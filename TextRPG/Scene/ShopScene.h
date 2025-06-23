@@ -33,8 +33,7 @@ private:
 	void EnableBuyMenu();
 	void EnableSellMenu();
 	void HandleBuyCommand(const uint8 shopItemIndex);
-	void HandleSellCommand(const wstring& cmd);
-	void HandleSellCommand(const uint8 inventoryItemIndex);
+	void HandleSellCommand(const std::wstring& cmd);
 
 private:
 	vector<wstring> m_shopItemList;

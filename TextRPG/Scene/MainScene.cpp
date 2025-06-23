@@ -114,7 +114,7 @@ void MainScene::Render()
 	}
 
 	m_screen.Write(13, 1, L"[ 棟溘纂 ]");
-	m_screen.Write(73, 1, L"<< 葆擊 >>");
+	m_screen.Write(73, 1, L"<< 檣漸饜葬 >>");
 
 	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
 	m_screen.Write(1, 2, L"式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式");
@@ -129,11 +129,13 @@ void MainScene::Render()
 	m_screen.Write(2, 11, L"團繪: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
 	m_screen.Write(2, 13, L"濰雜 嬴檜蠱");
 	m_screen.Write(2, 14, L"鼠晦: " + (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Weapon) == nullptr ? L"嘐濰雜" : (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Weapon)->GetItemName())));
-	m_screen.Write(2, 15, L"寞橫掘: " + (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Armor) == nullptr ? L"嘐濰雜" : (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Weapon)->GetItemName())));
+	m_screen.Write(2, 15, L"寞橫掘: " + (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Armor) == nullptr ? L"嘐濰雜" : (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::
+		Armor)->GetItemName())));
 	m_screen.Write(2, 17, L"檣漸饜葬 ");
-	for (int i = 0; i < player.GetInventory().GetItemList().size(); ++i)
+	const vector<ItemInstance>& itemList = player.GetInventory().GetItemList();
+	for (int i = 0; i < itemList.size(); ++i)
 	{
-		m_screen.Write(2, 18 + i, player.GetInventory().GetItemList()[i]->GetItemName());
+		m_screen.Write(2, 18 + i, itemList[i].Get()->GetItemName());
 	}
 	m_screen.Write(0, 29, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
 	m_screen.Write(0, 30, L"弛"); m_screen.Write(2, 30, L"貲滄 > " + m_input.GetInputBuffer());

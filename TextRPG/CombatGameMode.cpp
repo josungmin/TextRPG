@@ -200,11 +200,11 @@ void CombatGameMode::CombatEnd()
 		return;
 	}
 
-	if (player.GetInventory().AddItem(dropItem) == false)
-	{
-		m_textPrompt.Enqueue(L"시스템 : 인벤토리가 가득 차 아이템을 획득하지 못했습니다.");
-		return;
-	}
+	//if (player.GetInventory().AddItem(dropItem) == false)
+	//{
+	//	m_textPrompt.Enqueue(L"시스템 : 인벤토리가 가득 차 아이템을 획득하지 못했습니다.");
+	//	return;
+	//}
 
 	m_textPrompt.Enqueue(L"시스템 : 전리품으로 [" + dropItem->GetItemName() + L"] 를 획득했습니다.");
 
