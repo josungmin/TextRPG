@@ -264,46 +264,6 @@ void ShopScene::HandleBuyCommand(const uint8 shopItemIndex)
 	EnableShopMenu();
 	m_currentSceneState = EShopSceneState::Default;
 	return;
-
-
-	//const Item* item = GameInstance::GetInstance().GetItemTable().GetItem(m_shopItemList[shopItemIndex]);
-	//if(buyItem == nullptr)
-	//{
-	//	m_textPrompt.Enqueue(L"[오류] '" + m_shopItemList[shopItemIndex] + L"' 아이템을 찾을 수 없습니다.");
-	//	return;
-	//}
-
-	//PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
-	//const uint8 price = buyItem->GetBuyPrice();
-
-	//if (player.GetInventory().IsFull() == true)
-	//{
-	//	m_textPrompt.Enqueue(L"시스템 : 인벤토리 공간이 부족합니다.");
-	//	EnableShopMenu();
-	//	m_currentSceneState = EShopSceneState::Default;
-	//	return;
-	//}
-	//
-	//if (player.GetGold().amount < price)
-	//{
-	//	m_textPrompt.Enqueue(L"시스템 : 골드가 부족합니다.");
-	//	return;
-	//}
-
-	//Item* itemInstance = GameInstance::GetInstance().GetItemTable().CreateItem(buyItem->GetItemName());
-	//const bool addItemResult = player.GetInventory().AddItem(itemInstance);
-	//if(addItemResult == false)
-	//{
-	//	m_textPrompt.Enqueue(L"시스템 : 인벤토리가 가득 차 아이템을 구매하지 못했습니다.");
-	//	EnableShopMenu();
-	//	m_currentSceneState = EShopSceneState::Default;
-	//}
-
-	//player.GetGold().RemoveGold(price);
-	//m_textPrompt.Enqueue(L"시스템 : [" + itemInstance->GetItemName() + L"] 구매가 완료되었습니다.");
-	//
-	//EnableShopMenu();
-	//m_currentSceneState = EShopSceneState::Default;
 }
 
 void ShopScene::HandleSellCommand(const wstring& cmd)
@@ -341,15 +301,16 @@ void ShopScene::HandleSellCommand(const uint8 inventoryItemIndex)
 	}
 
 	const uint8 sellPrice = sellItem->GetSellPrice();
+	const wstring sellItemName = sellItem->GetItemName();
 	player.GetGold().AddGold(sellPrice);
 
-	if (player.GetInventory().RemoveItem(sellItem->GetItemName()))
+	if (player.GetInventory().RemoveItem(sellItem->GetItemName()) == false)
 	{
 		m_textPrompt.Enqueue(L"[오류] : 인벤토리 보유 아이템 삭제에 실패했습니다.");
 		return;
 	}
 
-	m_textPrompt.Enqueue(L"시스템 : [" + sellItem->GetItemName() + L"] 판매하였습니다. (+" + std::to_wstring(sellPrice) + L"G)");
+	m_textPrompt.Enqueue(L"시스템 : [" + sellItemName + L"] 판매하였습니다. (+" + std::to_wstring(sellPrice) + L"G)");
 
 	EnableShopMenu();
 	m_currentSceneState = EShopSceneState::Default;
