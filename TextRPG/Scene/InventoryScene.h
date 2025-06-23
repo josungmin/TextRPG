@@ -25,7 +25,7 @@ private:
 	void EnableInventoryMenu();
 	void EnableEquipMenu();
 	void EnableUnequipMenu();
-	void HandleEquipCommand(const wstring& cmd);
+	void HandleEquipCommand(const uint8 equipItemIndex);
 	void HandleUnequipCommand(const wstring& cmd);
 
 private:

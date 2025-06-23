@@ -179,5 +179,8 @@
     <ClInclude Include="Scene\InventoryScene.h">
       <Filter>헤더 파일\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Item\ItemInstance.h">
+      <Filter>헤더 파일\Item</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

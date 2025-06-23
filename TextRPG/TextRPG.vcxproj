@@ -161,6 +161,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Item\EquipableItem.h" />
     <ClInclude Include="Item\Item.h" />
+    <ClInclude Include="Item\ItemInstance.h" />
     <ClInclude Include="Item\ItemTable.h" />
     <ClInclude Include="MyType.h" />
     <ClInclude Include="Scene\DungeonScene.h" />

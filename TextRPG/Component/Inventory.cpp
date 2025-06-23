@@ -18,12 +18,6 @@ Inventory::~Inventory()
 const bool Inventory::AddItem(const wstring& itemName, const uint8 amount)
 {
 	const Item* newItem = GameInstance::GetInstance().GetItemTable().CreateItem(itemName);
-	//if (AddItem(newItem, amount) == false)
-	//{
-	//	return false;
-	//}
-
-	//return true;
 	return AddItem(newItem, amount);
 }
 

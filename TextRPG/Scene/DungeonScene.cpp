@@ -93,10 +93,8 @@ void DungeonScene::Update()
 
 void DungeonScene::Render()
 {
-	//m_textPrompt.Render(m_screen);
-
 	// Frame
-	m_screen.Write(0, 0, L"忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖");
+	m_screen.Write(0, 0, L"忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖");
 
 	for (int y = 1; y <= 28; ++y)
 	{
@@ -120,15 +118,15 @@ void DungeonScene::Render()
 	m_screen.Write(2, 10, L"寞橫溘: " + to_wstring(player.GetStats().GetStatValue(EStatType::Defence)));
 	m_screen.Write(2, 11, L"團繪: " + to_wstring(player.GetStats().GetStatValue(EStatType::Agility)));
 	m_screen.Write(2, 13, L"濰雜 嬴檜蠱");
-	m_screen.Write(2, 14, L"鼠晦: " + (player.GetEquipment().GetWeapon() == nullptr ? L"嘐濰雜" : player.GetEquipment().GetWeapon()->GetItemName()));
-	m_screen.Write(2, 15, L"寞橫掘: " + (player.GetEquipment().GetArmor() == nullptr ? L"嘐濰雜" : player.GetEquipment().GetArmor()->GetItemName()));
+	m_screen.Write(2, 14, L"鼠晦: " + (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Weapon) == nullptr ? L"嘐濰雜" : (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Weapon)->GetItemName())));
+	m_screen.Write(2, 15, L"寞橫掘: " + (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Armor) == nullptr ? L"嘐濰雜" : (player.GetEquipment().GetEquipedItem(EquipableItem::EEquipType::Weapon)->GetItemName())));
 	m_screen.Write(2, 17, L"檣漸饜葬 ");
 	for (int i = 0; i < player.GetInventory().GetItemList().size(); ++i)
 	{
 		m_screen.Write(2, 18 + i, player.GetInventory().GetItemList()[i]->GetItemName());
 	}
-
 	m_screen.Write(0, 29, L"弛式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式弛");
-	m_screen.Write(0, 30, L"弛"); m_screen.Write(2, 30, L"Command > " + m_input.GetInputBuffer());                                     m_screen.Write(126, 30, L"弛");
+	m_screen.Write(0, 30, L"弛"); m_screen.Write(2, 30, L"貲滄 > " + m_input.GetInputBuffer());
+	m_screen.Write(126, 30, L"弛");
 	m_screen.Write(0, 31, L"戌式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式戎");
 }
