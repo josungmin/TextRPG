@@ -33,7 +33,5 @@ const wstring Input::GetCommand()
 {
 	wstring cmd = m_command;
 	m_command.clear();
-
-	cmd.erase(std::remove(cmd.begin(), cmd.end(), ' '), cmd.end());
 	return cmd;
 }

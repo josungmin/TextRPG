@@ -3,7 +3,7 @@
 #include <cwchar>
 
 Screen::Screen()
-	: m_writeBuffer(nullptr)
+	: m_writeBuffer(nullptr), m_consoleBufferIndex(0)
 {
 	SetConsoleOutputCP(CP_UTF8);
 
@@ -15,6 +15,7 @@ Screen::Screen()
 			CONSOLE_TEXTMODE_BUFFER,
 			nullptr
 		);
+
 		SetConsoleScreenBufferSize((HANDLE)m_consoleBuffers[i], { WIDTH, HEIGHT });
 
 		SMALL_RECT rect = {
@@ -26,7 +27,7 @@ Screen::Screen()
 		SetConsoleWindowInfo((HANDLE)m_consoleBuffers[i], TRUE, &rect);
 	}
 
-	m_writeBuffer = new wchar_t[HEIGHT * WIDTH];
+	m_writeBuffer = new wchar_t[BUFFER_SIZE];
 	Clear();
 
 	VisibleConsoleCursor(false);
@@ -44,10 +45,15 @@ Screen::~Screen()
 
 void Screen::Write(const int16 x, const int16 y, const std::wstring& text)
 {
+	if (m_writeBuffer == nullptr)
+	{
+		return;
+	}
+
 	if (x < WIDTH && y < HEIGHT)
 	{
-		int pos = y * WIDTH + x;
-		for (int i = 0; i < text.size(); i++)
+		int32 pos = y * WIDTH + x;
+		for (size_t i = 0; i < text.size(); i++)
 		{
 			m_writeBuffer[pos] = text[i];
 
@@ -63,21 +69,27 @@ void Screen::Write(const int16 x, const int16 y, const std::wstring& text)
 
 void Screen::Render()
 {
-	unsigned long written;
+	DWORD written = 0;
 
-	for (int16 i = 0; i < BUFFER_SIZE; i++)
+	for (int32 i = 0; i < BUFFER_SIZE; i++)
 	{
+		COORD coord = { (SHORT)(i % WIDTH), (SHORT)(i / WIDTH) };
+		if (coord.X > WIDTH - 1 || coord.Y > HEIGHT - 1)
+		{
+			continue;
+		}
+
 		WriteConsoleOutputCharacterW(
 			m_consoleBuffers[m_consoleBufferIndex],
 			&m_writeBuffer[i],
 			1,
-			{ (int16)(i % WIDTH), (int16)(i / WIDTH) },
+			coord,
 			&written
 		);
 	}
 
 	SetConsoleActiveScreenBuffer(m_consoleBuffers[m_consoleBufferIndex]);
-	m_consoleBufferIndex = 1 - m_consoleBufferIndex;
+	m_consoleBufferIndex = m_consoleBufferIndex == 1 ? 0 : 1;
 }
 
 void Screen::Clear()

@@ -19,8 +19,8 @@ private:
 	void Render();
 
 private:
-	const uint32 TARGET_FPS = 30;
-	const uint32 FRAME_TIME_MS = 1000 / TARGET_FPS;
+	const ULONGLONG TARGET_FPS = 30;
+	const ULONGLONG FRAME_TIME_MS = 1000 / TARGET_FPS;
 
 private:
 	Screen m_screen;

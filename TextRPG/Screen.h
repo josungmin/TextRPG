@@ -22,7 +22,7 @@ private:
 private:
 	const int16 WIDTH = 128;
 	const int16 HEIGHT = 32;
-	const int32 BUFFER_SIZE = (WIDTH - 1) * (HEIGHT - 1);
+	const int32 BUFFER_SIZE = WIDTH * HEIGHT;
 
 private:
 	HANDLE m_consoleBuffers[2];
