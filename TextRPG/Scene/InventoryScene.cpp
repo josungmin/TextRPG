@@ -241,8 +241,8 @@ void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 		m_currentSceneState = EInventorySceneState::Default;
 	}
 
-	const uint8 index = static_cast<uint8>(stoi(cmd)) - 1;
-	if (index <= 0 || index >= static_cast<uint8>(EquipableItem::EEquipType::Max))
+	const uint8 index = static_cast<uint8>(stoi(cmd));
+	if (index > 1)
 	{
 		m_textPrompt.Enqueue(L"[오류] : 인벤토리 인덱스 범위를 초과했습니다. 다시 입력해주세요.");
 		return;
