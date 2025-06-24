@@ -3,15 +3,6 @@
 #include "../Stat/StatDataType.h"
 #include "../Item/EquipableItem.h"
 
-Equipment::Equipment()
-{
-	
-}
-
-Equipment::~Equipment()
-{
-	
-}
 
 const bool Equipment::IsEquiped(EquipableItem::EEquipType equipType) const
 {
@@ -21,7 +12,7 @@ const bool Equipment::IsEquiped(EquipableItem::EEquipType equipType) const
 		return false;
 	}
 
-	return m_equipedItemListTemp[index].IsValid();
+	return m_equipedItemList[index].IsValid();
 }
 
 const bool Equipment::EquipItem(ItemInstance itemInstance, StatContainer& ownerStatContainer)
@@ -32,7 +23,7 @@ const bool Equipment::EquipItem(ItemInstance itemInstance, StatContainer& ownerS
 	}
 
 	uint8 index = static_cast<uint8>(itemInstance.Get<EquipableItem>()->GetEquipType());
-	if (m_equipedItemListTemp[index].IsValid() == true)
+	if (m_equipedItemList[index].IsValid() == true)
 	{
 		return false;
 	}
@@ -40,7 +31,7 @@ const bool Equipment::EquipItem(ItemInstance itemInstance, StatContainer& ownerS
 	//const EquipableItem* selectedItem = m_equipedItemListTemp[index].Get<EquipableItem>();
 	//ownerStatContainer.AddModifierContainer(selectedItem->GetModifierContainer());
 
-	m_equipedItemListTemp[index] = move(itemInstance);
+	m_equipedItemList[index] = move(itemInstance);
 	return true;
 }
 
@@ -52,7 +43,7 @@ ItemInstance Equipment::UnequipItem(EquipableItem::EEquipType equipType, StatCon
 		return ItemInstance();
 	}
 
-	if (m_equipedItemListTemp[index].IsValid() == false)
+	if (m_equipedItemList[index].IsValid() == false)
 	{
 		return ItemInstance();
 	}
@@ -60,7 +51,7 @@ ItemInstance Equipment::UnequipItem(EquipableItem::EEquipType equipType, StatCon
 	//const EquipableItem* selectedItem = m_equipedItemListTemp[index].Get<EquipableItem>();
 	//ownerStatContainer.RemoveModifierContainer(selectedItem->GetModifierContainer().id);
 
-	return move(m_equipedItemListTemp[index]);
+	return move(m_equipedItemList[index]);
 }
 
 const EquipableItem* Equipment::GetEquipedItem(EquipableItem::EEquipType equipType) const
@@ -71,5 +62,5 @@ const EquipableItem* Equipment::GetEquipedItem(EquipableItem::EEquipType equipTy
 		return nullptr;
 	}
 
-	return m_equipedItemListTemp[index].Get<EquipableItem>();
+	return m_equipedItemList[index].Get<EquipableItem>();
 }

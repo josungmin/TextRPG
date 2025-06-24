@@ -8,8 +8,8 @@ struct StatContainer;
 class Equipment
 {
 public:
-    Equipment();
-    virtual ~Equipment();
+    Equipment() = default;
+    virtual ~Equipment() = default;
 
 public:
     const bool EquipItem(ItemInstance itemInstance, StatContainer& ownerStatContainer);
