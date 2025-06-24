@@ -5,60 +5,71 @@
 
 Equipment::Equipment()
 {
-	m_equipedItemList.reserve(static_cast<uint8>(EquipableItem::EEquipType::Max));
+	
 }
 
 Equipment::~Equipment()
 {
-	m_equipedItemList.clear();
+	
 }
 
 const bool Equipment::IsEquiped(EquipableItem::EEquipType equipType) const
 {
-	vector<ItemInstance>::const_iterator it = m_equipedItemList.begin();
-	for (it; it != m_equipedItemList.end(); ++it)
+	uint8 index = static_cast<uint8>(equipType);
+	if (index < 0 || static_cast<uint8>(EquipableItem::EEquipType::Max) < index)
 	{
-		if (equipType == it->Get<EquipableItem>()->GetEquipType())
-		{
-			return true;
-		}
+		return false;
 	}
 
-	return false;
+	return m_equipedItemListTemp[index].IsValid();
 }
 
 const bool Equipment::EquipItem(ItemInstance itemInstance, StatContainer& ownerStatContainer)
 {
-	m_equipedItemList.push_back(move(itemInstance));
+	if (itemInstance.IsValid() == false)
+	{
+		return false;
+	}
+
+	uint8 index = static_cast<uint8>(itemInstance.Get<EquipableItem>()->GetEquipType());
+	if (m_equipedItemListTemp[index].IsValid() == true)
+	{
+		return false;
+	}
+
+	//const EquipableItem* selectedItem = m_equipedItemListTemp[index].Get<EquipableItem>();
+	//ownerStatContainer.AddModifierContainer(selectedItem->GetModifierContainer());
+
+	m_equipedItemListTemp[index] = move(itemInstance);
 	return true;
 }
 
-ItemInstance Equipment::UnequipItem(EquipableItem::EEquipType type, StatContainer& ownerStatContainer)
+ItemInstance Equipment::UnequipItem(EquipableItem::EEquipType equipType, StatContainer& ownerStatContainer)
 {
-	vector<ItemInstance>::iterator it = m_equipedItemList.begin();
-	for (it; it != m_equipedItemList.end(); ++it)
+	uint8 index = static_cast<uint8>(equipType);
+	if (index < 0 || static_cast<uint8>(EquipableItem::EEquipType::Max) <= index)
 	{
-		if (type == it->Get<EquipableItem>()->GetEquipType())
-		{
-			break;
-		}
+		return ItemInstance();
 	}
 
-	ItemInstance unequipped = std::move(*it);
-	m_equipedItemList.erase(it);
-	return unequipped;
+	if (m_equipedItemListTemp[index].IsValid() == false)
+	{
+		return ItemInstance();
+	}
+
+	//const EquipableItem* selectedItem = m_equipedItemListTemp[index].Get<EquipableItem>();
+	//ownerStatContainer.RemoveModifierContainer(selectedItem->GetModifierContainer().id);
+
+	return move(m_equipedItemListTemp[index]);
 }
 
 const EquipableItem* Equipment::GetEquipedItem(EquipableItem::EEquipType equipType) const
 {
-	vector<ItemInstance>::const_iterator it = m_equipedItemList.begin();
-	for (it; it != m_equipedItemList.end(); ++it)
+	uint8 index = static_cast<uint8>(equipType);
+	if (index < 0 || static_cast<uint8>(EquipableItem::EEquipType::Max) <= index)
 	{
-		if (equipType == it->Get<EquipableItem>()->GetEquipType())
-		{
-			return it->Get<EquipableItem>();
-		}
+		return nullptr;
 	}
 
-	return nullptr;
+	return m_equipedItemListTemp[index].Get<EquipableItem>();
 }

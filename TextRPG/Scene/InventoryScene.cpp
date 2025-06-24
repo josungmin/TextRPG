@@ -227,7 +227,6 @@ void InventoryScene::HandleEquipCommand(const uint8 equipItemIndex)
 	m_currentSceneState = EInventorySceneState::Default;
 }
 
-// TODO: 수정 필요 - 아이템 해제의 인덱스 범위 초과 출력됨
 void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 {
 	Inventory& inventory = GameInstance::GetInstance().GetPlayer().GetInventory();
