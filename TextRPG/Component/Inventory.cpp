@@ -12,67 +12,74 @@ Inventory::~Inventory()
 	m_itemList.clear();
 }
 
-const bool Inventory::AddItem(const Item& item, const uint8 amount)
+const bool Inventory::AddItem(ItemInstance itemInstance, const uint8 amount)
 {
 	if (IsFull() == true)
 	{
 		return false;
 	}
 
-	if (item.GetType() == EquipableItem::EItemType::Equip)
+	if (itemInstance.Get()->GetType() == EquipableItem::EItemType::Equip)
 	{
-		m_itemList.emplace_back(item);
+		itemInstance.Get()->AddItem(amount);
+		m_itemList.push_back(move(itemInstance));
 		return true;
 	}
 
 	for (ItemInstance& inst : m_itemList)
 	{
-		if (inst.Get()->GetItemName() == item.GetItemName())
+		if (inst.Get()->GetItemName() == itemInstance.Get()->GetItemName())
 		{
 			if (inst.Get()->IsFull())
 			{
 				continue;
-			}				
+			}
 
 			if (inst.Get()->GetRemainCount() < amount)
 			{
 				return false;
 			}
-				
+
 			return inst.Get()->AddItem(amount);
 		}
 	}
 
-	m_itemList.emplace_back(item);
+	itemInstance.Get()->AddItem(amount);
+	m_itemList.push_back(move(itemInstance));
 	return true;
 }
 
-const bool Inventory::RemoveItem(const wstring& itemName, const uint8 amount)
+ItemInstance Inventory::RemoveItem(const wstring& itemName, const uint8 amount)
 {
-	auto it = std::find_if(
+	vector<ItemInstance>::iterator it = std::find_if(
 		m_itemList.begin(),
 		m_itemList.end(),
-		[&](const ItemInstance& inst) {
+		[&](const ItemInstance& inst)
+		{
 			return inst.Get()->GetItemName() == itemName;
 		});
 
 	if (it == m_itemList.end())
 	{
-		return false;
-	}		
+		return ItemInstance();
+	}
 
 	Item* targetItem = it->Get();
 	if (targetItem->GetCount() < amount)
 	{
-		return false;
-	}	
-
+		return ItemInstance();
+	}
+	
 	if (targetItem->GetCount() == amount)
 	{
+		ItemInstance removedItemInstance(move(*it));
 		m_itemList.erase(it);
-		return true;
+		return removedItemInstance;
 	}
 
-	return targetItem->RemoveItem(amount);
-}
+	targetItem->RemoveItem(amount);
 
+	ItemInstance removedItemInstance(*(it->Get()));
+	removedItemInstance.Get()->AddItem(amount);
+	return removedItemInstance;
+}

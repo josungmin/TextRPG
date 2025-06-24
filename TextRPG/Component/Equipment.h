@@ -12,14 +12,15 @@ public:
     virtual ~Equipment();
 
 public:
-    const bool EquipItemInstance(const ItemInstance& itemInstance, StatContainer& ownerStatContainer);
-    ItemInstance UnequipItemInstance(EquipableItem::EEquipType type, StatContainer& ownerStatContainer);
+    const bool EquipItem(ItemInstance itemInstance, StatContainer& ownerStatContainer);
+    ItemInstance UnequipItem(EquipableItem::EEquipType type, StatContainer& ownerStatContainer);
 
+public:
     const EquipableItem* GetEquipedItem(EquipableItem::EEquipType equipType) const;
     const bool IsEquiped(EquipableItem::EEquipType equipType) const;
 
 private:
-    vector<ItemInstance> equipedItemList;
+    vector<ItemInstance> m_equipedItemList;
 };
 
 

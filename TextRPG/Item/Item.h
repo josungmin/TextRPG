@@ -58,7 +58,7 @@ private:
 	uint8 m_maxCount = 99;
 
 protected:
-	uint8 m_count = 1;
+	uint8 m_count = 0;
 
 	const EItemType m_itemType = EItemType::None;
 	const wstring m_itemName{ L"Item Name" };

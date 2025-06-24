@@ -12,11 +12,11 @@ public:
 	virtual ~Inventory();
 
 public:
-	const bool AddItem(const Item& item, const uint8 amount = 1);
-	const bool RemoveItem(const wstring& itemName, const uint8 amount = 1);
-	inline const bool IsFull() const { return m_itemList.size() >= m_inventorySize; }
+	const bool AddItem(ItemInstance itemInstance, const uint8 amount = 1);
+	ItemInstance RemoveItem(const wstring& itemName, const uint8 amount = 1);
 
 public:
+	inline const bool IsFull() const { return m_itemList.size() >= m_inventorySize; }
 	inline const vector<ItemInstance>& GetItemList() const { return m_itemList; }
 
 private:

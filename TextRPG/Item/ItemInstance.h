@@ -5,11 +5,11 @@
 class ItemInstance
 {
 public:
-	ItemInstance(const Item& item)
-		: m_pItem(item.Clone())
-	{
+	ItemInstance()
+		: m_pItem(nullptr) { }
 
-	}
+	ItemInstance(const Item& item)
+		: m_pItem(item.Clone()) { }
 
 	ItemInstance(ItemInstance&& rhs) noexcept
 		:ItemInstance()
@@ -32,17 +32,11 @@ public:
 	ItemInstance(const ItemInstance&) = delete;
 	ItemInstance& operator=(const ItemInstance&) = delete;
 
-private:
-	ItemInstance()
-		:m_pItem(nullptr)
-	{
-
-	}
-
 public:
 	template<typename T>
 	inline T* Get() const { return dynamic_cast<T*>(m_pItem); }
 	inline Item* Get() const { return m_pItem; }
+	inline const bool IsValid() const { return m_pItem != nullptr; }
 
 private:
 	Item* m_pItem = nullptr;

@@ -175,9 +175,9 @@ void ShopScene::EnableBuyMenu()
 void ShopScene::EnableSellMenu()
 {
 	PlayerCharacter& player = GameInstance::GetInstance().GetPlayer();
-	const vector<ItemInstance>& items = player.GetInventory().GetItemList();
+	const vector<ItemInstance>& itemList = player.GetInventory().GetItemList();
 
-	if (items.empty())
+	if (itemList.empty())
 	{
 		m_textPrompt.Enqueue(L"시스템 : 판매 가능 아이템이 없습니다.");
 		m_currentSceneState = EShopSceneState::Default;
@@ -187,9 +187,9 @@ void ShopScene::EnableSellMenu()
 
 	m_textPrompt.Enqueue(L"시스템 : 판매 가능 아이템:");
 
-	for (size_t i = 0; i < items.size(); ++i)
+	for (size_t i = 0; i < itemList.size(); ++i)
 	{
-		const Item* item = items[i].Get(); 
+		const Item* item = itemList[i].Get(); 
 		if (item == nullptr)
 		{
 			m_textPrompt.Enqueue(L"[오류] '" + std::to_wstring(i) + L"' 슬롯의 아이템을 찾을 수 없습니다.");
@@ -235,15 +235,10 @@ void ShopScene::HandleBuyCommand(const uint8 shopItemIndex)
 		return;
 	}
 
-	if (player.GetGold().RemoveGold(item->GetBuyPrice()) == false)
-	{
-		m_textPrompt.Enqueue(L"시스템 : 골드가 부족합니다.");
-		EnableShopMenu();
-		m_currentSceneState = EShopSceneState::Default;
-		return;
-	}
+	player.GetGold().RemoveGold(item->GetBuyPrice());
 
-	if (player.GetInventory().AddItem(*item) == false)
+	ItemInstance buyItemInstance(*item);
+	if (player.GetInventory().AddItem(move(buyItemInstance)) == false)
 	{
 		m_textPrompt.Enqueue(L"[오류] : 인벤토리에 아이템 저장 실패.");
 		return;
@@ -260,31 +255,29 @@ void ShopScene::HandleSellCommand(const std::wstring& cmd)
 
 	const uint8 index = std::stoi(cmd) - 1;
 	const vector<ItemInstance>& itemList = player.GetInventory().GetItemList();
-	if (index < 0 || index >= static_cast<int>(itemList.size()))
+	if (index < 0 || index >= static_cast<uint8>(itemList.size()))
 	{
-		m_textPrompt.Enqueue(L"[오류] : 인벤토리 인덱스 범위를 초과했습니다.");
+		m_textPrompt.Enqueue(L"[오류] : 인벤토리 인덱스 범위를 초과했습니다. 다시 입력해주세요.");
 		return;
 	}
 	
-	const Item* item = itemList[index].Get();
-	wstring itemName = item->GetItemName();
-	uint8 sellPrice = item->GetSellPrice();
-
-	if (item == nullptr)
+	const Item* removedItem = itemList[index].Get();
+	if (removedItem == nullptr)
 	{
 		m_textPrompt.Enqueue(L"[오류] : 인벤토리 보유 아이템 검색에 실패했습니다.");
 		return;
 	}
 
-	player.GetGold().AddGold(sellPrice);
-
-	if (player.GetInventory().RemoveItem(itemName) == false)
+	ItemInstance removedItemInstance = move(player.GetInventory().RemoveItem(removedItem->GetItemName()));
+	if (removedItemInstance.IsValid() == false)
 	{
 		m_textPrompt.Enqueue(L"[오류] : 인벤토리 보유 아이템 삭제에 실패했습니다.");
 		return;
 	}
 
-	m_textPrompt.Enqueue(L"시스템 : [" + itemName + L"] 판매하였습니다. (+" + to_wstring(sellPrice) + L"G)");
+	player.GetGold().AddGold(removedItemInstance.Get()->GetSellPrice());
+
+	m_textPrompt.Enqueue(L"시스템 : [" + removedItemInstance.Get()->GetItemName() + L"] 판매하였습니다. (+" + to_wstring(removedItemInstance.Get()->GetSellPrice()) + L"G)");
 	m_currentSceneState = EShopSceneState::Default;
 	EnableShopMenu();
 	return;

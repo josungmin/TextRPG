@@ -173,39 +173,61 @@ void InventoryScene::EnableUnequipMenu()
 void InventoryScene::HandleEquipCommand(const uint8 equipItemIndex)
 {
 	Inventory& inventory = GameInstance::GetInstance().GetPlayer().GetInventory();
-	Equipment& equipment = GameInstance::GetInstance().GetPlayer().GetEquipment();
-	StatContainer& statContainer = GameInstance::GetInstance().GetPlayer().GetStats();
-
-	const ItemInstance& selected = inventory.GetItemList()[equipItemIndex];
-	ItemInstance equipItemInstance(*selected.Get());
-
-	const EquipableItem* equipItem = equipItemInstance.Get<EquipableItem>();
-	if (equipItem == nullptr)
+	if (equipItemIndex < 0 || equipItemIndex >= static_cast<uint8>(inventory.GetItemList().size()))
 	{
-		m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
+		m_textPrompt.Enqueue(L"[오류] : 인덱스 범위를 초과했습니다. 다시 입력해주세요.");
 		return;
 	}
 
-	const EquipableItem::EEquipType targetType = equipItem->GetEquipType();
-
-	if (equipment.IsEquiped(targetType) == true)
+	const EquipableItem* selectedItem = inventory.GetItemList()[equipItemIndex].Get<EquipableItem>();
+	if (selectedItem == nullptr)
 	{
-		ItemInstance unequipItem = equipment.UnequipItemInstance(targetType, statContainer);
-		inventory.AddItem(*unequipItem.Get());
+		m_textPrompt.Enqueue({ L"[오류] : 아이템이 존재하지 않습니다." });
+		return;
 	}
 
-	if (equipment.EquipItemInstance(equipItemInstance, statContainer) == false)
+	Equipment& equipment = GameInstance::GetInstance().GetPlayer().GetEquipment();
+	StatContainer& statContainer = GameInstance::GetInstance().GetPlayer().GetStats();
+
+	const EquipableItem::EEquipType selectedEquipType = selectedItem->GetEquipType();
+	if (equipment.IsEquiped(selectedEquipType) == true)
+	{
+		ItemInstance unequipItemInstance = equipment.UnequipItem(selectedEquipType, statContainer);
+		if (unequipItemInstance.IsValid() == false)
+		{
+			m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
+			m_textPrompt.Enqueue({ L"[오류] : unequipItemInstance is not valid" }); // TODO : 임시 코드
+			return;
+		}
+		
+		if (inventory.AddItem(move(unequipItemInstance)) == false)
+		{
+			m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
+			return;
+		}
+	}
+
+	const wstring& itemName = selectedItem->GetItemName();
+	ItemInstance equipItemInstance = inventory.RemoveItem(itemName);
+	if (equipItemInstance.IsValid() == false)
+	{
+		m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
+		m_textPrompt.Enqueue({ L"[오류] : equipItemInstance is not valid" }); // TODO : 임시 코드
+		return;
+	}
+
+	if (equipment.EquipItem(move(equipItemInstance), statContainer) == false)
 	{
 		m_textPrompt.Enqueue({ L"[오류] : 아이템 장착에 실패했습니다." });
 		return;
 	}
 
-	inventory.RemoveItem(equipItem->GetItemName());
-	m_textPrompt.Enqueue(L"시스템 : [" + equipItem->GetItemName() + L"] 을(를) 장착했습니다.");
+	m_textPrompt.Enqueue(L"시스템 : [" + itemName + L"] 을(를) 장착했습니다.");
 	EnableInventoryMenu();
 	m_currentSceneState = EInventorySceneState::Default;
 }
 
+// TODO: 수정 필요 - 아이템 해제의 인덱스 범위 초과 출력됨
 void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 {
 	Inventory& inventory = GameInstance::GetInstance().GetPlayer().GetInventory();
@@ -219,23 +241,32 @@ void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 		m_currentSceneState = EInventorySceneState::Default;
 	}
 
-	const uint8 index = static_cast<uint8>(stoi(cmd));
-	if (index >= static_cast<uint8>(EquipableItem::EEquipType::Max))
+	const uint8 index = static_cast<uint8>(stoi(cmd)) - 1;
+	if (index <= 0 || index >= static_cast<uint8>(EquipableItem::EEquipType::Max))
 	{
-		m_textPrompt.Enqueue(L"[오류] : 유효하지 않은 장비 타입입니다.");
+		m_textPrompt.Enqueue(L"[오류] : 인벤토리 인덱스 범위를 초과했습니다. 다시 입력해주세요.");
 		return;
 	}
 
-	const EquipableItem::EEquipType targetType = static_cast<EquipableItem::EEquipType>(index);
-	ItemInstance unequipItem = equipment.UnequipItemInstance(targetType, statContainer);
+	const EquipableItem::EEquipType selectedEquipType = static_cast<EquipableItem::EEquipType>(index);
 
-	if (inventory.AddItem(*unequipItem.Get()) == false)
+	ItemInstance unequipItemInstance = equipment.UnequipItem(selectedEquipType, statContainer);
+	if (unequipItemInstance.IsValid() == false)
+	{
+		m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
+		m_textPrompt.Enqueue({ L"[오류] : unequipItemInstance is not valid" }); // TODO : 임시 코드
+		return;
+	}
+
+	const wstring& itemName = unequipItemInstance.Get()->GetItemName();
+
+	if (inventory.AddItem(move(unequipItemInstance)) == false)
 	{
 		m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
 		return;
 	}
 
-	m_textPrompt.Enqueue(L"시스템 : [" + unequipItem.Get()->GetItemName() + L"] 을(를) 해제했습니다.");
+	m_textPrompt.Enqueue(L"시스템 : [" + itemName + L"] 을(를) 해제했습니다.");
 	EnableInventoryMenu();
 	m_currentSceneState = EInventorySceneState::Default;
 	return;
