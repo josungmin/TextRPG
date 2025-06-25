@@ -66,7 +66,7 @@ void InventoryScene::Update()
 					return;
 				}
 
-				const int index = std::stoi(cmd);
+				const int index = std::stoi(cmd) - 1;
 				if (index < 0 || GameInstance::GetInstance().GetPlayer().GetInventory().GetItemList().size() < index)
 				{
 					m_textPrompt.Enqueue(L"시스템 : 잘못된 입력입니다.");
@@ -252,8 +252,9 @@ void InventoryScene::HandleUnequipCommand(const wstring& cmd)
 	ItemInstance unequipItemInstance = equipment.UnequipItem(selectedEquipType, statContainer);
 	if (unequipItemInstance.IsValid() == false)
 	{
-		m_textPrompt.Enqueue({ L"[오류] : 인벤토리에서 아이템 추가에 실패했습니다." });
-		m_textPrompt.Enqueue({ L"[오류] : unequipItemInstance is not valid" }); // TODO : 임시 코드
+		m_textPrompt.Enqueue({ L"[시스템] : 장착 중인 아이템이 존재하지 않습니다." });
+		EnableInventoryMenu();
+		m_currentSceneState = EInventorySceneState::Default;
 		return;
 	}
 
