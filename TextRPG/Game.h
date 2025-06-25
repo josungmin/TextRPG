@@ -3,6 +3,8 @@
 #include "Input.h"
 #include "TextPrompt.h"
 
+constexpr DWORD TARGET_FPS = 30;
+constexpr DWORD FRAME_TIME_MS = 1000 / TARGET_FPS;
 
 class Game
 {
@@ -16,11 +18,7 @@ public:
 private:
 	void Init();
 	void Update();
-	void Render();
-
-private:
-	const ULONGLONG TARGET_FPS = 30;
-	const ULONGLONG FRAME_TIME_MS = 1000 / TARGET_FPS;
+	void Render();	
 
 private:
 	Screen m_screen;

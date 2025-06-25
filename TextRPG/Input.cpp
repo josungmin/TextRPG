@@ -29,9 +29,10 @@ void Input::InputProcess()
 	}
 }
 
-const wstring Input::GetCommand()
+wstring Input::GetCommand()
 {
 	wstring cmd = m_command;
 	m_command.clear();
+
 	return cmd;
 }

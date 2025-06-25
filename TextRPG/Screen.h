@@ -3,10 +3,13 @@
 #include <windows.h>
 #include "MyType.h"
 
+constexpr uint8 MAX_BUFFER_NUM = 2;
+
 class Screen
 {
 public:
 	Screen();
+	Screen(int16 width, int16 height);
 	virtual ~Screen();
 
 public:
@@ -14,10 +17,12 @@ public:
 	void Render();
 	void Clear();
 
-	void VisibleConsoleCursor(bool isVisible);
+	void VisibleConsoleCursor(const bool isVisible);
 
 private:
-	uint8 GetCharWidth(wchar_t wch);
+	void Init();
+	void Release();
+	uint8 GetCharWidth(const wchar_t wch);
 	 
 private:
 	const int16 WIDTH = 128;
@@ -25,7 +30,7 @@ private:
 	const int32 BUFFER_SIZE = WIDTH * HEIGHT;
 
 private:
-	HANDLE m_consoleBuffers[2];
+	HANDLE m_consoleBuffers[MAX_BUFFER_NUM];
 	uint8 m_consoleBufferIndex = 0;
 	wchar_t* m_writeBuffer = nullptr;
 };
